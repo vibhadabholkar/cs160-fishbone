@@ -1,0 +1,160 @@
+/* Map elements styling */
+.map-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.streak-info {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.progress-bar-wrapper {
+    flex-grow: 1;
+    height: 24px;
+    background-color: white;
+    border-radius: 12px;
+    margin-right: 10px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid white;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 4%;
+    background-color: #478BE3;
+    border-radius: 12px 0 0 12px;
+}
+
+.progress-text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    font-size: 14px;
+}
+
+.percentage {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.map-legend {
+    padding: 15px;
+}
+
+.legend-title {
+    margin: 0 0 10px 0;
+}
+
+.legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+}
+
+.legend-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.standard-circle {
+    background-color: #478BE3;
+    border: 2px solid #3670B9;
+}
+
+.challenge-circle {
+    background-color: #F1C40F;
+    border: 2px solid #D4AC0D;
+}
+
+.rest-circle {
+    background-color: #A9DFEB;
+    border: 2px solid #8ED1E5;
+}
+
+.event-circle {
+    background-color: #E84393;
+    border: 2px solid #D63384;
+}
+
+.boss-circle {
+    background-color: #E67E22;
+    border: 2px solid #D35400;
+}
+
+.map-container {
+    position: relative;
+    min-height: 350px;
+    padding-bottom: 40px; /* Space for the current node text */
+}
+
+.map-node {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #3670B9;
+    background-color: white;
+}
+
+.node-standard {
+    border: 2px solid #3670B9;
+}
+
+.node-challenge {
+    border: 2px solid #D4AC0D;
+    background-color: #F1C40F;
+}
+
+.node-rest {
+    border: 2px solid #8ED1E5;
+    background-color: #A9DFEB;
+}
+
+.node-event {
+    border: 2px solid #D63384;
+    background-color: #E84393;
+}
+
+.map-connection {
+    position: absolute;
+    height: 2px;
+    background-color: #34495E;
+    border-style: dashed;
+    transform-origin: left center;
+}
+
+.current-node-text {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}
+
+.character {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    bottom: 50px;
+    right: 20px;
+    background-color: #478BE3;
+    border-radius: 50%;
+}
