@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fishbone - Adventure Map</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../main.css">
+    <link rel="stylesheet" href="adventuremap.css">
+</head>
+<body>
+    <header>
+        <h1>Habit Adventure Map</h1>
+    </header>
+    
+    <main>
+        <div class="container">
+            <div class="map-info task">
+                <p class="streak-info"><strong>Current Streak:</strong> 3 days</p>
+                <div class="progress-container">
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar"></div>
+                        <p class="progress-text">Current Map Progress</p>
+                    </div>
+                    <span class="percentage">4%</span>
+                </div>
+            </div>
+
+            <div class="map-legend task">
+                <p class="legend-title"><strong>Map Legend:</strong></p>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-circle standard-circle"></div>
+                        <span>Standard</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle challenge-circle"></div>
+                        <span>Challenge</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle rest-circle"></div>
+                        <span>Rest</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle event-circle"></div>
+                        <span>Event</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle boss-circle"></div>
+                        <span>Boss</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="map-container task">
+                <!-- Simple placeholder for map nodes -->
+                <div class="map-node node-rest" style="top: 15%; left: 50%;"></div>
+                <div class="map-node node-standard" style="top: 50%; left: 20%;"></div>
+                <div class="map-node node-event" style="top: 50%; left: 80%;"></div>
+                <div class="map-node node-challenge" style="bottom: 30%; left: 35%;"></div>
+                <div class="map-node node-standard" style="bottom: 30%; left: 65%;"></div>
+                
+                <!-- Character at the bottom -->
+                <div class="character"></div>
+                
+                <p class="current-node-text"><strong>Current Node:</strong> None Selected</p>
+            </div>
+        </div>
+        
+        <!-- <div class="button-container">
+            <a href="" class="add-button">New Map</a>
+            <a href="" class="delete-button">Home</a>
+        </div> -->
+    </main>
+    
+    <script>
+        // TODO: Add JavaScript functionality to handle map interactions, node selection, and progress updates.
+    </script>
+</body>
+</html>
