@@ -13,7 +13,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="stylesheet" type="text/css" href="main.css" />
+    <link rel="stylesheet" type="text/css" href="habits.css" />
   </head>
   <body>
     <header>
@@ -21,7 +21,35 @@
     </header>
 
     <main>
+        <!-- Find a way to get thee stored earlier values into the edit habit section -->
         <div class="Edit-Habit">
+            <label for="habitname">Habit Name: </label>
+            <input type="text" id="habitname" placeholder="Enter the habit you want to create."><br>
+            <br>
+
+            <label for="freq">Frequency: </label>
+            <div class="button-group" id="freq-button-group">
+                <button class="active">Daily</button>
+                <button>Weekly</button>
+                <button>Custom</button>
+            </div>
+            <br>
+
+            <label for="tod">Preferred Time of Day: </label>
+            <input id="timepicker" type="text" placeholder="Select the time of day you would like to do this habit.">
+            <br>
+
+            <label for="target">Target: </label>
+            <input type="text" id="target" placeholder="Enter your target for this habit.">
+            <br>
+
+            <label for="notes">Additional Notes: </label>
+            <input type="text" id="notes" placeholder="Add any additional notes you want to include about this habit.">
+            <br>
+            <a href="habits.html">
+              <button>Done!</button>
+            </a>
+
            
         </div>
 

@@ -10,35 +10,49 @@
       href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
       rel="stylesheet"
     />
+
+    <!-- For the AM/PM Toggle on the Clock -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="stylesheet" type="text/css" href="main.css" />
+    <link rel="stylesheet" type="text/css" href="habits.css" />
   </head>
   <body>
     <header>
-      <h1>Add Habits</h1>      
+      <h1>Create New Habit</h1>      
     </header>
 
     <main>
         <div class="Add-Habit">
             <label for="habitname">Habit Name: </label>
             <input type="text" id="habitname" placeholder="Enter the habit you want to create."><br>
-    
+            <br>
+
             <label for="freq">Frequency: </label>
-            <!-- CHANGE THIS TO BUTTONS -->
-            <input type="text" id="desc" placeholder="Describe the task."><br>
-    
-            <label for="tod">Time of Day: </label>
-            <!-- CHANGE THIS TO BUTTONS -->
-            <input type="text" id="tod" placeholder="Enter the due date.">
+            <div class="button-group" id="freq-button-group">
+                <button class="active">Daily</button>
+                <button>Weekly</button>
+                <button>Custom</button>
+            </div>
+            <br>
+
+            <label for="tod">Preferred Time of Day: </label>
+            <input id="timepicker" type="text" placeholder="Select the time of day you would like to do this habit.">
+            <br>
 
             <label for="target">Target: </label>
             <input type="text" id="target" placeholder="Enter your target for this habit.">
+            <br>
 
-            <label for="notes">Additional Notes: </label>
-            <input type="text" id="notes" placeholder="Add any additional notes you want to include about this habit.">
-
+            <label for="notes">Description/Additional Notes: </label>
+            <input type="text" id="notes" placeholder="Add any description or additional notes you want to include about this habit.">
+            <br>
+            <a href="habits.html">
+              <button>Done!</button>
+            </a>
 
         </div>
 
@@ -47,6 +61,11 @@
 
     
     <script>
+        flatpickr("#timepicker", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "h:i K", // 12-hour with AM/PM
+        });
     
     </script>
   </body>
