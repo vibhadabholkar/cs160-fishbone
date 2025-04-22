@@ -1,0 +1,32 @@
+body {
+  font-family: "Lato", sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  text-align: center; /* Center text inside elements */
+  background-color: #f0f0f0; /* Optional: Light background */
+}
+
+header {
+  text-align: center; /* Ensures the heading is centered */
+  margin-bottom: 20px; /* Adds space between the title and the tasks */
+}
+
+.container {
+  margin: 5%;
+}
+
+.friend-card {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+#top-friends {
+  display: flex;
+  flex-direction: column;
+  gap: 20%;
+}
