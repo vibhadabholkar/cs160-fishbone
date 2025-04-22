@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../main.css">
     <link rel="stylesheet" href="adventuremap.css">
+    <!-- Vis.js library for network visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" />
 </head>
 <body>
     <header>
@@ -22,7 +25,8 @@
                 <div class="progress-container">
                     <div class="progress-bar-wrapper">
                         <div class="progress-bar"></div>
-                        <p class="progress-text">Current Map Progress</p>
+                        <p class="progress-text">Current Map
+Progress</p>
                     </div>
                     <span class="percentage">4%</span>
                 </div>
@@ -55,17 +59,13 @@
             </div>
             
             <div class="map-container task">
-                <!-- Simple placeholder for map nodes -->
-                <div class="map-node node-rest" style="top: 15%; left: 50%;"></div>
-                <div class="map-node node-standard" style="top: 50%; left: 20%;"></div>
-                <div class="map-node node-event" style="top: 50%; left: 80%;"></div>
-                <div class="map-node node-challenge" style="bottom: 30%; left: 35%;"></div>
-                <div class="map-node node-standard" style="bottom: 30%; left: 65%;"></div>
+                <!-- Network visualization container -->
+                <div id="map-network"></div>
                 
-                <!-- Character at the bottom -->
+                <!-- Character at the bottom (we'll position this with JS) -->
                 <div class="character"></div>
                 
-                <p class="current-node-text"><strong>Current Node:</strong> None Selected</p>
+                <p class="current-node-text"><strong>Current Node:</strong> <span id="selected-node">None Selected</span></p>
             </div>
         </div>
         
@@ -75,8 +75,6 @@
         </div> -->
     </main>
     
-    <script>
-        // TODO: Add JavaScript functionality to handle map interactions, node selection, and progress updates.
-    </script>
+    <script src="adventuremap.js"></script>
 </body>
 </html>
