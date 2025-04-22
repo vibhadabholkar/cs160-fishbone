@@ -39,7 +39,11 @@
     top: 50%;
     transform: translate(-50%, -50%);
     margin: 0;
-    font-size: 14px;
+    font-size: 12px;
+    width: 100%;
+    line-height: 1;
+    text-align: center;
+    white-space: pre-line;
 }
 
 .percentage {
