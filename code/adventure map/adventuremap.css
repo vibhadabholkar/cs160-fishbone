@@ -109,40 +109,25 @@
     padding-bottom: 40px; /* Space for the current node text */
 }
 
-.map-node {
-    position: absolute;
-    width: 30px;
-    height: 30px;
+/* Network container styling */
+#map-network {
+    width: 100%;
+    height: 300px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+}
+
+/* Override vis.js default node styling */
+.vis-network .vis-node {
+    border-width: 2px;
     border-radius: 50%;
-    border: 2px solid #3670B9;
-    background-color: white;
+    font-size: 12px;
 }
 
-.node-standard {
-    border: 2px solid #3670B9;
-}
-
-.node-challenge {
-    border: 2px solid #D4AC0D;
-    background-color: #F1C40F;
-}
-
-.node-rest {
-    border: 2px solid #8ED1E5;
-    background-color: #A9DFEB;
-}
-
-.node-event {
-    border: 2px solid #D63384;
-    background-color: #E84393;
-}
-
-.map-connection {
-    position: absolute;
-    height: 2px;
-    background-color: #34495E;
-    border-style: dashed;
-    transform-origin: left center;
+/* For current node indication */
+.vis-network .vis-node.current-node {
+    border-width: 3px;
+    box-shadow: 0 0 10px rgba(71, 139, 227, 0.7);
 }
 
 .current-node-text {
@@ -151,14 +136,15 @@
     width: 100%;
     text-align: center;
     margin: 0;
+    font-weight: normal;
 }
 
 .character {
     position: absolute;
     width: 40px;
     height: 40px;
-    bottom: 50px;
-    right: 20px;
     background-color: #478BE3;
     border-radius: 50%;
+    z-index: 10;
+    transition: all 0.5s ease;
 }
