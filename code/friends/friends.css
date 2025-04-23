@@ -7,21 +7,32 @@ body {
   justify-content: center; /* Center vertically */
   align-items: center; /* Center horizontally */
   text-align: center; /* Center text inside elements */
-  background-color: #1a1c1f;
+  background-color: #d1dced;
   color: #d1dced;
 }
 
-header {
-  text-align: center; /* Ensures the heading is centered */
-  margin-bottom: 20px; /* Adds space between the title and the tasks */
+#mobile {
+  background-color: #1a1c1f;
+  width: 40%;
+  align-items: center;
 }
 
-header img {
-  margin-top: 2%;
+#header {
+  text-align: center; /* Ensures the heading is centered */
+  margin-bottom: 10px; /* Adds space between the title and the tasks */
+}
+
+#header img {
+  margin-top: 3%;
   background-color: #257b8a;
-  height: 7%;
-  width: 7%;
+  height: 5%;
+  width: 5%;
   border-radius: 50%;
+}
+
+hr {
+  color: #d1dced;
+  width: 40%;
 }
 
 .container {
@@ -30,10 +41,10 @@ header img {
 
 #friend-box {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1fr 2fr;
   gap: 1rem;
   margin: 1% 10%;
-  width: 75%;
+  width: 80%;
 }
 
 .friend-card {
@@ -62,12 +73,11 @@ header img {
 }
 
 #top-friends {
-  grid-column: 1;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: center;
-  border-right: 4px solid #257b8a;
   border-radius: 5px;
 }
 
@@ -78,12 +88,14 @@ header img {
 }
 
 #all-friends {
-  grid-column: 2;
+  grid-row: 2;
   display: flex;
   gap: 1rem 1.5rem;
   flex-wrap: wrap;
+  width: 100%;
 }
 
-.column {
-  padding: 2%;
+#all-friends img {
+  height: 15%;
+  width: 15%;
 }
