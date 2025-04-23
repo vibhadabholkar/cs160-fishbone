@@ -1,5 +1,5 @@
 body {
-  font-family: "Lato", sans-serif;
+  font-family: "Figtree", sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
@@ -7,7 +7,8 @@ body {
   justify-content: center; /* Center vertically */
   align-items: center; /* Center horizontally */
   text-align: center; /* Center text inside elements */
-  background-color: #f0f0f0; /* Optional: Light background */
+  background-color: #1a1c1f;
+  color: #d1dced;
 }
 
 header {
@@ -15,18 +16,74 @@ header {
   margin-bottom: 20px; /* Adds space between the title and the tasks */
 }
 
+header img {
+  margin-top: 2%;
+  background-color: #257b8a;
+  height: 7%;
+  width: 7%;
+  border-radius: 50%;
+}
+
 .container {
-  margin: 5%;
+  margin: 1%;
+}
+
+#friend-box {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+  margin: 1% 10%;
+  width: 75%;
 }
 
 .friend-card {
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 5%;
+  background-color: #d1dced;
+  color: #1a1c1f;
+  padding: 1% 4%;
+  border-radius: 10px;
+  width: 75%;
+  align-items: center;
+  justify-content: left;
+}
+
+.container img {
+  border-radius: 50%;
+  background-color: #257b8a;
+  object-fit: contain;
+  height: 10%;
+  width: 10%;
+}
+
+.friend-card p {
+  font-size: 20px;
 }
 
 #top-friends {
+  grid-column: 1;
   display: flex;
   flex-direction: column;
-  gap: 20%;
+  gap: 20px;
+  align-items: center;
+  border-right: 4px solid #257b8a;
+  border-radius: 5px;
+}
+
+#star {
+  background: transparent;
+  height: 7%;
+  width: 7%;
+}
+
+#all-friends {
+  grid-column: 2;
+  display: flex;
+  gap: 1rem 1.5rem;
+  flex-wrap: wrap;
+}
+
+.column {
+  padding: 2%;
 }
