@@ -71,10 +71,20 @@ header {
   opacity: 0.8;
 }
 
+#mobile {
+  background-color: #1a1c1f;
+  width: 400px;
+  height: 100%;
+  align-items: center;
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
 #navbar {
   position: absolute; 
   bottom: 0;
-  width: 100%; 
+  width: calc(100% - 40px); 
   background-color: #1a1c1f;
   display: flex;
   justify-content: space-around;
