@@ -3,16 +3,24 @@ class Navbar extends HTMLElement {
         this.innerHTML = `
             <div id="navbar">
                 <div class="nav-item">
-                    <img src="../img/navbar/Home.png" alt="Home" class="nav-icon">
+                    <a href="../adventure_map/adventuremap.html">
+                        <img src="../img/navbar/Home.png" alt="Home" class="nav-icon">
+                    </a>
                 </div>
                 <div class="nav-item">
-                    <img src="../img/navbar/Friends.png" alt="Friends" class="nav-icon">
+                    <a href="../friends/friends.html">
+                        <img src="../img/navbar/Friends.png" alt="Friends" class="nav-icon">
+                    </a>
                 </div>
                 <div class="nav-item">
-                    <img src="../img/navbar/Insights.png" alt="Insights" class="nav-icon">
+                    <a href="../insights/insights.html">
+                        <img src="../img/navbar/Insights.png" alt="Insights" class="nav-icon">
+                    </a>
                 </div>
                 <div class="nav-item">
-                    <img src="../img/navbar/Profile.png" alt="Profile" class="nav-icon">
+                    <a href="../profile/profile.html">
+                        <img src="../img/navbar/Profile.png" alt="Profile" class="nav-icon">
+                    </a>
                 </div>
             </div>
         `;
