@@ -15,6 +15,7 @@ body {
   background-color: #1a1c1f;
   width: 40%;
   align-items: center;
+  position: relative; /* Ensure #navbar is positioned relative to this */
 }
 
 #header {
@@ -98,4 +99,36 @@ hr {
 #all-friends img {
   height: 15%;
   width: 15%;
+}
+
+
+#navbar {
+  position: absolute; 
+  bottom: 0;
+  width: 100%; 
+  background-color: #1a1c1f;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid #1a1c1f;
+  padding: 40px 0;
+  box-sizing: border-box;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Figtree', sans-serif;
+    font-size: 12px;
+    color: #ccc;
+}
+
+.nav-icon {
+    width: 70px;
+    height: 70px;
+}
+
+.nav-item p {
+    margin: 0;
 }
