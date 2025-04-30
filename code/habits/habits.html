@@ -13,65 +13,67 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <link rel="stylesheet" type="text/css" href="../friends/friends.css" />    
     <link rel="stylesheet" href="../main.css">
     <link rel="stylesheet" type="text/css" href="habits.css" />
-    
   </head>
   <body>
-    <header>
-      <h1>Add/Edit Habits</h1>      
-    </header>
-    <main>
+    <div id="mobile">
+      <header>
+        <h1>Add/Edit Habits</h1>      
+      </header>
+      <main>
 
-      <a href="addhabits.html">
-        <button id="Add"> Add Habits </button>
-      </a>
+        <a href="addhabits.html">
+          <button id="Add"> Add Habits </button>
+        </a>
 
-      <h2> Current Habits</h2>
+        <h2> Current Habits</h2>
 
-      <!-- Current Habits Div -->
-      <div class = "curr-habits">
+        <!-- Current Habits Div -->
+        <div class = "curr-habits">
 
-      </div>
+        </div>
 
-      <button id="DemoDone">Demo Done!</button>
+        <button id="DemoDone">Demo Done!</button>
+        
+      </main>
+
       
-    </main>
+      <script>
+        
 
-    
-    <script>
-      
+        // General Function structure credited to ChatGPT to understand how to move things between several html files like this
+        window.addEventListener("DOMContentLoaded", () => {
+          const headerContainer = document.getElementsByClassName("curr-habits")[0];
+          const wentToAddHabit = JSON.parse(localStorage.getItem("cameBack?")); 
+          if (wentToAddHabit) {
+            const habitList = JSON.parse(localStorage.getItem("habitData")); 
 
-      // General Function structure credited to ChatGPT to understand how to move things between several html files like this
-      window.addEventListener("DOMContentLoaded", () => {
-        const headerContainer = document.getElementsByClassName("curr-habits")[0];
-        const wentToAddHabit = JSON.parse(localStorage.getItem("cameBack?")); 
-        if (wentToAddHabit) {
-          const habitList = JSON.parse(localStorage.getItem("habitData")); 
-
-          if (habitList.length > 0) {
-            habitList.forEach(habit => {
-              const habitDiv = document.createElement('div');  
-              let html = "";
-              for (let key in habit) {
-                html += `<p><strong>${key}:</strong> ${habit[key]}</p><br>`;
-              }
-              habitDiv.innerHTML = html + `<a href="edithabits.html"> <button id="Edit">Edit Habit</button> </a>`;
-              headerContainer.appendChild(habitDiv);
-              localStorage.removeItem("cameBack?");
-            });
+            if (habitList.length > 0) {
+              habitList.forEach(habit => {
+                const habitDiv = document.createElement('div');  
+                let html = "";
+                for (let key in habit) {
+                  html += `<p><strong>${key}:</strong> ${habit[key]}</p><br>`;
+                }
+                habitDiv.innerHTML = html + `<a href="edithabits.html"> <button id="Edit">Edit Habit</button> </a>`;
+                headerContainer.appendChild(habitDiv);
+                localStorage.removeItem("cameBack?");
+              });
+            }
+            
           }
-          
-        }
-      });
-
-      document.getElementById('DemoDone').addEventListener('click', function() {
-        localStorage.clear();
-        location.reload()
         });
 
+        document.getElementById('DemoDone').addEventListener('click', function() {
+          localStorage.clear();
+          location.reload()
+          });
       
-    
-    </script>
+      </script>
+      <script src="../elements/navbar.js"></script>
+      <custom-navbar></custom-navbar>
+    </div>
   </body>
 </html>
