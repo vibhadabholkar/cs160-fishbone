@@ -1,0 +1,242 @@
+{
+    "nodes": [
+      {
+        "id": 1,
+        "label": "First Step",
+        "nodeType": "standard",
+        "state": "current",
+        "x": 0,
+        "y": 400,
+        "description": "Your journey of self-improvement begins. Morning meditation, regular runs, and evening reading await."
+      },
+      
+      {
+        "id": 2,
+        "label": "Morning Clarity",
+        "nodeType": "standard", 
+        "state": "pending",
+        "x": -200,
+        "y": 330,
+        "description": "The first week of morning meditation brings mental clarity. 7 consecutive days of mindfulness."
+      },
+      {
+        "id": 3,
+        "label": "First Miles",
+        "nodeType": "challenge",
+        "state": "pending",
+        "x": 0, 
+        "y": 330,
+        "description": "Complete your first three runs this week. Your body protests but grows stronger."
+      },
+      {
+        "id": 4,
+        "label": "Reading Ritual",
+        "nodeType": "standard",
+        "state": "pending",
+        "x": 200,
+        "y": 330,
+        "description": "Establish your evening reading ritual. 7 consecutive days of reading for 30 minutes."
+      },
+      
+      {
+        "id": 5,
+        "label": "Mind Garden",
+        "nodeType": "event",
+        "state": "pending",
+        "x": -275,
+        "y": 260,
+        "description": "Two weeks of consistent meditation. Your mind feels like a garden being tended daily."
+      },
+      {
+        "id": 6,
+        "label": "Breath Control",
+        "nodeType": "standard",
+        "state": "pending",
+        "x": -125,
+        "y": 260,
+        "description": "Your breathing techniques improve during meditation, helping you maintain focus for the full 10 minutes."
+      },
+      {
+        "id": 7,
+        "label": "Runner's Zone",
+        "nodeType": "challenge",
+        "state": "pending",
+        "x": 50,
+        "y": 260,
+        "description": "You've found your running rhythm. Complete 3 runs at a slightly faster pace than before."
+      },
+      {
+        "id": 8,
+        "label": "Story World",
+        "nodeType": "event",
+        "state": "pending",
+        "x": 175,
+        "y": 260,
+        "description": "You've finished your first book! The stories now live in your imagination."
+      },
+      {
+        "id": 9,
+        "label": "Knowledge Rest",
+        "nodeType": "rest",
+        "state": "pending",
+        "x": 275,
+        "y": 260,
+        "description": "Take time to reflect on what you've read. Let the knowledge settle before moving forward."
+      },
+      
+      {
+        "id": 10,
+        "label": "Mindfulness Moment",
+        "nodeType": "rest",
+        "state": "pending",
+        "x": -225,
+        "y": 190,
+        "description": "A peaceful plateau in your meditation journey. Enjoy the calm as your habit solidifies."
+      },
+      {
+        "id": 11,
+        "label": "Body Challenge",
+        "nodeType": "challenge",
+        "state": "pending",
+        "x": -75,
+        "y": 190,
+        "description": "Push yourself to run 4 miles once this week in addition to your regular runs."
+      },
+      {
+        "id": 12,
+        "label": "Knowledge Bridge",
+        "nodeType": "standard",
+        "state": "pending",
+        "x": 75,
+        "y": 190,
+        "description": "Connect ideas between different books you've read. Your reading habit is building a network of knowledge."
+      },
+      {
+        "id": 13,
+        "label": "Genre Explorer",
+        "nodeType": "event",
+        "state": "pending",
+        "x": 225,
+        "y": 190,
+        "description": "Try reading a different genre than usual. Expand your literary horizons."
+      },
+      
+      {
+        "id": 14,
+        "label": "Inner Sanctuary",
+        "nodeType": "event",
+        "state": "pending",
+        "x": -150,
+        "y": 120,
+        "description": "One month of meditation has created a sanctuary within your mind you can access anytime."
+      },
+      {
+        "id": 15,
+        "label": "Endurance Peak",
+        "nodeType": "challenge",
+        "state": "pending",
+        "x": 0,
+        "y": 120,
+        "description": "Complete all three weekly runs without stopping. Your endurance has reached new heights."
+      },
+      {
+        "id": 16,
+        "label": "Wisdom Collection",
+        "nodeType": "standard",
+        "state": "pending",
+        "x": 150,
+        "y": 120,
+        "description": "You've read consistently for a month. The wisdom from these books is becoming part of who you are."
+      },
+      
+      {
+        "id": 17,
+        "label": "Mind-Body Connection",
+        "nodeType": "challenge",
+        "state": "pending",
+        "x": -100,
+        "y": 50,
+        "description": "Try mindful running - applying meditation techniques during your run. Feel the synergy between habits."
+      },
+      {
+        "id": 18,
+        "label": "Reflective Reader",
+        "nodeType": "rest",
+        "state": "pending",
+        "x": 100,
+        "y": 50,
+        "description": "After reading, meditate on the ideas encountered. Your habits are intertwining."
+      },
+      
+      {
+        "id": 19,
+        "label": "Habit Harmony",
+        "nodeType": "boss",
+        "state": "pending",
+        "x": 0,
+        "y": -20,
+        "description": "You've integrated meditation, running, and reading into your life. These aren't just activities anymore - they're part of your identity."
+      }
+    ],
+    "edges": [
+      { "from": 1, "to": 2, "state": "pending" },
+      { "from": 1, "to": 3, "state": "pending" },
+      { "from": 1, "to": 4, "state": "pending" },
+      
+      { "from": 2, "to": 5, "state": "pending" },
+      { "from": 2, "to": 6, "state": "pending" },
+      { "from": 3, "to": 7, "state": "pending" },
+      { "from": 4, "to": 8, "state": "pending" },
+      { "from": 4, "to": 9, "state": "pending" },
+      
+      { "from": 5, "to": 10, "state": "pending" },
+      { "from": 6, "to": 10, "state": "pending" },
+      { "from": 6, "to": 11, "state": "pending" },
+      { "from": 7, "to": 11, "state": "pending" },
+      { "from": 8, "to": 12, "state": "pending" },
+      { "from": 9, "to": 13, "state": "pending" },
+      
+      { "from": 10, "to": 14, "state": "pending" },
+      { "from": 11, "to": 15, "state": "pending" },
+      { "from": 12, "to": 15, "state": "pending" },
+      { "from": 12, "to": 16, "state": "pending" },
+      { "from": 13, "to": 16, "state": "pending" },
+      
+      { "from": 14, "to": 17, "state": "pending" },
+      { "from": 15, "to": 17, "state": "pending" },
+      { "from": 15, "to": 18, "state": "pending" },
+      { "from": 16, "to": 18, "state": "pending" },
+      
+      { "from": 17, "to": 19, "state": "pending" },
+      { "from": 18, "to": 19, "state": "pending" }
+    ],
+    "config": {
+      "nodeTypes": {
+        "standard": {
+          "color": { "background": "#FFFFFF", "border": "#478BE3", "filled": "#478BE3" },
+          "borderWidth": 2,
+          "size": 35
+        },
+        "rest": {
+          "color": { "background": "#FFFFFF", "border": "#A9DFEB", "filled": "#A9DFEB" },
+          "borderWidth": 2,
+          "size": 35
+        },
+        "challenge": {
+          "color": { "background": "#FFFFFF", "border": "#F1C40F", "filled": "#F1C40F" },
+          "borderWidth": 2,
+          "size": 35
+        },
+        "event": {
+          "color": { "background": "#FFFFFF", "border": "#E84393", "filled": "#E84393" },
+          "borderWidth": 2,
+          "size": 35
+        },
+        "boss": {
+          "color": { "background": "#FFFFFF", "border": "#E67E22", "filled": "#E67E22" },
+          "borderWidth": 2,
+          "size": 35
+        }
+      }
+    }
+  }
