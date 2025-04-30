@@ -32,79 +32,259 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
     
-    // Create a tree-structured map (starting at the bottom, branching upward)
-    // No loops allowed - only forward progression
-    // IMPORTANT: Every path must lead to the boss
-    const nodes = new vis.DataSet([
-        // Level 1 (bottom - starting point)
-        { id: 1, label: "", group: 'current', state: 'current', nodeType: 'standard', x: 0, y: 300 },
-        
-        // Level 2
-        { id: 2, label: "", group: 'standard', state: 'pending', nodeType: 'standard', x: -150, y: 200 },
-        { id: 3, label: "", group: 'challenge', state: 'pending', nodeType: 'challenge', x: 150, y: 200 },
-        
-        // Level 3
-        { id: 4, label: "", group: 'rest', state: 'pending', nodeType: 'rest', x: -250, y: 100 },
-        { id: 5, label: "", group: 'event', state: 'pending', nodeType: 'event', x: -50, y: 100 },
-        { id: 6, label: "", group: 'standard', state: 'pending', nodeType: 'standard', x: 100, y: 100 },
-        { id: 7, label: "", group: 'event', state: 'pending', nodeType: 'event', x: 250, y: 100 },
-        
-        // Level 4
-        { id: 8, label: "", group: 'challenge', state: 'pending', nodeType: 'challenge', x: -300, y: 0 },
-        { id: 9, label: "", group: 'standard', state: 'pending', nodeType: 'standard', x: -150, y: 0 },
-        { id: 10, label: "", group: 'rest', state: 'pending', nodeType: 'rest', x: 0, y: 0 },
-        { id: 11, label: "", group: 'challenge', state: 'pending', nodeType: 'challenge', x: 150, y: 0 },
-        { id: 12, label: "", group: 'event', state: 'pending', nodeType: 'event', x: 300, y: 0 },
-        
-        // Level 5
-        { id: 13, label: "", group: 'standard', state: 'pending', nodeType: 'standard', x: -225, y: -100 },
-        { id: 14, label: "", group: 'event', state: 'pending', nodeType: 'event', x: -75, y: -100 },
-        { id: 15, label: "", group: 'rest', state: 'pending', nodeType: 'rest', x: 75, y: -100 },
-        { id: 16, label: "", group: 'challenge', state: 'pending', nodeType: 'challenge', x: 225, y: -100 },
-        
-        // Level 6 (top - final boss)
-        { id: 17, label: "", group: 'boss', state: 'pending', nodeType: 'boss', x: 0, y: -200 }
-    ]);
+    // The new JSON data for the habit tracker adventure map
+    const mapData = {
+        "nodes": [
+            // Level 1 (Starting Point)
+            {
+                "id": 1,
+                "label": "First Step",
+                "nodeType": "standard",
+                "state": "current",
+                "x": 0,
+                "y": 400,
+                "description": "Your journey of self-improvement begins. Morning meditation, regular runs, and evening reading await."
+            },
+            
+            // Level 2
+            {
+                "id": 2,
+                "label": "Morning Clarity",
+                "nodeType": "standard", 
+                "state": "pending",
+                "x": -200,
+                "y": 330,
+                "description": "The first week of morning meditation brings mental clarity. 7 consecutive days of mindfulness."
+            },
+            {
+                "id": 3,
+                "label": "First Miles",
+                "nodeType": "challenge",
+                "state": "pending",
+                "x": 0, 
+                "y": 330,
+                "description": "Complete your first three runs this week. Your body protests but grows stronger."
+            },
+            {
+                "id": 4,
+                "label": "Reading Ritual",
+                "nodeType": "standard",
+                "state": "pending",
+                "x": 200,
+                "y": 330,
+                "description": "Establish your evening reading ritual. 7 consecutive days of reading for 30 minutes."
+            },
+            
+            // Level 3
+            {
+                "id": 5,
+                "label": "Mind Garden",
+                "nodeType": "event",
+                "state": "pending",
+                "x": -275,
+                "y": 260,
+                "description": "Two weeks of consistent meditation. Your mind feels like a garden being tended daily."
+            },
+            {
+                "id": 6,
+                "label": "Breath Control",
+                "nodeType": "standard",
+                "state": "pending",
+                "x": -125,
+                "y": 260,
+                "description": "Your breathing techniques improve during meditation, helping you maintain focus for the full 10 minutes."
+            },
+            {
+                "id": 7,
+                "label": "Runner's Zone",
+                "nodeType": "challenge",
+                "state": "pending",
+                "x": 50,
+                "y": 260,
+                "description": "You've found your running rhythm. Complete 3 runs at a slightly faster pace than before."
+            },
+            {
+                "id": 8,
+                "label": "Story World",
+                "nodeType": "event",
+                "state": "pending",
+                "x": 175,
+                "y": 260,
+                "description": "You've finished your first book! The stories now live in your imagination."
+            },
+            {
+                "id": 9,
+                "label": "Knowledge Rest",
+                "nodeType": "rest",
+                "state": "pending",
+                "x": 275,
+                "y": 260,
+                "description": "Take time to reflect on what you've read. Let the knowledge settle before moving forward."
+            },
+            
+            // Level 4
+            {
+                "id": 10,
+                "label": "Mindfulness Moment",
+                "nodeType": "rest",
+                "state": "pending",
+                "x": -225,
+                "y": 190,
+                "description": "A peaceful plateau in your meditation journey. Enjoy the calm as your habit solidifies."
+            },
+            {
+                "id": 11,
+                "label": "Body Challenge",
+                "nodeType": "challenge",
+                "state": "pending",
+                "x": -75,
+                "y": 190,
+                "description": "Push yourself to run 4 miles once this week in addition to your regular runs."
+            },
+            {
+                "id": 12,
+                "label": "Knowledge Bridge",
+                "nodeType": "standard",
+                "state": "pending",
+                "x": 75,
+                "y": 190,
+                "description": "Connect ideas between different books you've read. Your reading habit is building a network of knowledge."
+            },
+            {
+                "id": 13,
+                "label": "Genre Explorer",
+                "nodeType": "event",
+                "state": "pending",
+                "x": 225,
+                "y": 190,
+                "description": "Try reading a different genre than usual. Expand your literary horizons."
+            },
+            
+            // Level 5
+            {
+                "id": 14,
+                "label": "Inner Sanctuary",
+                "nodeType": "event",
+                "state": "pending",
+                "x": -150,
+                "y": 120,
+                "description": "One month of meditation has created a sanctuary within your mind you can access anytime."
+            },
+            {
+                "id": 15,
+                "label": "Endurance Peak",
+                "nodeType": "challenge",
+                "state": "pending",
+                "x": 0,
+                "y": 120,
+                "description": "Complete all three weekly runs without stopping. Your endurance has reached new heights."
+            },
+            {
+                "id": 16,
+                "label": "Wisdom Collection",
+                "nodeType": "standard",
+                "state": "pending",
+                "x": 150,
+                "y": 120,
+                "description": "You've read consistently for a month. The wisdom from these books is becoming part of who you are."
+            },
+            
+            // Level 6
+            {
+                "id": 17,
+                "label": "Mind-Body Connection",
+                "nodeType": "challenge",
+                "state": "pending",
+                "x": -100,
+                "y": 50,
+                "description": "Try mindful running - applying meditation techniques during your run. Feel the synergy between habits."
+            },
+            {
+                "id": 18,
+                "label": "Reflective Reader",
+                "nodeType": "rest",
+                "state": "pending",
+                "x": 100,
+                "y": 50,
+                "description": "After reading, meditate on the ideas encountered. Your habits are intertwining."
+            },
+            
+            // Level 7 (Boss)
+            {
+                "id": 19,
+                "label": "Habit Harmony",
+                "nodeType": "boss",
+                "state": "pending",
+                "x": 0,
+                "y": -20,
+                "description": "You've integrated meditation, running, and reading into your life. These aren't just activities anymore - they're part of your identity."
+            }
+        ],
+        "edges": [
+            // Connections from Level 1 to Level 2
+            { "from": 1, "to": 2, "state": "pending" },
+            { "from": 1, "to": 3, "state": "pending" },
+            { "from": 1, "to": 4, "state": "pending" },
+            
+            // Connections from Level 2 to Level 3
+            { "from": 2, "to": 5, "state": "pending" },
+            { "from": 2, "to": 6, "state": "pending" },
+            { "from": 3, "to": 7, "state": "pending" },
+            { "from": 4, "to": 8, "state": "pending" },
+            { "from": 4, "to": 9, "state": "pending" },
+            
+            // Connections from Level 3 to Level 4
+            { "from": 5, "to": 10, "state": "pending" },
+            { "from": 6, "to": 10, "state": "pending" },
+            { "from": 6, "to": 11, "state": "pending" },
+            { "from": 7, "to": 11, "state": "pending" },
+            { "from": 8, "to": 12, "state": "pending" },
+            { "from": 9, "to": 13, "state": "pending" },
+            
+            // Connections from Level 4 to Level 5
+            { "from": 10, "to": 14, "state": "pending" },
+            { "from": 11, "to": 15, "state": "pending" },
+            { "from": 12, "to": 15, "state": "pending" },
+            { "from": 12, "to": 16, "state": "pending" },
+            { "from": 13, "to": 16, "state": "pending" },
+            
+            // Connections from Level 5 to Level 6
+            { "from": 14, "to": 17, "state": "pending" },
+            { "from": 15, "to": 17, "state": "pending" },
+            { "from": 15, "to": 18, "state": "pending" },
+            { "from": 16, "to": 18, "state": "pending" },
+            
+            // Connections from Level 6 to Level 7 (Boss)
+            { "from": 17, "to": 19, "state": "pending" },
+            { "from": 18, "to": 19, "state": "pending" }
+        ]
+    };
     
-    // Create edges array to connect the nodes (tree structure - no loops)
-    // IMPORTANT: Ensure every path eventually leads to the boss
-    const edges = new vis.DataSet([
-        // Connections from Level 1 to Level 2
-        { id: 'e1-2', from: 1, to: 2, dashes: [5, 5], state: 'pending' },
-        { id: 'e1-3', from: 1, to: 3, dashes: [5, 5], state: 'pending' },
-        
-        // Connections from Level 2 to Level 3
-        { id: 'e2-4', from: 2, to: 4, dashes: [5, 5], state: 'pending' },
-        { id: 'e2-5', from: 2, to: 5, dashes: [5, 5], state: 'pending' },
-        { id: 'e3-6', from: 3, to: 6, dashes: [5, 5], state: 'pending' },
-        { id: 'e3-7', from: 3, to: 7, dashes: [5, 5], state: 'pending' },
-        
-        // Connections from Level 3 to Level 4
-        { id: 'e4-8', from: 4, to: 8, dashes: [5, 5], state: 'pending' },
-        { id: 'e4-9', from: 4, to: 9, dashes: [5, 5], state: 'pending' },
-        { id: 'e5-9', from: 5, to: 9, dashes: [5, 5], state: 'pending' },
-        { id: 'e5-10', from: 5, to: 10, dashes: [5, 5], state: 'pending' },
-        { id: 'e6-10', from: 6, to: 10, dashes: [5, 5], state: 'pending' },
-        { id: 'e6-11', from: 6, to: 11, dashes: [5, 5], state: 'pending' },
-        { id: 'e7-11', from: 7, to: 11, dashes: [5, 5], state: 'pending' },
-        { id: 'e7-12', from: 7, to: 12, dashes: [5, 5], state: 'pending' },
-        
-        // Connections from Level 4 to Level 5
-        { id: 'e8-13', from: 8, to: 13, dashes: [5, 5], state: 'pending' },
-        { id: 'e9-13', from: 9, to: 13, dashes: [5, 5], state: 'pending' },
-        { id: 'e9-14', from: 9, to: 14, dashes: [5, 5], state: 'pending' },
-        { id: 'e10-14', from: 10, to: 14, dashes: [5, 5], state: 'pending' },
-        { id: 'e10-15', from: 10, to: 15, dashes: [5, 5], state: 'pending' },
-        { id: 'e11-15', from: 11, to: 15, dashes: [5, 5], state: 'pending' },
-        { id: 'e11-16', from: 11, to: 16, dashes: [5, 5], state: 'pending' },
-        { id: 'e12-16', from: 12, to: 16, dashes: [5, 5], state: 'pending' },
-        
-        // Connections from Level 5 to Level 6 (final boss)
-        { id: 'e13-17', from: 13, to: 17, dashes: [5, 5], state: 'pending' },
-        { id: 'e14-17', from: 14, to: 17, dashes: [5, 5], state: 'pending' },
-        { id: 'e15-17', from: 15, to: 17, dashes: [5, 5], state: 'pending' },
-        { id: 'e16-17', from: 16, to: 17, dashes: [5, 5], state: 'pending' }
-    ]);
+    // Update the page title with the map title
+    if (mapData.mapTitle) {
+        const headerElement = document.querySelector('#header h2');
+        if (headerElement) {
+            headerElement.textContent = mapData.mapTitle;
+        }
+    }
+    
+    // Process nodes to add group property based on nodeType
+    const processedNodes = mapData.nodes.map(node => ({
+        ...node,
+        group: node.state === 'current' ? 'current' : node.nodeType,
+        label: "" // We'll display labels in tooltips instead of on the nodes
+    }));
+    
+    // Process edges to add dashes property and ID
+    const processedEdges = mapData.edges.map(edge => ({
+        ...edge,
+        id: `e${edge.from}-${edge.to}`,
+        dashes: edge.state === 'traversed' ? false : [5, 5]
+    }));
+    
+    // Create vis.js DataSets
+    const nodes = new vis.DataSet(processedNodes);
+    const edges = new vis.DataSet(processedEdges);
     
     // Create the network data object
     const data = {
@@ -155,10 +335,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create the network visualization
     const network = new vis.Network(container, data, options);
     
+    // Find starting node (the one with state === 'current')
+    const startingNode = mapData.nodes.find(node => node.state === 'current');
+    let currentSelectedNode = startingNode ? startingNode.id : 1; // Default to node 1 if no current node found
+    
     // Set initial zoom level and position to show the starting node
     network.once("afterDrawing", function() {
         network.fit({
-            nodes: [1], // Focus on the starting node (bottom)
+            nodes: [currentSelectedNode], // Focus on the starting node (bottom)
             animation: {
                 duration: 1000,
                 easingFunction: "easeInOutQuad"
@@ -176,8 +360,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1100);
     });
     
-    // Variable to keep track of currently selected node
-    let currentSelectedNode = 1; // Default to node 1 which is set as current at the bottom
     let characterImg = null;
     
     // Function to create and position the character image
@@ -235,6 +417,43 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(createCharacterImage, 1200); // Delay to ensure network is fully rendered and positioned
     });
     
+    // Create a tooltip element for node descriptions
+    let tooltipDiv = document.createElement('div');
+    tooltipDiv.id = 'node-tooltip';
+    tooltipDiv.style.position = 'absolute';
+    tooltipDiv.style.backgroundColor = 'rgba(39, 111, 124, 0.9)';
+    tooltipDiv.style.color = 'white';
+    tooltipDiv.style.padding = '10px';
+    tooltipDiv.style.borderRadius = '5px';
+    tooltipDiv.style.zIndex = '1000';
+    tooltipDiv.style.display = 'none';
+    tooltipDiv.style.maxWidth = '250px';
+    tooltipDiv.style.pointerEvents = 'none'; // Allow clicks to pass through
+    container.appendChild(tooltipDiv);
+    
+    // Show tooltip on hover
+    network.on("hoverNode", function(params) {
+        const nodeId = params.node;
+        const node = nodes.get(nodeId);
+        
+        if (node) {
+            // Get node position and convert to DOM coordinates
+            const position = network.getPositions([nodeId])[nodeId];
+            const canvasPos = network.canvasToDOM(position);
+            
+            // Update tooltip content and position
+            tooltipDiv.innerHTML = `<strong>${node.label}</strong><br>${node.description}`;
+            tooltipDiv.style.left = (canvasPos.x + 40) + 'px';
+            tooltipDiv.style.top = (canvasPos.y - 30) + 'px';
+            tooltipDiv.style.display = 'block';
+        }
+    });
+    
+    // Hide tooltip when not hovering
+    network.on("blurNode", function() {
+        tooltipDiv.style.display = 'none';
+    });
+    
     // Handle node selection
     network.on('selectNode', function(params) {
         const nodeId = params.nodes[0];
@@ -248,7 +467,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update the selected node text
         const selectedNodeText = document.getElementById('selected-node');
-        selectedNodeText.textContent = node.nodeType.charAt(0).toUpperCase() + node.nodeType.slice(1);
+        selectedNodeText.textContent = node.label;
         
         // Check if the node is reachable (connected to the current node)
         const connectedEdges = network.getConnectedEdges(currentSelectedNode);
@@ -294,6 +513,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Reposition the character after animation completes
             setTimeout(createCharacterImage, 850);
+            
+            // Update map progress
+            updateMapProgress();
         }
         
         network.unselectAll();
@@ -353,6 +575,89 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Update map progress based on distance remaining to the boss node
+    function updateMapProgress() {
+        // Create an adjacency list from the edges for pathfinding
+        const graph = {};
+        edges.get().forEach(edge => {
+            if (!graph[edge.from]) {
+                graph[edge.from] = [];
+            }
+            graph[edge.from].push(edge.to);
+        });
+        
+        // Find the boss node
+        const bossNode = nodes.get({
+            filter: function(node) {
+                return node.nodeType === 'boss';
+            }
+        })[0];
+        
+        if (!bossNode) return; // If no boss node found
+        const bossNodeId = bossNode.id;
+        
+        // Get the starting node (node 1)
+        const startNodeId = 1;
+        
+        // Get current node
+        const currentNodeId = currentSelectedNode;
+        
+        // Calculate the shortest path from current node to boss
+        const stepsRemaining = findShortestPath(graph, currentNodeId, bossNodeId);
+        
+        // Calculate the shortest path from start to boss (total journey length)
+        const totalSteps = findShortestPath(graph, startNodeId, bossNodeId);
+        
+        // Calculate progress percentage
+        let progressPercentage = 0;
+        if (totalSteps > 0 && stepsRemaining <= totalSteps) {
+            const stepsTaken = totalSteps - stepsRemaining;
+            progressPercentage = Math.round((stepsTaken / totalSteps) * 100);
+        }
+        
+        // Update progress bar and percentage text
+        const progressBar = document.querySelector('.progress-bar');
+        const percentageText = document.querySelector('.percentage');
+        
+        if (progressBar && percentageText) {
+            progressBar.style.width = progressPercentage + '%';
+            percentageText.textContent = progressPercentage + '%';
+        }
+    }
+    
+    // Function to find the shortest path length using BFS
+    function findShortestPath(graph, startNodeId, endNodeId) {
+        // If start and end are the same, return 0
+        if (startNodeId === endNodeId) return 0;
+        
+        // If startNode has no outgoing edges in our graph
+        if (!graph[startNodeId]) return Infinity;
+        
+        // BFS to find shortest path
+        const queue = [{node: startNodeId, distance: 0}];
+        const visited = new Set([startNodeId]);
+        
+        while (queue.length > 0) {
+            const {node, distance} = queue.shift();
+            
+            // Get all neighbors
+            const neighbors = graph[node] || [];
+            
+            for (const neighbor of neighbors) {
+                if (neighbor === endNodeId) {
+                    return distance + 1; // Found the end node
+                }
+                
+                if (!visited.has(neighbor)) {
+                    visited.add(neighbor);
+                    queue.push({node: neighbor, distance: distance + 1});
+                }
+            }
+        }
+        
+        return Infinity; // No path found
+    }
+    
     // Add info tooltip at the bottom of the map
     const infoTooltip = document.createElement('div');
     infoTooltip.id = 'map-tooltip';
@@ -378,4 +683,7 @@ document.addEventListener('DOMContentLoaded', function() {
             infoTooltip.remove();
         }, 1000);
     }, 4000);
+    
+    // Initialize progress
+    updateMapProgress();
 });
