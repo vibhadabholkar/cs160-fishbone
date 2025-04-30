@@ -1,39 +1,87 @@
 /* Map elements styling */
-.map-info {
-    padding: 15px;
+body {
+    font-family: "Figtree", sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-}
-
-.streak-info {
+    background-color: #d1dced;
+    color: #d1dced;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  html {
+    height: 100%;
+  }
+  
+  h2 {
+    font-size: 18px;
+  }
+  
+  #mobile {
+    background-color: #1a1c1f;
+    width: 400px;
+    height: 100%;
+    align-items: center;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  #header {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 80px; /* Space for navbar */
+  }
+  
+  .map-info, .map-legend, .map-container {
+    background-color: #276F7C;
+    border-radius: 10px;
+    padding: 15px;
+    width: 90%;
+    color: #d1dced;
+  }
+  
+  .streak-info {
     margin: 0 0 15px 0;
     font-size: 16px;
-}
-
-.progress-container {
+  }
+  
+  .progress-container {
     display: flex;
     align-items: center;
     margin: 10px 0;
-}
-
-.progress-bar-wrapper {
+  }
+  
+  .progress-bar-wrapper {
     flex-grow: 1;
     height: 24px;
-    background-color: white;
+    background-color: #1a1c1f;
     border-radius: 12px;
     margin-right: 10px;
     position: relative;
     overflow: hidden;
-    border: 2px solid white;
-}
-
-.progress-bar {
+  }
+  
+  .progress-bar {
     height: 100%;
     width: 4%;
     background-color: #478BE3;
     border-radius: 12px 0 0 12px;
-}
-
-.progress-text {
+  }
+  
+  .progress-text {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -44,107 +92,120 @@
     line-height: 1;
     text-align: center;
     white-space: pre-line;
-}
-
-.percentage {
+    color: #d1dced;
+  }
+  
+  .percentage {
     font-weight: bold;
     font-size: 16px;
-}
-
-.map-legend {
-    padding: 15px;
-}
-
-.legend-title {
+  }
+  
+  .legend-title {
     margin: 0 0 10px 0;
-}
-
-.legend-items {
+    text-align: left;
+  }
+  
+  .legend-items {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 5px;
-}
-
-.legend-item {
+    gap: 8px;
+  }
+  
+  .legend-item {
     display: flex;
     align-items: center;
-}
-
-.legend-circle {
+  }
+  
+  .legend-circle {
     width: 20px;
     height: 20px;
     border-radius: 50%;
     margin-right: 5px;
-}
-
-.standard-circle {
+  }
+  
+  .standard-circle {
     background-color: #478BE3;
     border: 2px solid #3670B9;
-}
-
-.challenge-circle {
+  }
+  
+  .challenge-circle {
     background-color: #F1C40F;
     border: 2px solid #D4AC0D;
-}
-
-.rest-circle {
+  }
+  
+  .rest-circle {
     background-color: #A9DFEB;
     border: 2px solid #8ED1E5;
-}
-
-.event-circle {
+  }
+  
+  .event-circle {
     background-color: #E84393;
     border: 2px solid #D63384;
-}
-
-.boss-circle {
+  }
+  
+  .boss-circle {
     background-color: #E67E22;
     border: 2px solid #D35400;
-}
-
-.map-container {
+  }
+  
+  .map-container {
     position: relative;
     min-height: 350px;
-    padding-bottom: 40px; /* Space for the current node text */
-}
-
-/* Network container styling */
-#map-network {
+  }
+  
+  /* Network container styling */
+  #map-network {
     width: 100%;
     height: 300px;
-    background-color: #f9f9f9;
+    background-color: #1a1c1f;
     border-radius: 6px;
-}
-
-/* Override vis.js default node styling */
-.vis-network .vis-node {
+    margin-bottom: 15px;
+  }
+  
+  /* Override vis.js default node styling */
+  .vis-network .vis-node {
     border-width: 2px;
     border-radius: 50%;
     font-size: 12px;
-}
-
-/* For current node indication */
-.vis-network .vis-node.current-node {
+  }
+  
+  /* For current node indication */
+  .vis-network .vis-node.current-node {
     border-width: 3px;
     box-shadow: 0 0 10px rgba(71, 139, 227, 0.7);
-}
-
-.current-node-text {
-    position: absolute;
-    bottom: 10px;
+  }
+  
+  .current-node-text {
     width: 100%;
     text-align: center;
     margin: 0;
     font-weight: normal;
-}
-
-.character {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background-color: #478BE3;
-    border-radius: 50%;
-    z-index: 10;
-    transition: all 0.5s ease;
-}
+  }
+  
+  #navbar {
+    position: absolute; 
+    bottom: 0;
+    width: calc(100% - 40px); 
+    background-color: #1a1c1f;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #1a1c1f;
+    padding: 20px 0;
+    box-sizing: border-box;
+  }
+  
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Figtree', sans-serif;
+    font-size: 12px;
+    color: #ccc;
+  }
+  
+  .nav-icon {
+    width: 50px;
+    height: 50px;
+  }
