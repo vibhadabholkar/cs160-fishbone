@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,26 +15,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" />
 </head>
+
 <body>
     <div id="mobile">
         <div id="header">
             <h2>Habit Adventure Map</h2>
         </div>
-        
+
         <div class="container">
-            <div class="map-info">
-                <p class="streak-info"><strong>Current Streak:</strong> 3 days</p>
-                <div class="progress-container">
-                    <div class="progress-bar-wrapper">
-                        <div class="progress-bar"></div>
-                        <p class="progress-text">Current Map Progress</p>
+            <div class="top-section-wrapper">
+                <div class="map-info">
+                    <p class="streak-info">Current Streak: 3 days</p>
+                    <div class="progress-container">
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar"></div>
+                            <p class="progress-text">Current Map Progress</p>
+                        </div>
+                        <span class="percentage">4%</span>
                     </div>
-                    <span class="percentage">4%</span>
+                </div>
+                <div class="new-map-button">
+                    <div class="plus-icon">+</div>
+                    <span>New Map</span>
                 </div>
             </div>
 
+            <!-- Updated Map Legend HTML to ensure consistent order -->
             <div class="map-legend">
-                <p class="legend-title"><strong>Map Legend:</strong></p>
+                <p class="legend-title">Map Legend:</p>
                 <div class="legend-items">
                     <div class="legend-item">
                         <div class="legend-circle standard-circle"></div>
@@ -57,19 +66,21 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="map-container">
                 <!-- Network visualization container -->
                 <div id="map-network"></div>
-                
-                <p class="current-node-text"><strong>Current Node:</strong> <span id="selected-node">None Selected</span></p>
+
+                <p class="current-node-text"><strong>Current Node:</strong> <span id="selected-node">None
+                        Selected</span></p>
             </div>
         </div>
-        
+
         <script src="../elements/navbar.js"></script>
         <custom-navbar></custom-navbar>
     </div>
-    
+
     <script src="adventuremap.js"></script>
 </body>
+
 </html>

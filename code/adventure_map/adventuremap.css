@@ -1,211 +1,309 @@
 /* Map elements styling */
 body {
-    font-family: "Figtree", sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background-color: #d1dced;
-    color: #d1dced;
-    height: 100%;
-    overflow: hidden;
-  }
-  
-  html {
-    height: 100%;
-  }
-  
-  h2 {
-    font-size: 18px;
-  }
-  
-  #mobile {
-    background-color: #1a1c1f;
-    width: 400px;
-    height: 100%;
-    align-items: center;
-    position: relative;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  #header {
-    text-align: center;
-    margin-bottom: 10px;
-  }
-  
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 80px; /* Space for navbar */
-  }
-  
-  .map-info, .map-legend, .map-container {
-    background-color: #276F7C;
-    border-radius: 10px;
-    padding: 15px;
-    width: 90%;
-    color: #d1dced;
-  }
-  
-  .streak-info {
-    margin: 0 0 15px 0;
-    font-size: 16px;
-  }
-  
-  .progress-container {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-  }
-  
-  .progress-bar-wrapper {
-    flex-grow: 1;
-    height: 24px;
-    background-color: #1a1c1f;
-    border-radius: 12px;
-    margin-right: 10px;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .progress-bar {
-    height: 100%;
-    width: 4%;
-    background-color: #478BE3;
-    border-radius: 12px 0 0 12px;
-  }
-  
-  .progress-text {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    margin: 0;
-    font-size: 12px;
-    width: 100%;
-    line-height: 1;
-    text-align: center;
-    white-space: pre-line;
-    color: #d1dced;
-  }
-  
-  .percentage {
-    font-weight: bold;
-    font-size: 16px;
-  }
-  
-  .legend-title {
-    margin: 0 0 10px 0;
-    text-align: left;
-  }
-  
-  .legend-items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  
-  .legend-item {
-    display: flex;
-    align-items: center;
-  }
-  
-  .legend-circle {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    margin-right: 5px;
-  }
-  
-  .standard-circle {
-    background-color: #478BE3;
-    border: 2px solid #3670B9;
-  }
-  
-  .challenge-circle {
-    background-color: #F1C40F;
-    border: 2px solid #D4AC0D;
-  }
-  
-  .rest-circle {
-    background-color: #A9DFEB;
-    border: 2px solid #8ED1E5;
-  }
-  
-  .event-circle {
-    background-color: #E84393;
-    border: 2px solid #D63384;
-  }
-  
-  .boss-circle {
-    background-color: #E67E22;
-    border: 2px solid #D35400;
-  }
-  
-  .map-container {
-    position: relative;
-    min-height: 350px;
-  }
-  
-  /* Network container styling */
-  #map-network {
-    width: 100%;
-    height: 300px;
-    background-color: #1a1c1f;
-    border-radius: 6px;
-    margin-bottom: 15px;
-  }
-  
-  /* Override vis.js default node styling */
-  .vis-network .vis-node {
-    border-width: 2px;
-    border-radius: 50%;
-    font-size: 12px;
-  }
-  
-  /* For current node indication */
-  .vis-network .vis-node.current-node {
-    border-width: 3px;
-    box-shadow: 0 0 10px rgba(71, 139, 227, 0.7);
-  }
-  
-  .current-node-text {
-    width: 100%;
-    text-align: center;
-    margin: 0;
-    font-weight: normal;
-  }
-  
-  #navbar {
-    position: absolute; 
-    bottom: 0;
-    width: calc(100% - 40px); 
-    background-color: #1a1c1f;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    border-top: 1px solid #1a1c1f;
-    padding: 20px 0;
-    box-sizing: border-box;
-  }
-  
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: 'Figtree', sans-serif;
-    font-size: 12px;
-    color: #ccc;
-  }
-  
-  .nav-icon {
-    width: 50px;
-    height: 50px;
-  }
+  font-family: "Figtree", sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #f0f0f0;
+  color: #d1dced;
+  height: 100%;
+  overflow: hidden;
+}
+
+html {
+  height: 100%;
+}
+
+h2 {
+  font-size: 28px;
+  color: #d1dced;
+  margin: 0;
+  font-weight: 700;
+}
+
+#mobile {
+  background-color: #1a1c1f;
+  width: 400px;
+  height: 100%;
+  align-items: center;
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#header {
+  text-align: center;
+  margin-bottom: 25px;
+  background-color: #276F7C;
+  border-radius: 10px;
+  padding: 15px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 80px; /* Space for navbar */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* New top section wrapper for map info and new map button */
+.top-section-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.map-info {
+  width: calc(66.666% - 7.5px); /* 2/3 of the space minus half the gap */
+  color: #d1dced;
+  text-align: left;
+}
+
+.new-map-button {
+  background-color: #276F7C;
+  border-radius: 10px;
+  padding: 10px;
+  width: calc(33.333% - 7.5px); /* 1/3 of the space minus half the gap */
+  color: #d1dced;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.plus-icon {
+  background-color: #d1dced;
+  color: #276F7C;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.new-map-button span {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.streak-info {
+  margin: 0 0 15px 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.progress-bar-wrapper {
+  flex-grow: 1;
+  height: 30px;
+  background-color: white;
+  border-radius: 15px;
+  margin-right: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 4%;
+  background-color: #276F7C;
+  border-radius: 15px 0 0 15px;
+}
+
+.progress-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font-size: 14px;
+  width: 100%;
+  line-height: 1;
+  text-align: center;
+  white-space: pre-line;
+  color: black;
+  font-weight: 600;
+}
+
+.percentage {
+  font-weight: bold;
+  font-size: 20px;
+  color: #d1dced;
+}
+
+.map-legend, .map-container {
+  background-color: #276F7C;
+  border-radius: 10px;
+  padding: 15px;
+  width: 100%;
+  color: #d1dced;
+  box-sizing: border-box;
+}
+
+.legend-title {
+  margin: 0 0 10px 0;
+  text-align: left;
+}
+
+/* Updated legend layout */
+.legend-items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 10px;
+  width: 100%;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+}
+
+/* Explicit placement for each item */
+.legend-item:nth-child(1) { /* Standard */
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.legend-item:nth-child(2) { /* Challenge */
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.legend-item:nth-child(3) { /* Rest */
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.legend-item:nth-child(4) { /* Event */
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.legend-item:nth-child(5) { /* Boss */
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* Keep the rest of the legend styling the same */
+.legend-title {
+  margin: 0 0 10px 0;
+  text-align: left;
+  font-size: 18px;
+}
+
+.legend-circle {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.standard-circle {
+  background-color: #478BE3;
+  border: 2px solid #3670B9;
+}
+
+.challenge-circle {
+  background-color: #F1C40F;
+  border: 2px solid #D4AC0D;
+}
+
+.rest-circle {
+  background-color: #A9DFEB;
+  border: 2px solid #8ED1E5;
+}
+
+.event-circle {
+  background-color: #E84393;
+  border: 2px solid #D63384;
+}
+
+.boss-circle {
+  background-color: #E67E22;
+  border: 2px solid #D35400;
+}
+
+.map-container {
+  position: relative;
+  min-height: 350px;
+}
+
+/* Network container styling */
+#map-network {
+  width: 100%;
+  height: 300px;
+  background-color: #ffffff; 
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+/* Override vis.js default node styling */
+.vis-network .vis-node {
+  border-width: 2px;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+/* For current node indication */
+.vis-network .vis-node.current-node {
+  border-width: 3px;
+  box-shadow: 0 0 10px rgba(71, 139, 227, 0.7);
+}
+
+.current-node-text {
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  font-weight: normal;
+}
+
+#navbar {
+  position: absolute; 
+  bottom: 0;
+  left: 20px; /* Match the padding of the parent container */
+  width: calc(100% - 40px); /* Account for left and right padding */
+  background-color: #1a1c1f;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid #1a1c1f;
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Figtree', sans-serif;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.nav-icon {
+  width: 50px;
+  height: 50px;
+}
