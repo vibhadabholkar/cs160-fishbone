@@ -54,9 +54,9 @@
               const habitDiv = document.createElement('div');  
               let html = "";
               for (let key in habit) {
-                html += `<p><strong>${key}:</strong> ${habit[key]}</p>`;
+                html += `<p><strong>${key}:</strong> ${habit[key]}</p><br>`;
               }
-              habitDiv.innerHTML = html;
+              habitDiv.innerHTML = html + `<a href="edithabits.html"> <button id="Edit">Edit Habit</button> </a>`;
               headerContainer.appendChild(habitDiv);
               localStorage.removeItem("cameBack?");
             });
