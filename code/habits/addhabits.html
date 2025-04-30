@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title>Tasks</title>
+    <title>Add Habit</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,30 +28,40 @@
     <main>
         <div class="Add-Habit">
             <label for="habitname">Habit Name: </label>
-            <input type="text" id="habitname" placeholder="Enter the habit you want to create."><br>
+            <input type="text" id="habitname" name="Habit" placeholder="Enter the habit you want to create."><br>
             <br>
 
-            <label for="freq">Frequency: </label>
-            <div class="button-group" id="freq-button-group">
+            <label for="freq">Frequency: </label><br>
+
+            <input type="radio" id="freq-button-group-daily"  name="Frequency" value="Daily">
+            <label for="daily">Daily</label><br>
+
+            <input type="radio" id="freq-button-group-weekly" name="Frequency" value="Weekly">
+            <label for="weekly">Weekly</label><br>
+
+            <input type="radio" id="freq-button-group-custom" name="Frequency" value="Custom">
+            <label for="custom">Custom</label><br><br>
+           
+            <!-- <div class="button-group" name="Frequency" id="freq-button-group">
                 <button class="active">Daily</button>
                 <button>Weekly</button>
                 <button>Custom</button>
             </div>
-            <br>
+            <br> -->
 
             <label for="tod">Preferred Time of Day: </label>
-            <input id="timepicker" type="text" placeholder="Select the time of day you would like to do this habit.">
-            <br>
+            <input id="timepicker" name="Preferred Time of Day" type="text" placeholder="Select the time of day you would like to do this habit.">
+            <br><br>
 
             <label for="target">Target: </label>
-            <input type="text" id="target" placeholder="Enter your target for this habit.">
-            <br>
+            <input type="text" id="target" name="Target" placeholder="Enter your target for this habit.">
+            <br><br>
 
             <label for="notes">Description/Additional Notes: </label>
-            <input type="text" id="notes" placeholder="Add any description or additional notes you want to include about this habit.">
-            <br>
+            <input type="text" id="notes" name="Description/Additional Notes" placeholder="Add any description or additional notes you want to include about this habit.">
+            <br><br>
             <a href="habits.html">
-              <button>Done!</button>
+              <button id="Done">Done!</button>
             </a>
 
         </div>
@@ -66,6 +76,32 @@
             noCalendar: true,
             dateFormat: "h:i K", // 12-hour with AM/PM
         });
+
+         // General Function structure credited to ChatGPT to understand how to move things between several html files like this
+        function habitStorer() {
+          const habitDiv = document.getElementsByClassName("Add-Habit")[0];
+          const inputs = habitDiv.querySelectorAll("input");
+
+          let data = {};
+          inputs.forEach(input => {
+            if (input.name == "Frequency") {
+              const reminderFreq = document.querySelector('input[name="Frequency"]:checked');
+              data[input.name] = reminderFreq.value;
+            } else {
+              data[input.name] = input.value;
+            }
+          });
+
+          localStorage.setItem("habitData", JSON.stringify(data));
+          location.assign("habits.html");
+        }
+
+
+        document.getElementById('Done').addEventListener('click', function() {
+          habitStorer();
+          location.assign("habits.html");
+        });
+
     
     </script>
   </body>

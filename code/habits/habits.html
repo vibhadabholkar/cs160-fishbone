@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title>Tasks</title>
+    <title>Habits</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,6 +32,21 @@
 
     
     <script>
+      const headerContainer = document.getElementsByClassName("curr-habits")[0];
+
+      // General Function structure credited to ChatGPT to understand how to move things between several html files like this
+      window.addEventListener("DOMContentLoaded", () => {
+        const data = JSON.parse(localStorage.getItem("habitData")); 
+        if (data) {
+          var habitDiv = document.createElement('div');  
+          let html = "";
+          for (let key in data) {
+            html += `<p><strong>${key}:</strong> ${data[key]}</p>`;
+          }
+          habitDiv.innerHTML = html;
+          headerContainer.appendChild(habitDiv);
+        }
+      });
     
     </script>
   </body>
