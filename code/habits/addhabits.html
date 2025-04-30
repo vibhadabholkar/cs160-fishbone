@@ -18,6 +18,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <link rel="stylesheet" href="../main.css">
     <link rel="stylesheet" type="text/css" href="habits.css" />
   </head>
   <body>
@@ -60,9 +61,9 @@
             <label for="notes">Description/Additional Notes: </label>
             <input type="text" id="notes" name="Description/Additional Notes" placeholder="Add any description or additional notes you want to include about this habit.">
             <br><br>
-            <a href="habits.html">
-              <button id="Done">Done!</button>
-            </a>
+            <!-- <a href="habits.html"> -->
+            <button id="Done">Done!</button>
+            <!-- </a> -->
 
         </div>
 
@@ -79,8 +80,8 @@
 
          // General Function structure credited to ChatGPT to understand how to move things between several html files like this
         function habitStorer() {
-          const habitDiv = document.getElementsByClassName("Add-Habit")[0];
-          const inputs = habitDiv.querySelectorAll("input");
+          var habitDiv = document.getElementsByClassName("Add-Habit")[0];
+          var inputs = habitDiv.querySelectorAll("input");
 
           let data = {};
           inputs.forEach(input => {
@@ -92,13 +93,16 @@
             }
           });
 
-          localStorage.setItem("habitData", JSON.stringify(data));
-          location.assign("habits.html");
+          let habitList = JSON.parse(localStorage.getItem("habitData")) || [];
+          habitList.push(data);
+
+          localStorage.setItem("habitData", JSON.stringify(habitList));
         }
 
 
         document.getElementById('Done').addEventListener('click', function() {
           habitStorer();
+          localStorage.setItem("cameBack?", true);
           location.assign("habits.html");
         });
 

@@ -3,13 +3,15 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    justify-content: center; /* Center vertically */
-    align-items: center; /* Center horizontally */
-    height: 100vh; /* Full viewport height */
-    text-align: center; /* Center text inside elements */
-    background-color: #1a1c1f; /* Optional: Light background */
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    text-align: center; 
+    
+    background-color: #1a1c1f; 
     color: #d1dced;
+    height: 100%;
+    overflow: auto; 
   }
   
   header {
@@ -17,8 +19,8 @@ body {
     padding: 1px 16px;
     border-radius: 10px;
     background-color: #257b8a;
-    text-align: center; /* Ensures the heading is centered */
-    margin-bottom: 20px; /* Adds space between the title and the tasks */
+    text-align: center; 
+    margin-bottom: 20px; 
   }
   
   .container {
@@ -54,19 +56,32 @@ body {
     width: 250px; /* Set a fixed width */
     text-align: center; /* Ensures text inside the button is centered */
   }
-  
-  .task:hover {
-    background-color: white;
+
+  .curr-habits > div {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background-color: #257b8a;
+    border: 3px solid white;
+    color: #d1dced;
+    font-size: 16px;
+    width: 250px; /* Set a fixed width */
+    text-align: center; /* Ensures text inside the button is centered */
+    height: auto;
+    gap: 10px;
+    flex-grow: 1;
   }
   
+/*   
   .button-container {
     display: flex;
     justify-content: center; 
     gap: 40px;
     margin-top: 40px;
-  }
+  } */
   
-  .add-button {
+  /* .add-button {
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
@@ -76,9 +91,9 @@ body {
     text-align: center;
     color: white;
     background-color: #478BE3;
-  }
+  } */
   
-  .delete-button {
+  /* .delete-button {
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
@@ -92,4 +107,4 @@ body {
   
   .action-button:hover {
     opacity: 0.8;
-  }
+  } */

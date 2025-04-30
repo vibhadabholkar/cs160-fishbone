@@ -13,40 +13,64 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <link rel="stylesheet" href="../main.css">
     <link rel="stylesheet" type="text/css" href="habits.css" />
+    
   </head>
   <body>
     <header>
       <h1>Add/Edit Habits</h1>      
     </header>
     <main>
+
+      <a href="addhabits.html">
+        <button id="Add"> Add Habits </button>
+      </a>
+
+      <h2> Current Habits</h2>
+
       <!-- Current Habits Div -->
       <div class = "curr-habits">
-        <h2> Current Habits</h2>
-        <a href="addhabits.html">
-          <button> Add Habits </button>
-        </a>
+
       </div>
+
+      <button id="DemoDone">Demo Done!</button>
       
     </main>
 
     
     <script>
-      const headerContainer = document.getElementsByClassName("curr-habits")[0];
+      
 
       // General Function structure credited to ChatGPT to understand how to move things between several html files like this
       window.addEventListener("DOMContentLoaded", () => {
-        const data = JSON.parse(localStorage.getItem("habitData")); 
-        if (data) {
-          var habitDiv = document.createElement('div');  
-          let html = "";
-          for (let key in data) {
-            html += `<p><strong>${key}:</strong> ${data[key]}</p>`;
+        const headerContainer = document.getElementsByClassName("curr-habits")[0];
+        const wentToAddHabit = JSON.parse(localStorage.getItem("cameBack?")); 
+        if (wentToAddHabit) {
+          const habitList = JSON.parse(localStorage.getItem("habitData")); 
+
+          if (habitList.length > 0) {
+            habitList.forEach(habit => {
+              const habitDiv = document.createElement('div');  
+              let html = "";
+              for (let key in habit) {
+                html += `<p><strong>${key}:</strong> ${habit[key]}</p>`;
+              }
+              habitDiv.innerHTML = html;
+              headerContainer.appendChild(habitDiv);
+              localStorage.removeItem("cameBack?");
+            });
           }
-          habitDiv.innerHTML = html;
-          headerContainer.appendChild(habitDiv);
+          
         }
       });
+
+      document.getElementById('DemoDone').addEventListener('click', function() {
+        localStorage.clear();
+        location.reload()
+        });
+
+      
     
     </script>
   </body>
