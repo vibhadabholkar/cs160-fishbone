@@ -1,3 +1,13 @@
+/* #mobile {
+  background-color: #1a1c1f;
+  width: 400px;
+  height: 100%;
+  align-items: center;
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
+} */
+
 body {
     font-family: "Lato", sans-serif;
     margin: 0;
@@ -7,7 +17,7 @@ body {
     justify-content: center; 
     align-items: center; 
     text-align: center; 
-    
+    background-color: #1a1c1f;
     color: #d1dced;
     height: 100%;
     overflow: auto; 
