@@ -137,15 +137,18 @@ hr {
 
 
 #navbar {
-  position: absolute; 
+  position: fixed;
   bottom: 0;
-  width: 100%; 
+  left: 0;
+  right: 0;
+  max-width: 400px;
+  margin: 0 auto;           /* center it horizontally */
+  padding: 20px 0;
   background-color: #1a1c1f;
   display: flex;
   justify-content: space-around;
   align-items: center;
   border-top: 1px solid #1a1c1f;
-  padding: 40px 0;
   box-sizing: border-box;
 }
 

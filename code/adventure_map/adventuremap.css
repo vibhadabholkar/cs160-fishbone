@@ -347,16 +347,18 @@ h2 {
 }
 
 #navbar {
-  position: absolute; 
+  position: fixed;
   bottom: 0;
-  left: 20px; /* Match the padding of the parent container */
-  width: calc(100% - 40px); /* Account for left and right padding */
+  left: 0;
+  right: 0;
+  max-width: 400px;
+  margin: 0 auto;           /* center it horizontally */
+  padding: 20px 0;
   background-color: #1a1c1f;
   display: flex;
   justify-content: space-around;
   align-items: center;
   border-top: 1px solid #1a1c1f;
-  padding: 20px 0;
   box-sizing: border-box;
 }
 
