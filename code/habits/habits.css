@@ -20,7 +20,7 @@ body {
     background-color: #1a1c1f;
     color: #d1dced;
     height: 100%;
-    overflow: auto; 
+    overflow-y: auto; 
   }
   
   header {
@@ -32,11 +32,18 @@ body {
     margin-bottom: 20px; 
   }
   
-  .container {
+  #navbar {
+    position: absolute; 
+    bottom: 0;
+    width: 100%; 
+    background-color: #1a1c1f;
     display: flex;
-    flex-direction: column; /* Stack items vertically */
-    align-items: center; /* Center horizontally */
-    gap: 10px; /* Adds spacing between items */
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #1a1c1f;
+    padding: 40px 0;
+    box-sizing: border-box;
+    overflow-y: auto;
   }
 
   
@@ -51,6 +58,7 @@ body {
     font-size: 16px;
     width: 250px; /* Set a fixed width */
     text-align: center; /* Ensures text inside the button is centered */
+    margin: 0 auto; 
   }
 
   .Edit-Habit {
@@ -80,6 +88,7 @@ body {
     height: auto;
     gap: 10px;
     flex-grow: 1;
+    margin: 0 auto;
   }
   
 /*   
