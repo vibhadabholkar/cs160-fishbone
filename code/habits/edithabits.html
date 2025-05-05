@@ -1,64 +1,132 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
-    <title>Edit Habit</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
-      rel="stylesheet"
-    />
+<head>
+    <title>Edit Habits</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+    
+     <!-- For the AM/PM Toggle on the Clock -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="stylesheet" type="text/css" href="habits.css" />
-  </head>
-  <body>
-    <header>
-      <h1>Edit Habit</h1>      
-    </header>
+    <link rel="stylesheet" href="../main.css">
+</head>
 
-    <main>
-        <!-- Find a way to get thee stored earlier values into the edit habit section -->
-        <div class="Edit-Habit">
-            <label for="habitname">Habit Name: </label>
-            <input type="text" id="habitname" placeholder="Enter the habit you want to create."><br>
-            <br>
+<body>
+    <div id="mobile">
+        <header>
+            <h1>Edit Habit</h1>     
+        </header>
 
-            <label for="freq">Frequency: </label>
-            <div class="button-group" id="freq-button-group">
-                <button class="active">Daily</button>
-                <button>Weekly</button>
-                <button>Custom</button>
+        <main>
+            <div id="Edit-Habit">
+                <!-- Habit Name -->
+                <label for="habitname">Habit Name </label>
+                <input class= "not-freq" type="text" id="habitname" name="Habit" placeholder="Enter the habit you want to create."><br>
+                <br>
+    
+                <!-- Frequency Buttons -->
+                <label for="freq">Frequency </label>
+
+                <div id="freq-btn">
+                  <input type="radio" id="freq-button-group-daily"  name="Frequency" value="Daily">
+                  <label for="daily">Daily</label>
+      
+                  <input type="radio" id="freq-button-group-weekly" name="Frequency" value="Weekly">
+                  <label for="weekly">Weekly</label>
+      
+                  <input type="radio" id="freq-button-group-custom" name="Frequency" value="Custom">
+                  <label for="custom">Custom</label>
+                </div>
+                
+                <div id="custom-input" class = "not-freq">
+                  <input type="text" placeholder="Enter additional info">
+                </div>
+                <br>
+                
+                <!-- Preferred Time of Day -->
+                <label for="tod">Preferred Time of Day </label>
+                <input class= "not-freq" id="timepicker" name="Preferred Time of Day" type="text" placeholder="Select the time of day you would like to do this habit.">
+                <br>
+    
+                <!-- Target-->
+                <label for="target">Target </label>
+                <input class= "not-freq" type="text" id="target" name="Target" placeholder="Enter your target for this habit.">
+                <br>
+    
+                <!-- Description -->
+                <label for="notes">Description/Additional Notes </label>
+                <input class= "not-freq" type="text" id="notes" name="Description/Additional Notes" placeholder="Add any description/additional notes.">
+                <br><br>
+
+                <button class="btn btn-primary" id="Done">Done!</button>
             </div>
-            <br>
 
-            <label for="tod">Preferred Time of Day: </label>
-            <input id="timepicker" type="text" placeholder="Select the time of day you would like to do this habit.">
-            <br>
+        </main>
 
-            <label for="target">Target: </label>
-            <input type="text" id="target" placeholder="Enter your target for this habit.">
-            <br>
 
-            <label for="notes">Additional Notes: </label>
-            <input type="text" id="notes" placeholder="Add any additional notes you want to include about this habit.">
-            <br>
-            <a href="habits.html">
-              <button>Done!</button>
-            </a>
 
-           
-        </div>
+        <script>
+            flatpickr("#timepicker", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "h:i K", // 12-hour with AM/PM
+            });
 
-    
-    </main>
+            document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+              const customDiv = document.getElementById("custom-input");
+              radio.addEventListener('click', function() {
+                if (this.value == "Custom") {
+                  customDiv.style.display = "block";
+                } else {
+                  customDiv.style.display = "none";
+                }
+              });
+            });
 
-    
-    <script>
-    
-    </script>
-  </body>
+
+
+            // General Function structure credited to ChatGPT to understand how to move things between several html files like this
+            function habitStorer() {
+                var habitDiv = document.getElementById("Add-Habit");
+                var inputs = habitDiv.querySelectorAll("input");
+
+                let data = {};
+                inputs.forEach(input => {
+                    if (input.name == "Frequency") {
+                        const reminderFreq = document.querySelector('input[name="Frequency"]:checked');
+                        data[input.name] = reminderFreq.value;
+                    } else {
+                        data[input.name] = input.value;
+                    }
+                });
+
+                let habitList = JSON.parse(localStorage.getItem("habitData")) || [];
+                habitList.push(data);
+
+                localStorage.setItem("habitData", JSON.stringify(habitList));
+            }
+
+
+            document.getElementById('Done').addEventListener('click', function() {
+                habitStorer();
+                localStorage.setItem("cameBack?", true);
+                location.assign("habits.html");
+            });
+        </script>
+
+        
+        <script src="../elements/navbar.js"></script>
+        <custom-navbar></custom-navbar>
+    </div>
+</body>
 </html>
