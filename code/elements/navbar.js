@@ -4,7 +4,7 @@ class Navbar extends HTMLElement {
             <div id="navbar">
                 <div class="nav-item">
                     <a href="../adventure_map/adventuremap.html">
-                        <img src="../img/navbar/Home.png" alt="Home" class="nav-icon">
+                        <img src="../img/navbar/Map1.png" alt="Home" class="nav-icon">
                     </a>
                 </div>
                 <div class="nav-item">
