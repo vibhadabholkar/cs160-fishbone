@@ -48,8 +48,8 @@
                   <label for="custom">Custom</label>
                 </div>
                 
-                <div id="custom-input" class = "not-freq">
-                  <input type="text" placeholder="Enter additional info">
+                <div id="custom-input-div" class = "not-freq" name="Custom Frequency">
+                  <input id="custom-input" type="text" placeholder="Enter additional info">
                 </div>
                 <br>
                 
@@ -82,8 +82,8 @@
                 dateFormat: "h:i K", // 12-hour with AM/PM
             });
 
+            const customDiv = document.getElementById("custom-input-div");
             document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
-              const customDiv = document.getElementById("custom-input");
               radio.addEventListener('click', function() {
                 if (this.value == "Custom") {
                   customDiv.style.display = "block";
@@ -93,37 +93,9 @@
               });
             });
 
-            // General Function structure credited to ChatGPT to understand how to move things between several html files like this
-            // window.addEventListener("DOMContentLoaded", () => {
-            // const headerContainer = document.getElementsByClassName("curr-habits")[0];
-            // const wentToAddHabit = JSON.parse(localStorage.getItem("cameBack?")); 
-            // if (wentToAddHabit) {
-            //     const habitList = JSON.parse(localStorage.getItem("habitData")); 
-
-            //     if (habitList.length > 0) {
-            //     habitList.forEach(habit => {
-            //         const habitDiv = document.createElement('div');  
-            //         let html = "";
-            //         for (let key in habit) {
-            //         html += `<p><strong>${key}:</strong> ${habit[key]}</p><br>`;
-            //         }
-            //         habitDiv.innerHTML = html + `<a href="edithabits.html"> <button id="Edit">Edit Habit</button> </a>`;
-            //         headerContainer.appendChild(habitDiv);
-            //         localStorage.removeItem("cameBack?");
-            //     });
-            //     }
-                
-            // }
-            // });
-
-
-
-
           // General Function structure credited to ChatGPT to understand how to move things between several html files like this
             const editDiv = document.getElementById("Edit-Habit");
-            const habitInput = JSON.parse(localStorage.getItem("edit")); 
-            const html = habitInput.htmlContent;
-            const match = html.match(/<\/strong>\s*(.+)<\/p>/);
+            const habitInput = JSON.parse(localStorage.getItem("edit"));
 
             if (habitInput) {
               const freqValue = habitInput.Frequency || "";
@@ -131,44 +103,52 @@
                   const radio = document.querySelector(`input[name="Frequency"][value="${freqValue}"]`);
                   if (radio) {
                     radio.checked = true;
+                    if (freqValue === "Custom") {
+                      document.getElementById("custom-input-div").style.display = "block";
+                      document.getElementById("custom-input").value = habitInput["Custom Frequency"] || "";
+                    } else {
+                      document.getElementById("custom-input-div").style.display = "none";
+                    }
                   }
               }
 
-              // Prefill the input fields with the habit data
               document.getElementById("habitname").value = habitInput.Habit || "";
               document.getElementById("timepicker").value = habitInput["Preferred Time of Day"] || "";
               document.getElementById("target").value = habitInput.Target || "";
               document.getElementById("notes").value = habitInput["Description/Additional Notes"] || "";
+              document.getElementById("custom-input").value = habitInput["Custom Frequency"] || "";
             }
 
-            localStorage.removeItem("edit");
             
-
-            // General Function structure credited to ChatGPT to understand how to move things between several html files like this
-            function habitStorer() {
-              var habitDiv = document.getElementById("Add-Habit");
-              var inputs = habitDiv.querySelectorAll("input");
-
-              let data = {};
-              inputs.forEach(input => {
-                  if (input.name == "Frequency") {
-                      const reminderFreq = document.querySelector('input[name="Frequency"]:checked');
-                      data[input.name] = reminderFreq.value;
-                  } else {
-                      data[input.name] = input.value;
-                  }
-              });
-
-              let habitList = JSON.parse(localStorage.getItem("habitData")) || [];
-              habitList.push(data);
-
-              localStorage.setItem("habitData", JSON.stringify(habitList));
-            }
-
-
             document.getElementById('Done').addEventListener('click', function() {
-                habitStorer();
-                localStorage.setItem("cameBack?", true);
+                localStorage.setItem("cameBack", "true");
+                
+                var editedData = {};
+
+                if (document.querySelector('input[name="Frequency"]:checked')?.value  === "Custom") {
+                  editedData = {
+                    "Habit": document.getElementById("habitname").value,
+                    "Frequency": document.querySelector('input[name="Frequency"]:checked')?.value || "",
+                    "Custom Frequency": document.getElementById("custom-input").value,
+                    "Preferred Time of Day": document.getElementById("timepicker").value,
+                    "Target": document.getElementById("target").value,
+                    "Description/Additional Notes": document.getElementById("notes").value,
+                    "originalName": habitInput["originalName"]
+                  }
+                } else {
+                  editedData = {
+                    "Habit": document.getElementById("habitname").value,
+                    "Frequency": document.querySelector('input[name="Frequency"]:checked')?.value || "",
+                    "Preferred Time of Day": document.getElementById("timepicker").value,
+                    "Target": document.getElementById("target").value,
+                    "Description/Additional Notes": document.getElementById("notes").value,
+                    "originalName": habitInput["originalName"]
+                  }
+                }
+
+
+                
+                localStorage.setItem("editedHabit", JSON.stringify(editedData))
                 location.assign("habits.html");
             });
         </script>

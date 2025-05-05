@@ -15,6 +15,7 @@
 
     <link rel="stylesheet" type="text/css" href="habits.css" />
     <link rel="stylesheet" href="../main.css">
+    
 </head>
 
 <body>
@@ -38,51 +39,86 @@
 
 
         <script>
-            // General Function structure credited to ChatGPT to understand how to move things between several html files like this
-            window.addEventListener("DOMContentLoaded", () => {
+          window.addEventListener("DOMContentLoaded", () => {
             const headerContainer = document.getElementsByClassName("curr-habits")[0];
-            const wentToAddHabit = JSON.parse(localStorage.getItem("cameBack?")); 
-            if (wentToAddHabit) {
-                const habitList = JSON.parse(localStorage.getItem("habitData")); 
 
-                if (habitList.length > 0) {
-                habitList.forEach(habit => {
-                    const habitDiv = document.createElement('div');  
-                    let html = "";
-                    for (let key in habit) {
-                      if (key == "Habit") {
-                        html += `<span><p><strong>${key}:</strong> ${habit[key]}</p></span><br>`;
-                      } else {
-                        html += `<p><strong>${key}:</strong> ${habit[key]}</p><br>`;
+            const cameBack = localStorage.getItem("cameBack");
+                if (cameBack === "true") {
+                  const editedHabitData = JSON.parse(localStorage.getItem("editedHabit")); 
+                  if (editedHabitData) {
+                    let checkingHabitList = JSON.parse(localStorage.getItem("habitData")) || [];
+                    
+                    checkingHabitList = checkingHabitList.map(habit => {
+                      if (habit.Habit === editedHabitData.originalName) {
+                          delete editedHabitData.originalName;
+                          return editedHabitData; 
                       }
-                    }
-                    habitDiv.innerHTML = html + `<a href="edithabits.html"> <button id="Edit-Habit">Edit Habit</button> </a>`;
-                    headerContainer.appendChild(habitDiv);
-                    localStorage.removeItem("cameBack?");
-                });
+                      return habit;
+                  });
+                    
+                    localStorage.removeItem("edit");
+                    localStorage.removeItem("cameBack");
+                    localStorage.removeItem("editedHabit");
+                    localStorage.setItem("habitData", JSON.stringify(checkingHabitList));
+                  }
                 }
-                
+
+                  const habitList = JSON.parse(localStorage.getItem("habitData")) || []; 
+                  // console.log(habitList); 
+
+                  if (habitList.length > 0) {
+                  habitList.forEach(habit => {
+                      const habitDiv = document.createElement('div');  
+                      habitDiv.classList.add("habit");
+
+                      let html = "";
+                      for (let key in habit) {
+                        if (habit[key]) {
+                          if (key == "Habit") {
+                            html += `<span><p><strong>${key}:</strong> ${habit[key]}</p></span>`;
+                          } else {
+                            html += `<p><strong>${key}:</strong> ${habit[key]}</p>`;
+                          }
+                        }
+                      }
+
+                      habitDiv.innerHTML = html + `<button class="Edit-Habit">Edit Habit</button>`;
+                      
+                      headerContainer.appendChild(habitDiv); 
+                      
+                  });
+                  }
+                  
+          });
+
+          document.getElementById('DemoDone').addEventListener('click', function() {
+            localStorage.clear();
+            location.reload()
+          });
+
+
+          document.querySelector('.curr-habits').addEventListener('click', function(button) {
+            if (button.target && button.target.classList.contains('Edit-Habit')) {
+                const parentDiv = button.target.closest('.habit')
+                console.log(parentDiv);
+                const habitData = {};
+
+                const details = parentDiv.querySelectorAll('p');
+                details.forEach(detail => {
+                  const match = detail.innerText.match(/^(.*?):\s*(.*)$/);
+                  if (match) {
+                    habitData[match[1]] = match[2];
+                  }
+                });
+
+                habitData["originalName"] = habitData["Habit"];
+                localStorage.setItem("edit", JSON.stringify(habitData));
+                location.assign("edithabits.html");
             }
-            });
+          });
 
-            document.getElementById('DemoDone').addEventListener('click', function() {
-              localStorage.clear();
-              location.reload()
-            });
-
-            document.getElementById('Edit-Habit').addEventListener('click', function() {
-              const parentDiv = this.closest('.habit')
-              // var habitStatement = parentDiv.querySelector('span').textContent.trim();
-              // var parts = text.split(":");
-              // var habitName = parts[1].trim();
-
-              localStorage.setItem("edit", JSON.stringify(parentDiv));
-              location.reload()
-            });
 
         </script>
-
-        
         <script src="../elements/navbar.js"></script>
         <custom-navbar></custom-navbar>
     </div>

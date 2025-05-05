@@ -48,8 +48,8 @@
                   <label for="custom">Custom</label>
                 </div>
                 
-                <div id="custom-input" class = "not-freq">
-                  <input type="text" placeholder="Enter additional info">
+                <div id="custom-input-div" class = "not-freq" name="Custom Frequency">
+                  <input id="custom-input" type="text" placeholder="Enter additional info">
                 </div>
                 <br>
                 
@@ -82,8 +82,9 @@
                 dateFormat: "h:i K", // 12-hour with AM/PM
             });
 
+            const customDiv = document.getElementById("custom-input-div");
+            customDiv.style.display = "none";
             document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
-              const customDiv = document.getElementById("custom-input");
               radio.addEventListener('click', function() {
                 if (this.value == "Custom") {
                   customDiv.style.display = "block";
@@ -105,10 +106,16 @@
                     if (input.name == "Frequency") {
                         const reminderFreq = document.querySelector('input[name="Frequency"]:checked');
                         data[input.name] = reminderFreq.value;
+                        if (reminderFreq && reminderFreq.value === "Custom") {
+                          const customFreq = document.getElementById("custom-input").value;
+                          data["Custom Frequency"] = customFreq;
+                        }
                     } else {
                         data[input.name] = input.value;
                     }
                 });
+                data["originalName"] = data.Habit;
+
 
                 let habitList = JSON.parse(localStorage.getItem("habitData")) || [];
                 habitList.push(data);
@@ -119,7 +126,7 @@
 
             document.getElementById('Done').addEventListener('click', function() {
                 habitStorer();
-                localStorage.setItem("cameBack?", true);
+                localStorage.setItem("cameBack", "true");
                 location.assign("habits.html");
             });
         </script>
