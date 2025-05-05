@@ -14,6 +14,11 @@ class Navbar extends HTMLElement {
                 </div>
                 <div class="nav-item">
                     <a href="../habits/habits.html">
+                        <img src="../img/navbar/Add.png" alt="Habits" class="nav-icon">
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="../insights/insights.html">
                         <img src="../img/navbar/Insights.png" alt="Insights" class="nav-icon">
                     </a>
                 </div>

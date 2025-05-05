@@ -129,3 +129,27 @@ custom-navbar {
 #mobile {
   overflow: auto;
 }
+
+/* For Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+  height: 8px; /* Height of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color of the thumb (the part you drag) */
+  border-radius: 10px; /* Rounded corners for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Darker color on hover */
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1c1f; /* Color of the track (background area) */
+  border-radius: 10px; /* Rounded corners for the track */
+}
+
+::-webkit-scrollbar-track:hover {
+  background: #1a1c1f; /* Darker track on hover */
+}

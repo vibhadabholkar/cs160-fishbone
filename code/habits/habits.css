@@ -1,6 +1,6 @@
 
 body {
-    font-family: "Lato", sans-serif;
+    font-family: "Figtree", sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
@@ -15,6 +15,7 @@ body {
   }
   
   header {
+    font-family: 'Figtree', sans-serif;
     display: block;
     padding: 1px 16px;
     border-radius: 10px;
@@ -27,13 +28,15 @@ body {
     padding-bottom: 100px;
   }
 
-  /* input {
-    display: flex;
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-  } */
-  
+  input {
+    font-family: 'Figtree', sans-serif;
+  }
+
+  label {
+    font-family: 'Figtree', sans-serif;
+  }
+
+
   
   #Add-Habit {
     display: flex;
@@ -68,17 +71,57 @@ body {
     display: hidden;
   }
 
+  #Add {
+    padding: 10px 10px;
+    height: auto; 
+    width: auto;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    background-color: #257b8a;
+  }
+
+  .Edit-Btn {
+    padding: 10px 10px;
+    height: auto; 
+    width: auto;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    color: #257b8a;
+    background-color: #d1dced;
+  }
+
+  #DemoDone {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    color: #d1dced;
+    background-color: #52595c;
+  }
+
   .Edit-Habit {
     display: block;
     padding: 12px 16px;
     border-radius: 10px;
     background-color: #257b8a;
-    border: 3px solid white;
+    border: 3px solid #d1dced;
     text-decoration: none;
     color: #d1dced;
     font-size: 16px;
-    width: 250px; /* Set a fixed width */
-    text-align: center; /* Ensures text inside the button is centered */
+    width: 250px; 
+    text-align: center; 
   }
 
   .curr-habits > div {
@@ -87,11 +130,11 @@ body {
     padding: 10px 16px;
     border-radius: 10px;
     background-color: #257b8a;
-    border: 3px solid white;
+    border: 3px solid #d1dced;
     color: #d1dced;
     font-size: 16px;
-    width: 250px; /* Set a fixed width */
-    text-align: center; /* Ensures text inside the button is centered */
+    width: 250px; 
+    text-align: center; 
     height: auto;
     gap: 10px;
     flex-grow: 1;
