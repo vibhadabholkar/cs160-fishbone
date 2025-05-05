@@ -50,9 +50,13 @@
                     const habitDiv = document.createElement('div');  
                     let html = "";
                     for (let key in habit) {
-                    html += `<p><strong>${key}:</strong> ${habit[key]}</p><br>`;
+                      if (key == "Habit") {
+                        html += `<span><p><strong>${key}:</strong> ${habit[key]}</p></span><br>`;
+                      } else {
+                        html += `<p><strong>${key}:</strong> ${habit[key]}</p><br>`;
+                      }
                     }
-                    habitDiv.innerHTML = html + `<a href="edithabits.html"> <button id="Edit">Edit Habit</button> </a>`;
+                    habitDiv.innerHTML = html + `<a href="edithabits.html"> <button id="Edit-Habit">Edit Habit</button> </a>`;
                     headerContainer.appendChild(habitDiv);
                     localStorage.removeItem("cameBack?");
                 });
@@ -63,6 +67,16 @@
 
             document.getElementById('DemoDone').addEventListener('click', function() {
               localStorage.clear();
+              location.reload()
+            });
+
+            document.getElementById('Edit-Habit').addEventListener('click', function() {
+              const parentDiv = this.closest('.habit')
+              // var habitStatement = parentDiv.querySelector('span').textContent.trim();
+              // var parts = text.split(":");
+              // var habitName = parts[1].trim();
+
+              localStorage.setItem("edit", JSON.stringify(parentDiv));
               location.reload()
             });
 

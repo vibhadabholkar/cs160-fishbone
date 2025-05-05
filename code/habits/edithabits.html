@@ -93,27 +93,76 @@
               });
             });
 
+            // General Function structure credited to ChatGPT to understand how to move things between several html files like this
+            // window.addEventListener("DOMContentLoaded", () => {
+            // const headerContainer = document.getElementsByClassName("curr-habits")[0];
+            // const wentToAddHabit = JSON.parse(localStorage.getItem("cameBack?")); 
+            // if (wentToAddHabit) {
+            //     const habitList = JSON.parse(localStorage.getItem("habitData")); 
 
+            //     if (habitList.length > 0) {
+            //     habitList.forEach(habit => {
+            //         const habitDiv = document.createElement('div');  
+            //         let html = "";
+            //         for (let key in habit) {
+            //         html += `<p><strong>${key}:</strong> ${habit[key]}</p><br>`;
+            //         }
+            //         habitDiv.innerHTML = html + `<a href="edithabits.html"> <button id="Edit">Edit Habit</button> </a>`;
+            //         headerContainer.appendChild(habitDiv);
+            //         localStorage.removeItem("cameBack?");
+            //     });
+            //     }
+                
+            // }
+            // });
+
+
+
+
+          // General Function structure credited to ChatGPT to understand how to move things between several html files like this
+            const editDiv = document.getElementById("Edit-Habit");
+            const habitInput = JSON.parse(localStorage.getItem("edit")); 
+            const html = habitInput.htmlContent;
+            const match = html.match(/<\/strong>\s*(.+)<\/p>/);
+
+            if (habitInput) {
+              const freqValue = habitInput.Frequency || "";
+              if (freqValue) {
+                  const radio = document.querySelector(`input[name="Frequency"][value="${freqValue}"]`);
+                  if (radio) {
+                    radio.checked = true;
+                  }
+              }
+
+              // Prefill the input fields with the habit data
+              document.getElementById("habitname").value = habitInput.Habit || "";
+              document.getElementById("timepicker").value = habitInput["Preferred Time of Day"] || "";
+              document.getElementById("target").value = habitInput.Target || "";
+              document.getElementById("notes").value = habitInput["Description/Additional Notes"] || "";
+            }
+
+            localStorage.removeItem("edit");
+            
 
             // General Function structure credited to ChatGPT to understand how to move things between several html files like this
             function habitStorer() {
-                var habitDiv = document.getElementById("Add-Habit");
-                var inputs = habitDiv.querySelectorAll("input");
+              var habitDiv = document.getElementById("Add-Habit");
+              var inputs = habitDiv.querySelectorAll("input");
 
-                let data = {};
-                inputs.forEach(input => {
-                    if (input.name == "Frequency") {
-                        const reminderFreq = document.querySelector('input[name="Frequency"]:checked');
-                        data[input.name] = reminderFreq.value;
-                    } else {
-                        data[input.name] = input.value;
-                    }
-                });
+              let data = {};
+              inputs.forEach(input => {
+                  if (input.name == "Frequency") {
+                      const reminderFreq = document.querySelector('input[name="Frequency"]:checked');
+                      data[input.name] = reminderFreq.value;
+                  } else {
+                      data[input.name] = input.value;
+                  }
+              });
 
-                let habitList = JSON.parse(localStorage.getItem("habitData")) || [];
-                habitList.push(data);
+              let habitList = JSON.parse(localStorage.getItem("habitData")) || [];
+              habitList.push(data);
 
-                localStorage.setItem("habitData", JSON.stringify(habitList));
+              localStorage.setItem("habitData", JSON.stringify(habitList));
             }
 
 
