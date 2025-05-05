@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 "state": "pending",
                 "x": 0, 
                 "y": 330,
-                "description": "Complete your first three runs this week. Your body protests but grows stronger."
+                "description": "Complete your habits before noon today!"
             },
             {
                 "id": 4,
@@ -454,6 +454,153 @@ document.addEventListener('DOMContentLoaded', function() {
         tooltipDiv.style.display = 'none';
     });
     
+    // Create the node challenge modal
+    function createNodeChallengeModal() {
+        // Create modal container if it doesn't exist
+        if (!document.getElementById('node-challenge-modal')) {
+            const modalContainer = document.createElement('div');
+            modalContainer.id = 'node-challenge-modal';
+            modalContainer.className = 'modal-container';
+            modalContainer.style.display = 'none';
+            
+            // Create modal content
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
+            
+            // Add modal HTML structure
+            modalContent.innerHTML = `
+                <div class="challenge-title">Challenge Day!</div>
+                <div class="challenge-bonus">
+                    <div class="bonus-header">Challenge Bonus:</div>
+                    <div class="bonus-description">Complete all habits before noon (12:00pm)!</div>
+                    <div class="bonus-reward">Reward: New Fish Outfit</div>
+                </div>
+                <div class="time-remaining">
+                    <div class="time-label">Time Remaining:</div>
+                    <div class="time-counter" id="time-counter">03:42:18</div>
+                </div>
+                <div class="habits-container" id="habits-container">
+                    <!-- Habits will be inserted here dynamically -->
+                </div>
+                <div class="button-row">
+                    <button class="button cancel-button" id="cancel-challenge">Cancel</button>
+                    <button class="button accept-button" id="accept-challenge">Accept</button>
+                </div>
+            `;
+            
+            // Add content to container
+            modalContainer.appendChild(modalContent);
+            
+            // Add modal to page
+            document.body.appendChild(modalContainer);
+            
+            // Add event listeners to buttons
+            document.getElementById('cancel-challenge').addEventListener('click', function() {
+                hideNodeChallengeModal();
+            });
+            
+            document.getElementById('accept-challenge').addEventListener('click', function() {
+                acceptNodeChallenge();
+            });
+            
+            // Close modal when clicking outside of content
+            modalContainer.addEventListener('click', function(event) {
+                if (event.target === modalContainer) {
+                    hideNodeChallengeModal();
+                }
+            });
+        }
+    }
+    
+    // Show the node challenge modal
+    function showNodeChallengeModal(node) {
+        createNodeChallengeModal();
+        
+        // Update title based on node type
+        const titleElement = document.querySelector('.challenge-title');
+        titleElement.textContent = `${node.nodeType.charAt(0).toUpperCase() + node.nodeType.slice(1)}: ${node.label}`;
+        
+        // Update description based on node
+        const descriptionElement = document.querySelector('.bonus-description');
+        descriptionElement.textContent = node.description;
+        
+        // Set reward based on node type
+        const rewardElement = document.querySelector('.bonus-reward');
+        let reward = "New Fish Outfit";
+        switch (node.nodeType) {
+            case 'challenge':
+                reward = "New Fish Outfit";
+                break;
+            case 'event':
+                reward = "Special Decoration";
+                break;
+            case 'rest':
+                reward = "Energy Refill";
+                break;
+            case 'boss':
+                reward = "Rare Fish Outfit";
+                break;
+            default:
+                reward = "New Fish Outfit";
+        }
+        rewardElement.textContent = `Reward: ${reward}`;
+        
+        // Add habits based on user profile
+        const habitsContainer = document.getElementById('habits-container');
+        habitsContainer.innerHTML = ''; // Clear previous habits
+        
+        // For this example, we'll use the three habits from the profile
+        // In a real app, these would be pulled from the user's profile
+        const habits = [
+            { name: 'Meditation', details: '10 minutes • Morning' },
+            { name: 'Running', details: '2 miles • Before noon' },
+            { name: 'Reading', details: '20 minutes • Before noon' }
+        ];
+        
+        // Create habit elements
+        habits.forEach(habit => {
+            const habitElement = document.createElement('div');
+            habitElement.className = 'habit-item';
+            habitElement.innerHTML = `
+                <div class="habit-name">${habit.name}</div>
+                <div class="habit-details">${habit.details}</div>
+            `;
+            habitsContainer.appendChild(habitElement);
+        });
+        
+        // Set countdown timer
+        updateCountdownTimer();
+        
+        // Show modal
+        const modalContainer = document.getElementById('node-challenge-modal');
+        modalContainer.style.display = 'flex';
+    }
+    
+    // Hide the node challenge modal
+    function hideNodeChallengeModal() {
+        const modalContainer = document.getElementById('node-challenge-modal');
+        if (modalContainer) {
+            modalContainer.style.display = 'none';
+        }
+    }
+    
+    // Accept the node challenge
+    function acceptNodeChallenge() {
+        // In a real app, this would mark the challenge as accepted
+        // and start tracking the habits
+        hideNodeChallengeModal();
+    }
+    
+    // Update countdown timer
+    function updateCountdownTimer() {
+        // In a real app, this would calculate the actual remaining time
+        // For now, we'll just set a static time
+        const timeCounter = document.getElementById('time-counter');
+        if (timeCounter) {
+            timeCounter.textContent = '03:42:18';
+        }
+    }
+    
     // Handle node selection
     network.on('selectNode', function(params) {
         const nodeId = params.nodes[0];
@@ -478,6 +625,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         if (pathExists) {
+            // Show modal for the node
+            showNodeChallengeModal(node);
+            
             // Update previous current node
             const prevCurrentNode = nodes.get(currentSelectedNode);
             prevCurrentNode.group = prevCurrentNode.nodeType;
