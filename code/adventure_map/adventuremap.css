@@ -403,7 +403,7 @@ h2 {
 
 .challenge-title {
   background-color: #f4d03f;
-  color: #000;
+  color: #333;
   font-size: 28px;
   font-weight: bold;
   padding: 15px;
@@ -412,7 +412,7 @@ h2 {
 }
 
 .challenge-bonus {
-  background-color: #5dade2;
+  background-color: #4aa7b5; /* Lighter teal */
   color: #fff;
   padding: 15px;
   border-radius: 15px;
@@ -430,13 +430,13 @@ h2 {
 }
 
 .bonus-reward {
-  color: #f4d03f;
+  color: #f0f0f0; /* Off-white */
   font-weight: bold;
 }
 
 .time-remaining {
-  background-color: #f4d03f;
-  color: #000;
+  background-color: #f0f0f0; /* Off-white */
+  color: #333;
   padding: 15px;
   border-radius: 15px;
   text-align: center;
@@ -459,7 +459,7 @@ h2 {
 }
 
 .habit-item {
-  background-color: #5dade2;
+  background-color: #3a8f9d; /* Medium teal */
   color: #fff;
   padding: 15px;
   border-radius: 15px;
@@ -497,6 +497,6 @@ h2 {
 }
 
 .accept-button {
-  background-color: #5dade2;
+  background-color: #276F7C; /* Main teal */
   color: #fff;
 }
