@@ -82,7 +82,7 @@
                         }
                       }
 
-                      habitDiv.innerHTML = html + `<button class="Edit-Habit">Edit Habit</button>`;
+                      habitDiv.innerHTML = html + `<button class="Edit-Btn">Edit Habit</button>`;
                       
                       headerContainer.appendChild(habitDiv); 
                       
@@ -98,7 +98,7 @@
 
 
           document.querySelector('.curr-habits').addEventListener('click', function(button) {
-            if (button.target && button.target.classList.contains('Edit-Habit')) {
+            if (button.target && button.target.classList.contains('Edit-Btn')) {
                 const parentDiv = button.target.closest('.habit')
                 console.log(parentDiv);
                 const habitData = {};
