@@ -504,7 +504,22 @@ document.addEventListener('DOMContentLoaded', function () {
         characterImg.style.top = (canvasPosition.y - 35) + 'px';
     }
 
-    // NEW FUNCTION: Update the selectable property for nodes based on the current node
+    // NEW: Function to update the current node text display
+    function updateCurrentNodeText() {
+        const selectedNodeText = document.getElementById('selected-node');
+        if (selectedNodeText && currentSelectedNode) {
+            const currentNode = nodes.get(currentSelectedNode);
+            if (currentNode) {
+                selectedNodeText.textContent = currentNode.label;
+            } else {
+                selectedNodeText.textContent = 'None Selected';
+            }
+        } else if (selectedNodeText) {
+            selectedNodeText.textContent = 'None Selected';
+        }
+    }
+
+    // Update selectable nodes based on current node state
     function updateSelectableNodes() {
         // First, reset all nodes to not selectable
         const allNodes = nodes.get();
@@ -513,7 +528,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         nodes.update(allNodes);
 
-        // If we have a current node, find all nodes that are directly connected
+        // If there's a current node and it's in progress, only make it selectable
+        if (currentSelectedNode) {
+            const currentNode = nodes.get(currentSelectedNode);
+            if (currentNode && currentNode.state === 'in-progress') {
+                // When a node is in progress, only that node is selectable
+                currentNode.selectable = true;
+                nodes.update(currentNode);
+                return; // Exit early - no other nodes should be selectable
+            }
+        }
+
+        // If we're here, either there's no current node or it's completed
+        // If we have a current node that's completed, find all connected nodes
         if (currentSelectedNode) {
             const connectedEdges = network.getConnectedEdges(currentSelectedNode);
             connectedEdges.forEach(edgeId => {
@@ -619,6 +646,246 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Create the habit completion modal
+    function createHabitCompletionModal() {
+        // Create modal container if it doesn't exist
+        if (!document.getElementById('habit-completion-modal')) {
+            const modalContainer = document.createElement('div');
+            modalContainer.id = 'habit-completion-modal';
+            modalContainer.className = 'modal-container';
+            modalContainer.style.display = 'none';
+
+            // Create modal content
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
+
+            // Add modal HTML structure
+            modalContent.innerHTML = `
+                <div class="challenge-title">Complete Your Habits</div>
+                <div class="challenge-bonus">
+                    <div class="bonus-header">Today's Challenge:</div>
+                    <div class="bonus-description" id="habit-description">Complete all habits to continue your journey!</div>
+                    <div class="bonus-reward" id="habit-reward">Reward: Progress on your map</div>
+                </div>
+                <div class="time-remaining">
+                    <div class="time-label">Time Remaining Today:</div>
+                    <div class="time-counter" id="habit-time-counter">03:42:18</div>
+                </div>
+                <div class="habits-container" id="habit-checkboxes-container">
+                    <!-- Habits with checkboxes will be inserted here dynamically -->
+                </div>
+                <div class="button-row">
+                    <button class="button cancel-button" id="close-habit-modal">Close</button>
+                    <button class="button accept-button" id="complete-habits">Complete All</button>
+                </div>
+            `;
+
+            // Add content to container
+            modalContainer.appendChild(modalContent);
+
+            // Add modal to page
+            document.body.appendChild(modalContainer);
+
+            // Add event listeners to buttons
+            document.getElementById('close-habit-modal').addEventListener('click', function () {
+                hideHabitCompletionModal();
+            });
+
+            document.getElementById('complete-habits').addEventListener('click', function () {
+                completeAllHabits();
+            });
+
+            // Close modal when clicking outside of content
+            modalContainer.addEventListener('click', function (event) {
+                if (event.target === modalContainer) {
+                    hideHabitCompletionModal();
+                }
+            });
+        }
+    }
+
+    // Show the habit completion modal
+    function showHabitCompletionModal(node) {
+        createHabitCompletionModal();
+
+        // Update title based on node type
+        const titleElement = document.querySelector('#habit-completion-modal .challenge-title');
+        titleElement.textContent = `${node.nodeType.charAt(0).toUpperCase() + node.nodeType.slice(1)}: ${node.label}`;
+
+        // Set the background color of the title to match the node type color
+        const nodeTypeStyle = nodeTypes[node.nodeType];
+        if (nodeTypeStyle && nodeTypeStyle.color && nodeTypeStyle.color.filled) {
+            titleElement.style.backgroundColor = nodeTypeStyle.color.filled;
+
+            // Set text color to white or black based on background brightness
+            const rgb = hexToRgb(nodeTypeStyle.color.filled);
+            const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+            titleElement.style.color = brightness > 128 ? '#333' : '#fff';
+        }
+
+        // Helper function to convert hex color to RGB
+        function hexToRgb(hex) {
+            // Remove the # if present
+            hex = hex.replace(/^#/, '');
+
+            // Parse the hex values
+            const bigint = parseInt(hex, 16);
+            const r = (bigint >> 16) & 255;
+            const g = (bigint >> 8) & 255;
+            const b = bigint & 255;
+
+            return { r, g, b };
+        }
+
+        // Update description based on node
+        const descriptionElement = document.getElementById('habit-description');
+        descriptionElement.textContent = node.description;
+
+        // Set reward based on node type
+        const rewardElement = document.getElementById('habit-reward');
+        let reward = "Progress on your map";
+        switch (node.nodeType) {
+            case 'challenge':
+                reward = "Double XP Bonus";
+                break;
+            case 'event':
+                reward = "Special Decoration";
+                break;
+            case 'rest':
+                reward = "Energy Refill";
+                break;
+            case 'boss':
+                reward = "Rare Fish Outfit";
+                break;
+            default:
+                reward = "New Fish Outfit";
+        }
+        rewardElement.textContent = `Reward: ${reward}`;
+
+        // Update countdown timer
+        const timeCounter = document.getElementById('habit-time-counter');
+        if (timeCounter) {
+            const now = new Date();
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999);
+            const timeRemaining = endOfDay - now;
+
+            const hours = Math.floor(timeRemaining / 3600000).toString().padStart(2, '0');
+            const minutes = Math.floor((timeRemaining % 3600000) / 60000).toString().padStart(2, '0');
+            const seconds = Math.floor((timeRemaining % 60000) / 1000).toString().padStart(2, '0');
+
+            timeCounter.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Add habits with checkboxes based on node data
+        const habitsContainer = document.getElementById('habit-checkboxes-container');
+        habitsContainer.innerHTML = ''; // Clear previous habits
+
+        // Add habits from the node with checkboxes
+        if (node.habits && node.habits.length > 0) {
+            node.habits.forEach((habit, index) => {
+                const habitElement = document.createElement('div');
+                habitElement.className = 'habit-item';
+                habitElement.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div class="habit-name">${habit.name}</div>
+                            <div class="habit-details">${habit.details}</div>
+                        </div>
+                        <div class="habit-checkbox-container">
+                            <input type="checkbox" id="habit-${index}" class="habit-checkbox" style="width: 25px; height: 25px;">
+                        </div>
+                    </div>
+                `;
+                habitsContainer.appendChild(habitElement);
+            });
+        }
+
+        // Add event listeners to checkboxes
+        const checkboxes = document.querySelectorAll('.habit-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                // Check if all habits are completed
+                const allChecked = Array.from(checkboxes).every(box => box.checked);
+                const completeButton = document.getElementById('complete-habits');
+
+                if (completeButton) {
+                    completeButton.disabled = !allChecked;
+                    if (allChecked) {
+                        completeButton.style.backgroundColor = '#4CAF50'; // Green when all habits are checked
+                    } else {
+                        completeButton.style.backgroundColor = '#276F7C'; // Default color
+                    }
+                }
+            });
+        });
+
+        // Initially disable the complete button
+        const completeButton = document.getElementById('complete-habits');
+        if (completeButton) {
+            completeButton.disabled = true;
+        }
+
+        // Show modal
+        const modalContainer = document.getElementById('habit-completion-modal');
+        modalContainer.style.display = 'flex';
+    }
+
+    // Hide the habit completion modal
+    function hideHabitCompletionModal() {
+        const modalContainer = document.getElementById('habit-completion-modal');
+        if (modalContainer) {
+            modalContainer.style.display = 'none';
+        }
+    }
+
+    // Complete all habits and mark node as completed
+    function completeAllHabits() {
+        if (currentSelectedNode) {
+            const node = nodes.get(currentSelectedNode);
+
+            // Mark the node as completed
+            node.state = 'completed';
+            node.group = node.nodeType; // Use type for styling
+            nodes.update(node);
+
+            // Update any connected edges if needed
+            const connectedEdges = network.getConnectedEdges(currentSelectedNode);
+            connectedEdges.forEach(edgeId => {
+                const edge = edges.get(edgeId);
+                if (edge.state === 'traversing') {
+                    edge.state = 'traversed';
+                    edges.update(edge);
+                }
+            });
+
+            // Update the map progress
+            updateMapProgress();
+
+            // Update selectable nodes for the next step
+            // Now other nodes connected to this one will be selectable
+            updateSelectableNodes();
+
+            // Hide the modal
+            hideHabitCompletionModal();
+        }
+    }
+
+    // Set initial state and load event handlers
+    function initializeMap() {
+        // Initialize the current node text
+        updateCurrentNodeText();
+
+        // Update selectable nodes
+        updateSelectableNodes();
+
+        // Start the animation loop
+        animateSelectableNodes();
+    }
+
+    // Initialize the map when everything is loaded
+    setTimeout(initializeMap, 1200); // Slight delay to ensure everything is rendered
+
     // Show the node challenge modal
     function showNodeChallengeModal(node) {
         createNodeChallengeModal();
@@ -718,33 +985,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // If this is the first node selection (starting the map)
             if (!currentSelectedNode) {
-                // Just set the current node, don't mark anything as completed
+                // Set the current node, mark as 'in-progress' not 'completed'
                 currentSelectedNode = targetNodeId;
                 node.group = 'current';
-                node.state = 'current';
+                node.state = 'in-progress'; // Using in-progress instead of current
                 nodes.update(node);
             } else {
-                // Update previous current node
-                const prevCurrentNode = nodes.get(currentSelectedNode);
-                prevCurrentNode.group = prevCurrentNode.nodeType;
-                prevCurrentNode.state = 'completed';
-                nodes.update(prevCurrentNode);
+                // Current node stays as is until habits are completed
 
-                // Update the new current node
-                node.group = 'current';
-                node.state = 'current';
-                nodes.update(node);
-
-                // Update the edge between them to traversed
+                // Update the edge between them to show the path but not fully traversed
                 const connectedEdges = network.getConnectedEdges(currentSelectedNode);
                 connectedEdges.forEach(edgeId => {
                     const edge = edges.get(edgeId);
                     if (edge.from === currentSelectedNode && edge.to === targetNodeId) {
                         edge.dashes = false;
-                        edge.state = 'traversed';
+                        edge.state = 'traversing'; // Using traversing instead of traversed
                         edges.update(edge);
                     }
                 });
+
+                // Update the new current node
+                node.group = 'current';
+                node.state = 'in-progress';
+                nodes.update(node);
 
                 // Update the current node reference
                 currentSelectedNode = targetNodeId;
@@ -768,10 +1031,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }, 850);
 
+            // Update the "Current Node: x" text at the bottom to show the newly selected node
+            updateCurrentNodeText();
+
             // Update map progress
             updateMapProgress();
 
-            // Update selectable nodes
+            // Update selectable nodes - this will only make the current node selectable
             updateSelectableNodes();
 
             // Reset the target node
@@ -797,20 +1063,28 @@ document.addEventListener('DOMContentLoaded', function () {
         const nodeId = params.nodes[0];
         const node = nodes.get(nodeId);
 
-        // Update the selected node text
-        const selectedNodeText = document.getElementById('selected-node');
-        selectedNodeText.textContent = node.label;
-
-        // Only proceed if the node is selectable
-        if (node.selectable) {
+        // If this is the current node and it's in progress, show habit completion modal
+        if (nodeId === currentSelectedNode && node.state === 'in-progress') {
+            showHabitCompletionModal(node);
+        }
+        // If no current node yet or we're allowed to select new nodes (current one is completed)
+        else if (node.selectable) {
             // Store target node
             targetNodeId = nodeId;
 
-            // Show modal for the node
+            // Show node challenge modal
             showNodeChallengeModal(node);
         }
 
         network.unselectAll();
+    });
+
+    // Handle click outside nodes
+    network.on('click', function (params) {
+        if (params.nodes.length === 0) {
+            // We don't update the current node text when clicking elsewhere
+            // This keeps the text showing the actual current node
+        }
     });
 
     // Handle click outside nodes to deselect
@@ -834,12 +1108,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 let fillColor, strokeColor;
 
                 // Determine styling based on node type and state
-                if (node.state === 'current') {
-                    // Current node is filled with its type color with a subtle highlight
-                    fillColor = typeStyle.color.filled;
-                    strokeColor = typeStyle.color.border;
+                if (node.state === 'current' || node.state === 'in-progress') {
+                    if (node.state === 'in-progress') {
+                        // In-progress nodes have white background with colored border
+                        // but also have a yellow highlight
+                        fillColor = typeStyle.color.background;
+                        strokeColor = typeStyle.color.border;
+                    } else {
+                        // Legacy current node styling
+                        fillColor = typeStyle.color.filled;
+                        strokeColor = typeStyle.color.border;
+                    }
 
-                    // Draw a highlight ring around the current node
+                    // Draw a highlight ring around the current/in-progress node
                     ctx.beginPath();
                     ctx.arc(pos.x, pos.y, (typeStyle.size / 2) + 3, 0, 2 * Math.PI, false);
                     ctx.strokeStyle = '#FFEB3B'; // Bright yellow highlight
