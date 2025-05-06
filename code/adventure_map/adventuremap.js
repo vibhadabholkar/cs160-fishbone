@@ -684,7 +684,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Create character image
         characterImg = document.createElement('img');
-        characterImg.src = '../img/Fishbone Default Green.png'; // Path to the Fishbone character image
+        characterImg.src = '../img/skeleton-profile-green.png'; // Path to the Fishbone character image
         characterImg.id = 'character-img';
         characterImg.style.position = 'absolute';
         characterImg.style.width = '40px';

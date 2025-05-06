@@ -169,3 +169,35 @@ hr {
 .nav-item p {
     margin: 0;
 }
+
+.rounded-button {
+  display: inline-block;
+  padding: 10px 20px; /* Adjust padding for size */
+  font-size: 14px; /* Adjust font size */
+  color: black; /* Text color */
+  background-color: #96D4DF; /* Button background color */
+  border: none; /* Remove border */
+  border-radius: 25px; /* Make the button rounded */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  text-align: center; /* Center the text */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.rounded-button:hover {
+  background-color: #257b8a; /* Darker shade on hover */
+  color: white; /* Text color */
+}
+
+.bookmark {
+  transition: filter 0.3s ease; /* Smooth transition for hover and click effects */
+  cursor: pointer; /* Pointer cursor for interactivity */
+}
+
+.bookmark:hover {
+  filter: brightness(0.7); /* Darken on hover */
+}
+
+.bookmark.darkened {
+  filter: brightness(0.7); /* Keep the image darkened when clicked */
+}

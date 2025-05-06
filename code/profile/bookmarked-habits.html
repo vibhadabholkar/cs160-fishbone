@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Ann Basil</title>
+    <title>Katy Perry</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,60 +20,50 @@
 <body>
     <div id="mobile">
         <div id="header">
-            <a href="edit-profile.html">
-                <img src="../img/profile/skeleton-green.png" alt="Your Profile" style="height: 100px; width: 100px; border-radius: 0; background-color: transparent;">
-            </a>            
+            <img src="../img/skeleton-profile-green.png" alt="Your Profile" style="height: 100px; width: 100px;">
             <h2 style="margin-bottom: -5px;">Ann Basil</h2>
             <p style="font-size: 13px; color: #ccc">@ann_basil</p>
         </div>
-        <script>
-            // Get the saved image src from localStorage
-            const savedImageSrc = localStorage.getItem('selectedProfileImage');
-        
-            // If a saved image exists, update the profile image
-            if (savedImageSrc) {
-                const profileImage = document.querySelector('#header img');
-                profileImage.src = savedImageSrc;
-            }
-        </script>
         <div class="column" id="column-1">
             <div class="container" id="friend-habits">
                 <div style="text-align: left;">
-                    <h2>Current Habits</h2>
+                    <h2>Bookmarked Habits</h2>
                 </div>
-                <div class="friend-habits" style="background-color: #BFD9DE;">
+                <div class="friend-habits" style="background-color: #D1E8EC;">
                     <div style="text-align: left;">
                         <h2 style="margin-bottom: -5px; font-size: 15px">Meditation</h2>
                         <p style="font-size: 10px; color: #2B2E2F">Daily • 10 minutes • Morning</p>
                     </div>
+                    <div style="text-align: right; padding-left: 98px;">
+                        <input type="radio" name="habit-selection" style="width: 20px; height: 20px;">
+                    </div>
                 </div>
-                <div class="friend-habits" style="background-color: #BFD9DE;">
+                <div class="friend-habits" style="background-color: #D1E8EC;">
                     <div style="text-align: left;">
                         <h2 style="margin-bottom: -5px; font-size: 15px">Running</h2>
                         <p style="font-size: 10px; color: #2B2E2F">3 times per week • 2 miles</p>
                     </div>
-                </div>
-                <div class="friend-habits" style="background-color: #BFD9DE;">
-                    <div style="text-align: left;">
-                        <h2 style="margin-bottom: -5px; font-size: 15px">Reading</h2>
-                        <p style="font-size: 10px; color: #2B2E2F">Daily • 20 minutes • Evening</p>
+                    <div style="text-align: right; padding-left: 108px;">
+                        <input type="radio" name="habit-selection" style="width: 20px; height: 20px;">
                     </div>
-
                 </div>
-            </div>
-            <div class="container" id="friend-habits">
-                <div style="text-align: left;">
-                    <h2>Badges</h2>
+                <div class="friend-habits" style="background-color: #D1E8EC;">
+                    <div style="text-align: left;">
+                        <h2 style="margin-bottom: -5px; font-size: 15px">Running</h2>
+                        <p style="font-size: 10px; color: #2B2E2F">3 times per week • 2 miles</p>
+                    </div>
+                    <div style="text-align: right; padding-left: 108px;">
+                        <input type="radio" name="habit-selection" style="width: 20px; height: 20px;">
+                    </div>
                 </div>
-                <div>
-                    <img src="../img/badge/runningBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
-                    <img src="../img/badge/waterBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
-                    <img src="../img/badge/flowerBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
-                    <img src="../img/badge/teethBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
-                    <img src="../img/badge/readingBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
-                    <img src="../img/badge/campingBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
-                    <img src="../img/badge/meditationBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
-                    <img src="../img/badge/foodBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                <div class="friend-habits" style="background-color: #D1E8EC;">
+                    <div style="text-align: left;">
+                        <h2 style="margin-bottom: -5px; font-size: 15px">Running</h2>
+                        <p style="font-size: 10px; color: #2B2E2F">3 times per week • 2 miles</p>
+                    </div>
+                    <div style="text-align: right; padding-left: 108px;">
+                        <input type="radio" name="habit-selection" style="width: 20px; height: 20px;">
+                    </div>
                 </div>
             </div>
             <br>
@@ -81,7 +71,7 @@
                 <style>
                     .rounded-button {
                         background-color: #257b8a; /* Default background color */
-                        color: black; /* Default text color */
+                        color: white; /* Default text color */
                         padding: 10px 20px;
                         font-size: 14px;
                         border: none;
@@ -93,11 +83,14 @@
                 
                     .rounded-button:hover {
                         background-color: #1a5e63; /* Hover background color */
-                        color: white; /* Hover text color */
+                        color: #f0f0f0; /* Hover text color */
                     }
                 </style>
-                <button class="rounded-button" onclick="location.href='bookmarked-habits.html';">Bookmarked Habits</button>
+                <div class="container" id="bookmarked-habits">
+                    <button class="rounded-button" onclick="location.href='../habits/edithabits.html';">Add Habit</button>
+                </div>            
             </div>
+
         </div>
         <script src="../elements/navbar.js"></script>
         <custom-navbar></custom-navbar>
