@@ -117,6 +117,7 @@
 
 
               let habitList = JSON.parse(localStorage.getItem("habitData")) || [];
+              // console.log(data);
               habitList.push(data);
 
               localStorage.setItem("habitData", JSON.stringify(habitList));
