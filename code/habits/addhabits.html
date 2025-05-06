@@ -29,6 +29,7 @@
 
         <main>
             <div id="Add-Habit">
+
                 <!-- Habit Name -->
                 <label for="habitname">Habit Name </label>
                 <input class= "not-freq" type="text" id="habitname" name="Habit" placeholder="Enter the habit you want to create."><br>
@@ -76,59 +77,59 @@
 
 
         <script>
-            flatpickr("#timepicker", {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "h:i K", // 12-hour with AM/PM
-            });
+          flatpickr("#timepicker", {
+              enableTime: true,
+              noCalendar: true,
+              dateFormat: "h:i K", // 12-hour with AM/PM
+          });
 
-            const customDiv = document.getElementById("custom-input-div");
-            customDiv.style.display = "none";
-            document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
-              radio.addEventListener('click', function() {
-                if (this.value == "Custom") {
-                  customDiv.style.display = "block";
-                } else {
-                  customDiv.style.display = "none";
-                }
+          const customDiv = document.getElementById("custom-input-div");
+          customDiv.style.display = "none";
+          document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+            radio.addEventListener('click', function() {
+              if (this.value == "Custom") {
+                customDiv.style.display = "block";
+              } else {
+                customDiv.style.display = "none";
+              }
+            });
+          });
+
+          // General Function structure credited to ChatGPT to understand how to move things between several html files like this
+          function habitStorer() {
+              var habitDiv = document.getElementById("Add-Habit");
+              var inputs = habitDiv.querySelectorAll("input");
+
+              let data = {};
+              inputs.forEach(input => {
+                  if (input.name == "Frequency") {
+                      const reminderFreq = document.querySelector('input[name="Frequency"]:checked');
+                      data[input.name] = reminderFreq.value;
+                      if (reminderFreq && reminderFreq.value === "Custom") {
+                        const customFreq = document.getElementById("custom-input").value;
+                        data["Custom Frequency"] = customFreq;
+                      }
+                  } else {
+                      data[input.name] = input.value;
+                  }
               });
-            });
+              // data["originalName"] = data.Habit;
 
 
+              let habitList = JSON.parse(localStorage.getItem("habitData")) || [];
+              habitList.push(data);
 
-            // General Function structure credited to ChatGPT to understand how to move things between several html files like this
-            function habitStorer() {
-                var habitDiv = document.getElementById("Add-Habit");
-                var inputs = habitDiv.querySelectorAll("input");
-
-                let data = {};
-                inputs.forEach(input => {
-                    if (input.name == "Frequency") {
-                        const reminderFreq = document.querySelector('input[name="Frequency"]:checked');
-                        data[input.name] = reminderFreq.value;
-                        if (reminderFreq && reminderFreq.value === "Custom") {
-                          const customFreq = document.getElementById("custom-input").value;
-                          data["Custom Frequency"] = customFreq;
-                        }
-                    } else {
-                        data[input.name] = input.value;
-                    }
-                });
-                // data["originalName"] = data.Habit;
+              localStorage.setItem("habitData", JSON.stringify(habitList));
+          }
 
 
-                let habitList = JSON.parse(localStorage.getItem("habitData")) || [];
-                habitList.push(data);
+          document.getElementById('Done').addEventListener('click', function() {
+              habitStorer();
+              localStorage.setItem("cameBack", "true");
+              location.assign("habits.html");
+          });
 
-                localStorage.setItem("habitData", JSON.stringify(habitList));
-            }
-
-
-            document.getElementById('Done').addEventListener('click', function() {
-                habitStorer();
-                localStorage.setItem("cameBack", "true");
-                location.assign("habits.html");
-            });
+         
         </script>
 
         
