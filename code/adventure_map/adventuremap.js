@@ -364,7 +364,9 @@ document.addEventListener('DOMContentLoaded', function () {
         NODE_STATES: 'fishbone_node_states',
         EDGE_STATES: 'fishbone_edge_states',
         HABIT_CHECKBOXES: 'fishbone_habit_checkboxes',
-        MAP_DATA: 'fishbone_map_data'
+        MAP_DATA: 'fishbone_map_data',
+        STREAK_COUNT: 'fishbone_streak_count',
+        LAST_COMPLETION_DATE: 'fishbone_last_completion_date'
     };
 
     // Function to save map data to localStorage (for LLM generated maps)
@@ -565,6 +567,72 @@ document.addEventListener('DOMContentLoaded', function () {
         saveNodeStates();
         saveEdgeStates();
         saveHabitCheckboxStates();
+        // Note: Streak data is saved separately when updated
+    }
+
+    // Streak management functions
+    function getStreakCount() {
+        const savedStreak = localStorage.getItem(STORAGE_KEYS.STREAK_COUNT);
+        return savedStreak ? parseInt(savedStreak) : 0;
+    }
+
+    function getLastCompletionDate() {
+        const lastDate = localStorage.getItem(STORAGE_KEYS.LAST_COMPLETION_DATE);
+        return lastDate ? new Date(lastDate) : null;
+    }
+
+    function saveStreakData(streakCount, completionDate) {
+        localStorage.setItem(STORAGE_KEYS.STREAK_COUNT, streakCount.toString());
+        localStorage.setItem(STORAGE_KEYS.LAST_COMPLETION_DATE, completionDate.toISOString());
+    }
+
+    function updateStreak() {
+        let streakCount = getStreakCount();
+        const lastCompletionDate = getLastCompletionDate();
+        const today = new Date();
+
+        // Reset dates to just the date part (no time) for comparison
+        const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+        // If this is the first completion or the streak was broken, start at 1
+        if (!lastCompletionDate) {
+            streakCount = 1;
+        } else {
+            const lastDate = new Date(
+                lastCompletionDate.getFullYear(),
+                lastCompletionDate.getMonth(),
+                lastCompletionDate.getDate()
+            );
+
+            // Calculate the difference in days
+            const timeDiff = todayDate.getTime() - lastDate.getTime();
+            const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+
+            if (daysDiff === 0) {
+                // Already completed something today, streak doesn't change
+            } else if (daysDiff === 1) {
+                // Completed yesterday, streak increases
+                streakCount++;
+            } else {
+                // Streak broken
+                streakCount = 1;
+            }
+        }
+
+        // Save updated streak data
+        saveStreakData(streakCount, today);
+
+        // Update the UI
+        updateStreakDisplay(streakCount);
+
+        return streakCount;
+    }
+
+    function updateStreakDisplay(streakCount) {
+        const streakElement = document.querySelector('.streak-info');
+        if (streakElement) {
+            streakElement.textContent = `Current Streak: ${streakCount} ${streakCount === 1 ? 'day' : 'days'}`;
+        }
     }
 
     // Load saved state if available
@@ -605,6 +673,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Load habit checkbox states
         habitCheckboxStates = loadHabitCheckboxStates();
+
+        // Update streak display
+        updateStreakDisplay(getStreakCount());
     }
 
     // Function to handle changes to habit checkboxes
@@ -1102,6 +1173,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 saveHabitCheckboxStates();
             }
 
+            // Update the streak count
+            updateStreak();
+
             // Update the map progress
             updateMapProgress();
 
@@ -1550,59 +1624,20 @@ document.addEventListener('DOMContentLoaded', function () {
         tooltipDiv.style.display = 'none';
     });
 
-    // Update map progress based on distance remaining to the boss node
+    // Update map progress based on completed nodes in the 7-day path
     function updateMapProgress() {
-        // If no node is selected, progress is 0%
-        if (!currentSelectedNode) {
-            updateProgressDisplay(0);
-            return;
-        }
+        // For a weekly habit tracker, the total path is 7 nodes (days) long
+        const TOTAL_DAYS_IN_JOURNEY = 7;
 
-        // Create an adjacency list from the edges for pathfinding
-        const graph = {};
-        edges.get().forEach(edge => {
-            if (!graph[edge.from]) {
-                graph[edge.from] = [];
-            }
-            graph[edge.from].push(edge.to);
-        });
+        // Count completed nodes that are on the user's path
+        const completedNodes = nodes.get().filter(node => node.state === 'completed').length;
 
-        // Find the boss node
-        const bossNode = nodes.get({
-            filter: function (node) {
-                return node.nodeType === 'boss';
-            }
-        })[0];
-
-        if (!bossNode) return; // If no boss node found
-        const bossNodeId = bossNode.id;
-
-        // Calculate the shortest path from current node to boss
-        const stepsRemaining = findShortestPath(graph, currentSelectedNode, bossNodeId);
-
-        // Calculate the shortest path from a starting node to boss (total journey length)
-        // Using node 1 as a reference starting point
-        const totalSteps = findShortestPath(graph, 1, bossNodeId);
-
-        // Calculate steps taken, accounting for being at the first node
-        // If we're at a starting node (1 or 2), count it as 1 step taken
-        let stepsTaken;
-        const isAtStartingNode = currentSelectedNode === 1 || currentSelectedNode === 2;
-
-        if (isAtStartingNode) {
-            // At starting node, we've completed 1 step (the selection of the starting node)
-            stepsTaken = 1;
-        } else {
-            // For other nodes, calculate based on remaining distance
-            stepsTaken = totalSteps - stepsRemaining + 1; // +1 to count the initial step
-        }
-
-        // Calculate progress percentage
-        let progressPercentage = 0;
-        if (totalSteps > 0) {
-            // Calculate percentage including the starting node
-            progressPercentage = Math.round((stepsTaken / (totalSteps + 1)) * 100);
-        }
+        // Calculate progress percentage based on a 7-day journey
+        // Cap at 100% in case there are more than 7 completed nodes
+        let progressPercentage = Math.min(
+            Math.round((completedNodes / TOTAL_DAYS_IN_JOURNEY) * 100),
+            100
+        );
 
         updateProgressDisplay(progressPercentage);
     }
