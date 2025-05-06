@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    // Map configuration option - increase the default size of the nodes for a larger clickable area
+    const CLICK_AREA_SIZE = 50; // Clickable area size (larger than visual size)
+
     // The new Slay the Spire style map data
     const mapData = {
         "nodes": [
@@ -366,7 +369,9 @@ document.addEventListener('DOMContentLoaded', function () {
         ...node,
         group: node.state === 'current' ? 'current' : node.nodeType,
         selectable: false, // Add selectable property, default to false
-        label: "" // We'll display labels in tooltips instead of on the nodes
+        displayLabel: node.label, // Store the original label in a new property
+        label: "", // We'll display labels in tooltips instead of on the nodes
+        size: CLICK_AREA_SIZE // Set a larger clickable area while maintaining visual appearance
     }));
 
     // Process edges to add dashes property and ID
@@ -395,7 +400,17 @@ document.addEventListener('DOMContentLoaded', function () {
             shadow: false,
             font: {
                 size: 0 // Hide labels
-            }
+            },
+            size: CLICK_AREA_SIZE, // Use the larger clickable area size
+            scaling: {
+                label: {
+                    enabled: false
+                }
+            },
+            chosen: false, // Prevent visual changes on selection
+            margin: 10, // Add margin to increase clickable area
+            widthConstraint: false,
+            heightConstraint: false
         },
         edges: {
             width: 2,
@@ -436,14 +451,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // Create the network visualization
     const network = new vis.Network(container, data, options);
 
-    // Set initial zoom level and position to show the map
+    // Ensure proper initialization of the current node text
     network.once("afterDrawing", function () {
+        // Fit the view
         network.fit({
             animation: {
                 duration: 1000,
                 easingFunction: "easeInOutQuad"
             }
         });
+
         // After initial fitting, apply a zoom level
         setTimeout(() => {
             network.moveTo({
@@ -453,6 +470,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     easingFunction: "easeInOutQuad"
                 }
             });
+
+            // Initialize the current node text display
+            updateCurrentNodeText();
         }, 1100);
     });
 
@@ -504,18 +524,35 @@ document.addEventListener('DOMContentLoaded', function () {
         characterImg.style.top = (canvasPosition.y - 35) + 'px';
     }
 
-    // NEW: Function to update the current node text display
+    // Add debugging to check if labels are properly populated
     function updateCurrentNodeText() {
         const selectedNodeText = document.getElementById('selected-node');
         if (selectedNodeText && currentSelectedNode) {
             const currentNode = nodes.get(currentSelectedNode);
             if (currentNode) {
-                selectedNodeText.textContent = currentNode.label;
+                // Log the node data to console for debugging
+                console.log("Current node data:", currentNode);
+
+                // Include nodeType and label with a dash separator
+                const nodeTypeCapitalized = currentNode.nodeType.charAt(0).toUpperCase() + currentNode.nodeType.slice(1);
+                const labelText = currentNode.displayLabel || "Unknown"; // Use the displayLabel property we added
+
+                // Create the display text
+                const displayText = `${nodeTypeCapitalized} - ${labelText}`;
+                console.log("Setting node text to:", displayText);
+
+                // Set the text content
+                selectedNodeText.textContent = displayText;
+
+                // Add tooltip with full description
+                selectedNodeText.title = currentNode.description || "";
             } else {
                 selectedNodeText.textContent = 'None Selected';
+                selectedNodeText.title = '';
             }
         } else if (selectedNodeText) {
             selectedNodeText.textContent = 'None Selected';
+            selectedNodeText.title = '';
         }
     }
 
@@ -835,6 +872,20 @@ document.addEventListener('DOMContentLoaded', function () {
     function hideHabitCompletionModal() {
         const modalContainer = document.getElementById('habit-completion-modal');
         if (modalContainer) {
+            // Reset the complete button's color before hiding the modal
+            const completeButton = document.getElementById('complete-habits');
+            if (completeButton) {
+                completeButton.style.backgroundColor = '#276F7C'; // Reset to default teal color
+                completeButton.disabled = true;
+            }
+
+            // Uncheck all checkboxes
+            const checkboxes = document.querySelectorAll('.habit-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+
+            // Hide the modal
             modalContainer.style.display = 'none';
         }
     }
@@ -865,6 +916,13 @@ document.addEventListener('DOMContentLoaded', function () {
             // Update selectable nodes for the next step
             // Now other nodes connected to this one will be selectable
             updateSelectableNodes();
+
+            // Reset the complete button's color before hiding the modal
+            const completeButton = document.getElementById('complete-habits');
+            if (completeButton) {
+                completeButton.style.backgroundColor = '#276F7C'; // Reset to default teal color
+                completeButton.disabled = true;
+            }
 
             // Hide the modal
             hideHabitCompletionModal();
@@ -1079,20 +1137,10 @@ document.addEventListener('DOMContentLoaded', function () {
         network.unselectAll();
     });
 
-    // Handle click outside nodes
+    // Handle click outside nodes - don't update the current node text
     network.on('click', function (params) {
         if (params.nodes.length === 0) {
-            // We don't update the current node text when clicking elsewhere
-            // This keeps the text showing the actual current node
-        }
-    });
-
-    // Handle click outside nodes to deselect
-    network.on('click', function (params) {
-        if (params.nodes.length === 0) {
-            // Clear selection
-            const selectedNodeText = document.getElementById('selected-node');
-            selectedNodeText.textContent = 'None Selected';
+            // Do nothing - keep the current node text as is
         }
     });
 
@@ -1136,7 +1184,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     strokeColor = typeStyle.color.border;
                 }
 
-                // Draw the node
+                // Draw the node - exact same rendering as original code
                 ctx.beginPath();
                 ctx.arc(pos.x, pos.y, typeStyle.size / 2, 0, 2 * Math.PI, false);
                 ctx.fillStyle = fillColor;
