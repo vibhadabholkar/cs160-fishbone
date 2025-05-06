@@ -358,6 +358,35 @@ document.addEventListener('DOMContentLoaded', function () {
         ]
     };
 
+    // Storage keys for persistence
+    const STORAGE_KEYS = {
+        CURRENT_NODE: 'fishbone_current_node',
+        NODE_STATES: 'fishbone_node_states',
+        EDGE_STATES: 'fishbone_edge_states',
+        HABIT_CHECKBOXES: 'fishbone_habit_checkboxes',
+        MAP_DATA: 'fishbone_map_data'
+    };
+
+    // Function to save map data to localStorage (for LLM generated maps)
+    function saveMapData(data) {
+        localStorage.setItem(STORAGE_KEYS.MAP_DATA, JSON.stringify(data));
+    }
+
+    // Function to load map data from localStorage
+    function loadMapData() {
+        const savedData = localStorage.getItem(STORAGE_KEYS.MAP_DATA);
+        return savedData ? JSON.parse(savedData) : null;
+    }
+
+    // Check if we have a custom map saved
+    const savedMapData = loadMapData();
+    // If we have a saved custom map, use it instead of the default
+    if (savedMapData) {
+        // Use the saved map data
+        mapData.nodes = savedMapData.nodes;
+        mapData.edges = savedMapData.edges;
+    }
+
     // Update the page title with the map title
     const headerElement = document.querySelector('#header h2');
     if (headerElement) {
@@ -391,6 +420,17 @@ document.addEventListener('DOMContentLoaded', function () {
         nodes: nodes,
         edges: edges
     };
+
+    // Variable to keep track of currently selected node
+    let currentSelectedNode = null; // No node selected initially
+    let characterImg = null;
+    let targetNodeId = null; // For handling node selection and challenge acceptance
+
+    // Object to store habit checkbox states
+    let habitCheckboxStates = {};
+
+    // Timer for countdown
+    let countdownTimer = null;
 
     // Configuration options for the network
     const options = {
@@ -451,8 +491,141 @@ document.addEventListener('DOMContentLoaded', function () {
     // Create the network visualization
     const network = new vis.Network(container, data, options);
 
+    // Function to save current node to localStorage
+    function saveCurrentNode() {
+        if (currentSelectedNode) {
+            localStorage.setItem(STORAGE_KEYS.CURRENT_NODE, currentSelectedNode.toString());
+        } else {
+            localStorage.removeItem(STORAGE_KEYS.CURRENT_NODE);
+        }
+    }
+
+    // Function to load current node from localStorage
+    function loadCurrentNode() {
+        const savedNode = localStorage.getItem(STORAGE_KEYS.CURRENT_NODE);
+        return savedNode ? parseInt(savedNode) : null;
+    }
+
+    // Function to save node states to localStorage
+    function saveNodeStates() {
+        const nodeStates = {};
+        const allNodes = nodes.get();
+
+        allNodes.forEach(node => {
+            nodeStates[node.id] = {
+                state: node.state,
+                group: node.group
+            };
+        });
+
+        localStorage.setItem(STORAGE_KEYS.NODE_STATES, JSON.stringify(nodeStates));
+    }
+
+    // Function to load node states from localStorage
+    function loadNodeStates() {
+        const savedStates = localStorage.getItem(STORAGE_KEYS.NODE_STATES);
+        return savedStates ? JSON.parse(savedStates) : null;
+    }
+
+    // Function to save edge states to localStorage
+    function saveEdgeStates() {
+        const edgeStates = {};
+        const allEdges = edges.get();
+
+        allEdges.forEach(edge => {
+            edgeStates[edge.id] = {
+                state: edge.state,
+                dashes: edge.dashes
+            };
+        });
+
+        localStorage.setItem(STORAGE_KEYS.EDGE_STATES, JSON.stringify(edgeStates));
+    }
+
+    // Function to load edge states from localStorage
+    function loadEdgeStates() {
+        const savedStates = localStorage.getItem(STORAGE_KEYS.EDGE_STATES);
+        return savedStates ? JSON.parse(savedStates) : null;
+    }
+
+    // Function to save habit checkbox states to localStorage
+    function saveHabitCheckboxStates() {
+        localStorage.setItem(STORAGE_KEYS.HABIT_CHECKBOXES, JSON.stringify(habitCheckboxStates));
+    }
+
+    // Function to load habit checkbox states from localStorage
+    function loadHabitCheckboxStates() {
+        const savedStates = localStorage.getItem(STORAGE_KEYS.HABIT_CHECKBOXES);
+        return savedStates ? JSON.parse(savedStates) : {};
+    }
+
+    // Function to save all state to localStorage
+    function saveAllState() {
+        saveCurrentNode();
+        saveNodeStates();
+        saveEdgeStates();
+        saveHabitCheckboxStates();
+    }
+
+    // Load saved state if available
+    function loadSavedState() {
+        // Load current node
+        const savedCurrentNode = loadCurrentNode();
+        if (savedCurrentNode) {
+            currentSelectedNode = savedCurrentNode;
+        }
+
+        // Load node states
+        const savedNodeStates = loadNodeStates();
+        if (savedNodeStates) {
+            const allNodes = nodes.get();
+            const updatedNodes = allNodes.map(node => {
+                if (savedNodeStates[node.id]) {
+                    node.state = savedNodeStates[node.id].state;
+                    node.group = savedNodeStates[node.id].group;
+                }
+                return node;
+            });
+            nodes.update(updatedNodes);
+        }
+
+        // Load edge states
+        const savedEdgeStates = loadEdgeStates();
+        if (savedEdgeStates) {
+            const allEdges = edges.get();
+            const updatedEdges = allEdges.map(edge => {
+                if (savedEdgeStates[edge.id]) {
+                    edge.state = savedEdgeStates[edge.id].state;
+                    edge.dashes = savedEdgeStates[edge.id].dashes;
+                }
+                return edge;
+            });
+            edges.update(updatedEdges);
+        }
+
+        // Load habit checkbox states
+        habitCheckboxStates = loadHabitCheckboxStates();
+    }
+
+    // Function to handle changes to habit checkboxes
+    function handleHabitCheckboxChange(nodeId, habitIndex, checked) {
+        // Initialize node's habit states if not exist
+        if (!habitCheckboxStates[nodeId]) {
+            habitCheckboxStates[nodeId] = {};
+        }
+
+        // Save the checkbox state
+        habitCheckboxStates[nodeId][habitIndex] = checked;
+
+        // Save to localStorage
+        saveHabitCheckboxStates();
+    }
+
     // Ensure proper initialization of the current node text
     network.once("afterDrawing", function () {
+        // Load saved state before initializing the view
+        loadSavedState();
+
         // Fit the view
         network.fit({
             animation: {
@@ -463,23 +636,41 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // After initial fitting, apply a zoom level
         setTimeout(() => {
-            network.moveTo({
-                scale: 0.8, // Adjust as needed
-                animation: {
-                    duration: 1000,
-                    easingFunction: "easeInOutQuad"
-                }
-            });
+            // If we have a current node, focus on it
+            if (currentSelectedNode) {
+                network.focus(currentSelectedNode, {
+                    scale: 0.8,
+                    animation: {
+                        duration: 1000,
+                        easingFunction: "easeInOutQuad"
+                    }
+                });
+            } else {
+                // Otherwise just set a general zoom level
+                network.moveTo({
+                    scale: 0.8, // Adjust as needed
+                    animation: {
+                        duration: 1000,
+                        easingFunction: "easeInOutQuad"
+                    }
+                });
+            }
+
+            // Create character image if there's a current node
+            if (currentSelectedNode) {
+                setTimeout(createCharacterImage, 1100);
+            }
 
             // Initialize the current node text display
             updateCurrentNodeText();
+
+            // Update selectable nodes based on current state
+            updateSelectableNodes();
+
+            // Update map progress
+            updateMapProgress();
         }, 1100);
     });
-
-    // Variable to keep track of currently selected node
-    let currentSelectedNode = null; // No node selected initially
-    let characterImg = null;
-    let targetNodeId = null; // For handling node selection and challenge acceptance
 
     // Function to create the character image once
     function createCharacterImage() {
@@ -747,7 +938,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Update title based on node type
         const titleElement = document.querySelector('#habit-completion-modal .challenge-title');
-        titleElement.textContent = `${node.nodeType.charAt(0).toUpperCase() + node.nodeType.slice(1)}: ${node.label}`;
+        titleElement.textContent = `${node.nodeType.charAt(0).toUpperCase() + node.nodeType.slice(1)}: ${node.displayLabel}`;
 
         // Set the background color of the title to match the node type color
         const nodeTypeStyle = nodeTypes[node.nodeType];
@@ -799,20 +990,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         rewardElement.textContent = `Reward: ${reward}`;
 
-        // Update countdown timer
-        const timeCounter = document.getElementById('habit-time-counter');
-        if (timeCounter) {
-            const now = new Date();
-            const endOfDay = new Date();
-            endOfDay.setHours(23, 59, 59, 999);
-            const timeRemaining = endOfDay - now;
-
-            const hours = Math.floor(timeRemaining / 3600000).toString().padStart(2, '0');
-            const minutes = Math.floor((timeRemaining % 3600000) / 60000).toString().padStart(2, '0');
-            const seconds = Math.floor((timeRemaining % 60000) / 1000).toString().padStart(2, '0');
-
-            timeCounter.textContent = `${hours}:${minutes}:${seconds}`;
-        }
+        // Start a live countdown timer
+        startCountdownTimer('habit-time-counter');
 
         // Add habits with checkboxes based on node data
         const habitsContainer = document.getElementById('habit-checkboxes-container');
@@ -823,6 +1002,11 @@ document.addEventListener('DOMContentLoaded', function () {
             node.habits.forEach((habit, index) => {
                 const habitElement = document.createElement('div');
                 habitElement.className = 'habit-item';
+
+                // Get saved checkbox state if available
+                const isChecked = habitCheckboxStates[node.id] &&
+                    habitCheckboxStates[node.id][index] === true;
+
                 habitElement.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
@@ -830,7 +1014,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             <div class="habit-details">${habit.details}</div>
                         </div>
                         <div class="habit-checkbox-container">
-                            <input type="checkbox" id="habit-${index}" class="habit-checkbox" style="width: 25px; height: 25px;">
+                            <input type="checkbox" id="habit-${index}" class="habit-checkbox" 
+                                  ${isChecked ? 'checked' : ''} style="width: 25px; height: 25px;">
                         </div>
                     </div>
                 `;
@@ -840,8 +1025,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Add event listeners to checkboxes
         const checkboxes = document.querySelectorAll('.habit-checkbox');
-        checkboxes.forEach(checkbox => {
+        checkboxes.forEach((checkbox, index) => {
             checkbox.addEventListener('change', function () {
+                // Save the checkbox state
+                handleHabitCheckboxChange(node.id, index, checkbox.checked);
+
                 // Check if all habits are completed
                 const allChecked = Array.from(checkboxes).every(box => box.checked);
                 const completeButton = document.getElementById('complete-habits');
@@ -857,10 +1045,16 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        // Initially disable the complete button
+        // Initially check if all checkboxes are already checked
+        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
         const completeButton = document.getElementById('complete-habits');
         if (completeButton) {
-            completeButton.disabled = true;
+            completeButton.disabled = !allChecked;
+            if (allChecked) {
+                completeButton.style.backgroundColor = '#4CAF50'; // Green when all habits are checked
+            } else {
+                completeButton.style.backgroundColor = '#276F7C'; // Default color
+            }
         }
 
         // Show modal
@@ -872,18 +1066,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function hideHabitCompletionModal() {
         const modalContainer = document.getElementById('habit-completion-modal');
         if (modalContainer) {
-            // Reset the complete button's color before hiding the modal
-            const completeButton = document.getElementById('complete-habits');
-            if (completeButton) {
-                completeButton.style.backgroundColor = '#276F7C'; // Reset to default teal color
-                completeButton.disabled = true;
-            }
+            // Don't reset checkbox states anymore - they're saved
 
-            // Uncheck all checkboxes
-            const checkboxes = document.querySelectorAll('.habit-checkbox');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = false;
-            });
+            // Stop the countdown timer
+            stopCountdownTimer();
 
             // Hide the modal
             modalContainer.style.display = 'none';
@@ -910,12 +1096,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
+            // Clear checkbox states for this node since it's completed
+            if (habitCheckboxStates[currentSelectedNode]) {
+                delete habitCheckboxStates[currentSelectedNode];
+                saveHabitCheckboxStates();
+            }
+
             // Update the map progress
             updateMapProgress();
 
             // Update selectable nodes for the next step
             // Now other nodes connected to this one will be selectable
             updateSelectableNodes();
+
+            // Save the state to localStorage
+            saveAllState();
 
             // Reset the complete button's color before hiding the modal
             const completeButton = document.getElementById('complete-habits');
@@ -950,7 +1145,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Update title based on node type
         const titleElement = document.querySelector('.challenge-title');
-        titleElement.textContent = `${node.nodeType.charAt(0).toUpperCase() + node.nodeType.slice(1)}: ${node.label}`;
+        titleElement.textContent = `${node.nodeType.charAt(0).toUpperCase() + node.nodeType.slice(1)}: ${node.displayLabel}`;
 
         // Set the background color of the title to match the node type color
         const nodeTypeStyle = nodeTypes[node.nodeType];
@@ -1019,8 +1214,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        // Set countdown timer
-        updateCountdownTimer();
+        // Start a live countdown timer
+        startCountdownTimer('time-counter');
 
         // Show modal
         const modalContainer = document.getElementById('node-challenge-modal');
@@ -1098,6 +1293,9 @@ document.addEventListener('DOMContentLoaded', function () {
             // Update selectable nodes - this will only make the current node selectable
             updateSelectableNodes();
 
+            // Save state to localStorage
+            saveAllState();
+
             // Reset the target node
             targetNodeId = null;
         }
@@ -1107,12 +1305,59 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Update countdown timer
+    function startCountdownTimer(elementId) {
+        // Clear any existing timer
+        if (countdownTimer) {
+            clearInterval(countdownTimer);
+        }
+
+        // Function to update the countdown display
+        const updateTimeDisplay = () => {
+            const timeCounter = document.getElementById(elementId);
+            if (!timeCounter) {
+                clearInterval(countdownTimer);
+                return;
+            }
+
+            const now = new Date();
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999);
+            const timeRemaining = endOfDay - now;
+
+            // If it's past midnight, stop the timer
+            if (timeRemaining <= 0) {
+                timeCounter.textContent = '00:00:00';
+                clearInterval(countdownTimer);
+                return;
+            }
+
+            const hours = Math.floor(timeRemaining / 3600000).toString().padStart(2, '0');
+            const minutes = Math.floor((timeRemaining % 3600000) / 60000).toString().padStart(2, '0');
+            const seconds = Math.floor((timeRemaining % 60000) / 1000).toString().padStart(2, '0');
+
+            timeCounter.textContent = `${hours}:${minutes}:${seconds}`;
+        };
+
+        // Update immediately then set interval
+        updateTimeDisplay();
+        countdownTimer = setInterval(updateTimeDisplay, 1000);
+
+        return countdownTimer;
+    }
+
+    // Function to stop countdown timer
+    function stopCountdownTimer() {
+        if (countdownTimer) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+        }
+    }
+
+    // Legacy function for backward compatibility
     function updateCountdownTimer() {
-        // In a real app, this would calculate the actual remaining time
-        // For now, we'll just set a static time
         const timeCounter = document.getElementById('time-counter');
         if (timeCounter) {
-            timeCounter.textContent = '03:42:18';
+            startCountdownTimer('time-counter');
         }
     }
 
@@ -1130,7 +1375,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Store target node
             targetNodeId = nodeId;
 
-            // Show node challenge modal
+            // Show node challenge modal and start the countdown timer
             showNodeChallengeModal(node);
         }
 
@@ -1277,7 +1522,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const canvasPos = network.canvasToDOM(position);
 
             // Create tooltip content
-            let tooltipContent = `<strong>${node.label}</strong><br>${node.description}`;
+            let tooltipContent = `<strong>${node.displayLabel}</strong><br>${node.description}`;
 
             // Add habits to tooltip
             if (node.habits && node.habits.length > 0) {
@@ -1432,6 +1677,55 @@ document.addEventListener('DOMContentLoaded', function () {
             infoTooltip.remove();
         }, 1000);
     }, 4000);
+
+    // Add a function to clear the saved data (for debugging/testing)
+    window.clearFishboneData = function () {
+        Object.values(STORAGE_KEYS).forEach(key => {
+            localStorage.removeItem(key);
+        });
+        console.log("All Fishbone data cleared from localStorage.");
+        // Reload the page to start fresh
+        window.location.reload();
+    };
+
+    // Function to import map data from a JSON file
+    window.importMapData = function (jsonData) {
+        try {
+            // Parse the JSON if it's a string
+            const data = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
+
+            // Validate the data has the required structure
+            if (!data.nodes || !data.edges) {
+                throw new Error("Invalid map data: missing nodes or edges");
+            }
+
+            // Save the map data to localStorage
+            saveMapData(data);
+
+            // Clear other saved state since we're using a new map
+            localStorage.removeItem(STORAGE_KEYS.CURRENT_NODE);
+            localStorage.removeItem(STORAGE_KEYS.NODE_STATES);
+            localStorage.removeItem(STORAGE_KEYS.EDGE_STATES);
+            localStorage.removeItem(STORAGE_KEYS.HABIT_CHECKBOXES);
+
+            console.log("Map data imported successfully. Reloading page...");
+            // Reload the page to use the new map data
+            window.location.reload();
+        } catch (error) {
+            console.error("Error importing map data:", error);
+            alert("Error importing map data: " + error.message);
+        }
+    };
+
+    // Add a reset button to the top section
+    const newMapButton = document.querySelector('.new-map-button');
+    if (newMapButton) {
+        newMapButton.addEventListener('click', function () {
+            if (confirm("Are you sure you want to reset your progress and start a new map?")) {
+                window.clearFishboneData();
+            }
+        });
+    }
 
     // Initialize progress and selectable nodes
     updateMapProgress();
