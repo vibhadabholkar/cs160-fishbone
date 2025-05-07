@@ -1495,24 +1495,79 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Create character image after focusing
                 setTimeout(createCharacterImage, isNewlyGeneratedMap ? 100 : 1000);
             } else {
-                // Otherwise fit the entire network
-                network.fit({
-                    animation: isNewlyGeneratedMap ? false : {
-                        duration: 1000,
-                        easingFunction: "easeInOutQuad"
-                    }
-                });
+                // If no current node, focus on starting nodes instead of the entire map
+                const startingNodeIds = findStartingNodes(mapData);
 
-                // Then set a reasonable zoom level with no animation for new maps
-                setTimeout(() => {
-                    network.moveTo({
-                        scale: 0.8,
+                if (startingNodeIds.length > 0) {
+                    // Get positions of all starting nodes
+                    const startingPositions = network.getPositions(startingNodeIds);
+
+                    // Calculate the center point of all starting nodes
+                    let sumX = 0, sumY = 0;
+                    let count = 0;
+
+                    for (const nodeId in startingPositions) {
+                        if (startingPositions.hasOwnProperty(nodeId)) {
+                            sumX += startingPositions[nodeId].x;
+                            sumY += startingPositions[nodeId].y;
+                            count++;
+                        }
+                    }
+
+                    // If we found starting nodes, focus on their center
+                    if (count > 0) {
+                        const centerX = sumX / count;
+                        const centerY = sumY / count;
+
+                        // Focus on the center of starting nodes
+                        network.moveTo({
+                            position: { x: centerX, y: centerY },
+                            scale: 0.9,
+                            animation: isNewlyGeneratedMap ? false : {
+                                duration: 1000,
+                                easingFunction: "easeInOutQuad"
+                            }
+                        });
+                    } else {
+                        // Fallback to fitting the entire network
+                        network.fit({
+                            animation: isNewlyGeneratedMap ? false : {
+                                duration: 1000,
+                                easingFunction: "easeInOutQuad"
+                            }
+                        });
+
+                        // Set a reasonable zoom level
+                        setTimeout(() => {
+                            network.moveTo({
+                                scale: 0.8,
+                                animation: isNewlyGeneratedMap ? false : {
+                                    duration: 1000,
+                                    easingFunction: "easeInOutQuad"
+                                }
+                            });
+                        }, isNewlyGeneratedMap ? 100 : 1000);
+                    }
+                } else {
+                    // If no starting nodes were found, fall back to fitting the entire network
+                    network.fit({
                         animation: isNewlyGeneratedMap ? false : {
                             duration: 1000,
                             easingFunction: "easeInOutQuad"
                         }
                     });
-                }, isNewlyGeneratedMap ? 100 : 1000);
+
+                    // Set a reasonable zoom level
+                    setTimeout(() => {
+                        network.moveTo({
+                            scale: 0.8,
+                            animation: isNewlyGeneratedMap ? false : {
+                                duration: 1000,
+                                easingFunction: "easeInOutQuad"
+                            }
+                        });
+                    }, isNewlyGeneratedMap ? 100 : 1000);
+                }
             }
 
             // Initialize the current node text display
