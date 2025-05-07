@@ -98,6 +98,12 @@ hr {
   font-size: 12px;
 }
 
+.friend-card a {
+  text-decoration: none; 
+  color: inherit;         
+  display: contents;      
+}
+
 #top-friends {
   grid-row: 1;
   display: flex;
