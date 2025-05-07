@@ -764,7 +764,7 @@ function showMapSelectionModal() {
         // Add modal HTML structure
         modalContent.innerHTML = `
             <div class="challenge-title" style="background-color: #276F7C;">Choose Your Map</div>
-            <div class="challenge-bonus">
+            <div class="time-remaining">
                 <div class="bonus-header">Map Selection:</div>
                 <div class="bonus-description">Choose which type of adventure map you'd like to use.</div>
             </div>
