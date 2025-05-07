@@ -1,3 +1,266 @@
+// Storage keys for persistence
+const STORAGE_KEYS = {
+    CURRENT_NODE: 'fishbone_current_node',
+    NODE_STATES: 'fishbone_node_states',
+    EDGE_STATES: 'fishbone_edge_states',
+    HABIT_CHECKBOXES: 'fishbone_habit_checkboxes',
+    MAP_DATA: 'fishbone_map_data',
+    STREAK_COUNT: 'fishbone_streak_count',
+    LAST_COMPLETION_DATE: 'fishbone_last_completion_date',
+    UNLOCKED_AVATARS: 'fishbone_unlocked_avatars'
+};
+
+// Available avatars data array - used for unlocking rewards
+const AVATAR_DATA = [
+    {
+        id: 'shark-red',
+        src: '../img/shark-profile-red.png',
+        profileSrc: '../img/profile/shark-red.png',
+        name: 'Red Shark',
+        unlocked: false
+    },
+    {
+        id: 'fish-purple',
+        src: '../img/fish-profile-purple.png',
+        profileSrc: '../img/profile/fish-purple.png',
+        name: 'Purple Fish',
+        unlocked: false
+    },
+    {
+        id: 'fish-green',
+        src: '../img/fish-profile-green.png',
+        profileSrc: '../img/profile/fish-green.png',
+        name: 'Green Fish',
+        unlocked: false
+    },
+    {
+        id: 'shark-black',
+        src: '../img/shark-profile-black.png',
+        profileSrc: '../img/profile/shark-black.png',
+        name: 'Black Shark',
+        unlocked: false
+    },
+    {
+        id: 'skeleton-yellow',
+        src: '../img/skeleton-profile-yellow.png',
+        profileSrc: '../img/profile/skeleton-yellow.png',
+        name: 'Yellow Skeleton',
+        unlocked: false
+    },
+    {
+        id: 'fish-suit',
+        src: '../img/fish-profile-suit.png',
+        profileSrc: '../img/profile/fish-suit.png',
+        name: 'Suit Fish',
+        unlocked: false
+    }
+];
+
+// Default avatar that is always unlocked
+const DEFAULT_AVATAR = {
+    id: 'skeleton-green',
+    src: '../img/skeleton-profile-green.png',
+    profileSrc: '../img/profile/skeleton-green.png',
+    name: 'Green Skeleton',
+    unlocked: true
+};
+
+// Function to save map data to localStorage
+function saveMapData(data) {
+    localStorage.setItem(STORAGE_KEYS.MAP_DATA, JSON.stringify(data));
+}
+
+// Function to get unlocked avatars from localStorage
+function getUnlockedAvatars() {
+    const savedAvatars = localStorage.getItem(STORAGE_KEYS.UNLOCKED_AVATARS);
+    return savedAvatars ? JSON.parse(savedAvatars) : [];
+}
+
+// Function to save unlocked avatars to localStorage
+function saveUnlockedAvatars(unlockedAvatars) {
+    localStorage.setItem(STORAGE_KEYS.UNLOCKED_AVATARS, JSON.stringify(unlockedAvatars));
+}
+
+// Function to unlock a random avatar
+function unlockRandomAvatar() {
+    // Get currently unlocked avatars
+    const unlockedAvatarIds = getUnlockedAvatars();
+
+    // Find avatars that are not yet unlocked
+    const lockedAvatars = AVATAR_DATA.filter(avatar => !unlockedAvatarIds.includes(avatar.id));
+
+    // If all avatars are unlocked, return null
+    if (lockedAvatars.length === 0) {
+        console.log("All avatars already unlocked!");
+        return null;
+    }
+
+    // Select a random avatar from the locked ones
+    const randomIndex = Math.floor(Math.random() * lockedAvatars.length);
+    const avatarToUnlock = lockedAvatars[randomIndex];
+
+    // Add the avatar ID to the unlocked list
+    unlockedAvatarIds.push(avatarToUnlock.id);
+
+    // Save the updated list
+    saveUnlockedAvatars(unlockedAvatarIds);
+
+    console.log(`Unlocked avatar: ${avatarToUnlock.name}`);
+    return avatarToUnlock;
+}
+
+// Function to show avatar unlocked modal
+function showAvatarUnlockedModal(avatar) {
+    // Create modal container if it doesn't exist
+    if (!document.getElementById('avatar-unlocked-modal')) {
+        const modalContainer = document.createElement('div');
+        modalContainer.id = 'avatar-unlocked-modal';
+        modalContainer.className = 'modal-container';
+        modalContainer.style.display = 'none';
+
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content';
+
+        // Add modal HTML structure
+        modalContent.innerHTML = `
+            <div class="challenge-title" style="background-color: #E67E22;">New Avatar Unlocked!</div>
+            <div style="text-align: center; padding: 20px 0;">
+                <img id="unlocked-avatar-img" src="${avatar.src}" alt="${avatar.name}" style="width: 150px; height: 150px; margin: 0 auto; display: block;">
+                <div style="font-size: 24px; font-weight: bold; margin-top: 15px; color: #fff;">${avatar.name}</div>
+            </div>
+            <div class="challenge-bonus">
+                <div class="bonus-header">Congratulations!</div>
+                <div class="bonus-description">You've completed a boss node and unlocked a new avatar!</div>
+                <div class="bonus-reward">Go to your profile to try it on.</div>
+            </div>
+            <div class="button-row">
+                <button class="button accept-button" id="close-avatar-modal" style="width: 100%;">Awesome!</button>
+            </div>
+        `;
+
+        // Add content to container
+        modalContainer.appendChild(modalContent);
+
+        // Add modal to page
+        document.body.appendChild(modalContainer);
+
+        // Add event listener to close button
+        document.getElementById('close-avatar-modal').addEventListener('click', function () {
+            modalContainer.style.display = 'none';
+        });
+
+        // Close modal when clicking outside of content
+        modalContainer.addEventListener('click', function (event) {
+            if (event.target === modalContainer) {
+                modalContainer.style.display = 'none';
+            }
+        });
+    } else {
+        // Update existing modal with new avatar details
+        document.getElementById('unlocked-avatar-img').src = avatar.src;
+        document.getElementById('unlocked-avatar-img').alt = avatar.name;
+        const nameElement = document.getElementById('unlocked-avatar-img').nextElementSibling;
+        if (nameElement) {
+            nameElement.textContent = avatar.name;
+        }
+    }
+
+    // Show the modal
+    document.getElementById('avatar-unlocked-modal').style.display = 'flex';
+}
+
+// Add a function to generate a new map based on habits
+async function generateNewMap() {
+    const habitData = localStorage.getItem("habitData");
+
+    if (!habitData || JSON.parse(habitData).length === 0) {
+        alert("Please add some habits first before generating a map.");
+        return;
+    }
+
+    // Show loading animation in map area
+    const mapContainer = document.querySelector('.map-container');
+    if (mapContainer) {
+        // Create loading element
+        const loadingDiv = document.createElement('div');
+        loadingDiv.id = 'map-loading-message';
+        loadingDiv.style.backgroundColor = '#276F7C';
+        loadingDiv.style.borderRadius = '10px';
+        loadingDiv.style.padding = '30px 20px';
+        loadingDiv.style.textAlign = 'center';
+        loadingDiv.style.color = '#d1dced';
+        loadingDiv.style.fontSize = '20px';
+        loadingDiv.style.fontWeight = 'bold';
+        loadingDiv.style.marginTop = '20px';
+        loadingDiv.textContent = "Creating adventure map...";
+
+        // Replace the map with loading message
+        mapContainer.innerHTML = '';
+        mapContainer.appendChild(loadingDiv);
+
+        // Start the ellipsis animation
+        let dotsCount = 0;
+        const dotsAnimation = setInterval(() => {
+            dotsCount = (dotsCount + 1) % 4;
+            const dots = '.'.repeat(dotsCount);
+            loadingDiv.textContent = `Creating adventure map${dots}`;
+        }, 500);
+
+        try {
+            // Make the request to the Reagent web app
+            const response = await fetch(
+                'https://noggin.rea.gent/ordinary-elephant-7817',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer rg_v1_ym68fddenmsi818hh993qlfl7iulg0gscd41_ngk',
+                    },
+                    body: JSON.stringify({
+                        habitData: habitData
+                    }),
+                }
+            ).then(response => response.json()); // Use response.json() to get the parsed object
+
+            // Clear the animation
+            clearInterval(dotsAnimation);
+
+            console.log("Response:", response);
+
+            // Check if we have valid map data
+            if (response && response.nodes && response.edges) {
+                // If the JSON uses traditional mathematical Y coordinates (up is positive),
+                // we need to adjust for screen coordinates (down is positive)
+                // This is handled later in the code when the map is loaded
+
+                // Save the map data to localStorage
+                saveMapData(response);
+
+                // Clear other saved state since we're using a new map
+                localStorage.removeItem(STORAGE_KEYS.CURRENT_NODE);
+                localStorage.removeItem(STORAGE_KEYS.NODE_STATES);
+                localStorage.removeItem(STORAGE_KEYS.EDGE_STATES);
+                localStorage.removeItem(STORAGE_KEYS.HABIT_CHECKBOXES);
+
+                console.log("Map data generated successfully. Reloading page...");
+                // Reload the page to use the new map data
+                sessionStorage.setItem('newlyGeneratedMap', 'true');
+                window.location.reload();
+            } else {
+                console.error("Invalid map data format:", response);
+                loadingDiv.textContent = "Error: Invalid map data received. Please try again.";
+            }
+        } catch (error) {
+            // Clear the animation
+            clearInterval(dotsAnimation);
+
+            console.error("Error generating map:", error);
+            loadingDiv.textContent = "Error generating map. Please try again.";
+        }
+    }
+}
+
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function () {
     // Get the container element
@@ -358,70 +621,187 @@ document.addEventListener('DOMContentLoaded', function () {
         ]
     };
 
-    // Storage keys for persistence
-    const STORAGE_KEYS = {
-        CURRENT_NODE: 'fishbone_current_node',
-        NODE_STATES: 'fishbone_node_states',
-        EDGE_STATES: 'fishbone_edge_states',
-        HABIT_CHECKBOXES: 'fishbone_habit_checkboxes',
-        MAP_DATA: 'fishbone_map_data',
-        STREAK_COUNT: 'fishbone_streak_count',
-        LAST_COMPLETION_DATE: 'fishbone_last_completion_date'
-    };
-
-    // Function to save map data to localStorage (for LLM generated maps)
-    function saveMapData(data) {
-        localStorage.setItem(STORAGE_KEYS.MAP_DATA, JSON.stringify(data));
-    }
-
     // Function to load map data from localStorage
     function loadMapData() {
         const savedData = localStorage.getItem(STORAGE_KEYS.MAP_DATA);
         return savedData ? JSON.parse(savedData) : null;
     }
 
+    // Function to fix y-coordinates in the map data
+    // In LLM-generated maps, we might get mathematical coordinates (where up is positive)
+    // but vis.js uses screen coordinates (where down is positive)
+    function normalizeMapCoordinates(mapData) {
+        // First, detect if y-axis needs to be inverted
+        // Check if the LLM is using mathematical coordinates (negative y at bottom, positive at top)
+        // by looking at the pattern of y values in relation to a typical map structure
+
+        // Make a shallow copy
+        const normalizedData = JSON.parse(JSON.stringify(mapData));
+
+        // First, determine if we need to invert Y values:
+        // In a typical map, boss nodes should be at the top, starting nodes at the bottom
+        // This might be reversed in mathematical coordinates (boss nodes have negative y)
+        let needsInversion = false;
+
+        // Check if boss nodes have lower y values than starting nodes
+        const bossNodes = normalizedData.nodes.filter(node => node.nodeType === 'boss');
+        const startNodes = normalizedData.nodes.filter(node =>
+            node.label.toLowerCase().includes('start') ||
+            node.label.toLowerCase().includes('beginning') ||
+            node.label.toLowerCase().includes('path'));
+
+        if (bossNodes.length > 0 && startNodes.length > 0) {
+            const avgBossY = bossNodes.reduce((sum, node) => sum + node.y, 0) / bossNodes.length;
+            const avgStartY = startNodes.reduce((sum, node) => sum + node.y, 0) / startNodes.length;
+
+            // If boss nodes have smaller y values, we need to invert
+            // (In screen coordinates, smaller y means higher position)
+            if (avgBossY < avgStartY) {
+                // The data seems correct for screen coordinates (smaller y at top)
+                needsInversion = false;
+            } else {
+                // The data seems to use mathematical coordinates (larger y at top)
+                needsInversion = true;
+            }
+        } else {
+            // Alternative detection: 
+            // Assume if we have negative y values, they're meant to be at the top
+            const hasNegativeY = normalizedData.nodes.some(node => node.y < 0);
+            const hasLargePositiveY = normalizedData.nodes.some(node => node.y > 200);
+
+            if (hasNegativeY && hasLargePositiveY) {
+                needsInversion = true;
+            }
+        }
+
+        if (needsInversion) {
+            console.log("Inverting Y coordinates for compatibility with screen coordinates");
+
+            // Find the range of y values to properly invert
+            const yValues = normalizedData.nodes.map(node => node.y);
+            const minY = Math.min(...yValues);
+            const maxY = Math.max(...yValues);
+
+            // Invert each node's y coordinate
+            normalizedData.nodes.forEach(node => {
+                // Invert y value within the range
+                // node.y = maxY - (node.y - minY);
+
+                // Alternative: just negate y values
+                node.y = -node.y;
+            });
+        }
+
+        return normalizedData;
+    }
+
+    // Function to identify starting nodes based on map structure
+    function findStartingNodes(mapData) {
+        // Create a set to track which nodes have incoming edges
+        const nodesWithIncoming = new Set();
+
+        // Record all nodes that have incoming edges
+        mapData.edges.forEach(edge => {
+            nodesWithIncoming.add(edge.to);
+        });
+
+        // Get all node IDs that have no incoming edges - these are starting nodes
+        const startNodeIds = mapData.nodes
+            .filter(node => !nodesWithIncoming.has(node.id))
+            .map(node => node.id);
+
+        console.log("Identified starting nodes:", startNodeIds);
+        return startNodeIds;
+    }
+
     // Check if we have a custom map saved
     const savedMapData = loadMapData();
     // If we have a saved custom map, use it instead of the default
     if (savedMapData) {
-        // Use the saved map data
-        mapData.nodes = savedMapData.nodes;
-        mapData.edges = savedMapData.edges;
+        // Process the custom map to ensure coordinates are correct
+        const normalizedMapData = normalizeMapCoordinates(savedMapData);
+        // Use the normalized map data
+        mapData.nodes = normalizedMapData.nodes;
+        mapData.edges = normalizedMapData.edges;
     }
 
-    // Update the page title with the map title
-    const headerElement = document.querySelector('#header h2');
-    if (headerElement) {
-        headerElement.textContent = "Weekly Habit Adventure";
-    }
+    // Create empty vis.js DataSets
+    const nodes = new vis.DataSet([]);
+    const edges = new vis.DataSet([]);
 
-    // Process nodes to add group property based on nodeType and add selectable property
-    const processedNodes = mapData.nodes.map(node => ({
-        ...node,
-        group: node.state === 'current' ? 'current' : node.nodeType,
-        selectable: false, // Add selectable property, default to false
-        displayLabel: node.label, // Store the original label in a new property
-        label: "", // We'll display labels in tooltips instead of on the nodes
-        size: CLICK_AREA_SIZE // Set a larger clickable area while maintaining visual appearance
-    }));
-
-    // Process edges to add dashes property and ID
-    const processedEdges = mapData.edges.map(edge => ({
-        ...edge,
-        id: `e${edge.from}-${edge.to}`,
-        dashes: edge.state === 'traversed' ? false : [5, 5],
-        smooth: false // Use straight lines instead of curved
-    }));
-
-    // Create vis.js DataSets
-    const nodes = new vis.DataSet(processedNodes);
-    const edges = new vis.DataSet(processedEdges);
-
-    // Create the network data object
+    // Create the network data object (initially empty)
     const data = {
         nodes: nodes,
         edges: edges
     };
+
+    // Check if we have a map and habits
+    const hasMap = localStorage.getItem(STORAGE_KEYS.MAP_DATA);
+    const hasHabits = localStorage.getItem("habitData");
+
+    // If no map, show placeholder message instead
+    if (!hasMap) {
+        // Hide the network container and map legend
+        const mapContainer = document.querySelector('.map-container');
+        const mapLegend = document.querySelector('.map-legend');
+        const progressBarWrapper = document.querySelector('.progress-bar-wrapper');
+        const percentage = document.querySelector('.percentage');
+
+        if (mapContainer) {
+            // Create message element
+            const messageDiv = document.createElement('div');
+            messageDiv.id = 'map-placeholder-message';
+            messageDiv.style.backgroundColor = '#276F7C';
+            messageDiv.style.borderRadius = '10px';
+            messageDiv.style.padding = '30px 20px';
+            messageDiv.style.textAlign = 'center';
+            messageDiv.style.color = '#d1dced';
+            messageDiv.style.fontSize = '18px';
+            messageDiv.style.fontWeight = 'bold';
+            messageDiv.style.marginTop = '20px';
+
+            if (hasHabits) {
+                messageDiv.textContent = "Once you add your habits, click on \"New Map\" to start your adventure!";
+            } else {
+                messageDiv.textContent = "Add some habits first, then come back to start your adventure!";
+            }
+
+            // Replace the map network with this message
+            mapContainer.innerHTML = '';
+            mapContainer.appendChild(messageDiv);
+        }
+
+        if (mapLegend) {
+            mapLegend.style.display = 'none';
+        }
+
+        if (progressBarWrapper && percentage) {
+            progressBarWrapper.style.display = 'none';
+            percentage.style.display = 'none';
+        }
+    } else {
+        // Process nodes to add group property based on nodeType and add selectable property
+        const processedNodes = mapData.nodes.map(node => ({
+            ...node,
+            group: node.state === 'current' ? 'current' : node.nodeType,
+            selectable: false, // Add selectable property, default to false
+            displayLabel: node.label, // Store the original label in a new property
+            label: "", // We'll display labels in tooltips instead of on the nodes
+            size: CLICK_AREA_SIZE // Set a larger clickable area while maintaining visual appearance
+        }));
+
+        // Process edges to add dashes property and ID
+        const processedEdges = mapData.edges.map(edge => ({
+            ...edge,
+            id: `e${edge.from}-${edge.to}`,
+            dashes: edge.state === 'traversed' ? false : [5, 5],
+            smooth: false // Use straight lines instead of curved
+        }));
+
+        // Update the datasets with the processed data
+        nodes.update(processedNodes);
+        edges.update(processedEdges);
+    }
 
     // Variable to keep track of currently selected node
     let currentSelectedNode = null; // No node selected initially
@@ -697,39 +1077,47 @@ document.addEventListener('DOMContentLoaded', function () {
         // Load saved state before initializing the view
         loadSavedState();
 
-        // Fit the view
-        network.fit({
-            animation: {
-                duration: 1000,
-                easingFunction: "easeInOutQuad"
-            }
-        });
+        // Flag to check if this is the first load after generating a new map
+        const isNewlyGeneratedMap = sessionStorage.getItem('newlyGeneratedMap') === 'true';
 
-        // After initial fitting, apply a zoom level
+        // Clear the flag after checking it
+        if (isNewlyGeneratedMap) {
+            sessionStorage.removeItem('newlyGeneratedMap');
+        }
+
+        // Use a single zoom operation with appropriate timing
         setTimeout(() => {
             // If we have a current node, focus on it
             if (currentSelectedNode) {
                 network.focus(currentSelectedNode, {
                     scale: 0.8,
-                    animation: {
+                    animation: isNewlyGeneratedMap ? false : {
                         duration: 1000,
                         easingFunction: "easeInOutQuad"
                     }
                 });
-            } else {
-                // Otherwise just set a general zoom level
-                network.moveTo({
-                    scale: 0.8, // Adjust as needed
-                    animation: {
-                        duration: 1000,
-                        easingFunction: "easeInOutQuad"
-                    }
-                });
-            }
 
-            // Create character image if there's a current node
-            if (currentSelectedNode) {
-                setTimeout(createCharacterImage, 1100);
+                // Create character image after focusing
+                setTimeout(createCharacterImage, isNewlyGeneratedMap ? 100 : 1000);
+            } else {
+                // Otherwise fit the entire network
+                network.fit({
+                    animation: isNewlyGeneratedMap ? false : {
+                        duration: 1000,
+                        easingFunction: "easeInOutQuad"
+                    }
+                });
+
+                // Then set a reasonable zoom level with no animation for new maps
+                setTimeout(() => {
+                    network.moveTo({
+                        scale: 0.8,
+                        animation: isNewlyGeneratedMap ? false : {
+                            duration: 1000,
+                            easingFunction: "easeInOutQuad"
+                        }
+                    });
+                }, isNewlyGeneratedMap ? 100 : 1000);
             }
 
             // Initialize the current node text display
@@ -740,7 +1128,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Update map progress
             updateMapProgress();
-        }, 1100);
+        }, isNewlyGeneratedMap ? 100 : 500);
     });
 
     // Function to create the character image once
@@ -795,12 +1183,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Log the node data to console for debugging
                 console.log("Current node data:", currentNode);
 
-                // Include nodeType and label with a dash separator
+                // Include nodeType and label with a colon separator instead of hyphen
                 const nodeTypeCapitalized = currentNode.nodeType.charAt(0).toUpperCase() + currentNode.nodeType.slice(1);
                 const labelText = currentNode.displayLabel || "Unknown"; // Use the displayLabel property we added
 
-                // Create the display text
-                const displayText = `${nodeTypeCapitalized} - ${labelText}`;
+                // Create the display text with colon instead of hyphen
+                const displayText = `${nodeTypeCapitalized}: ${labelText}`;
                 console.log("Setting node text to:", displayText);
 
                 // Set the text content
@@ -855,8 +1243,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         } else {
             // If no node is selected yet, make starting nodes selectable
-            const startingNodes = [1, 2]; // IDs of the starting nodes
-            startingNodes.forEach(nodeId => {
+            // Dynamically identify starting nodes
+            const startingNodeIds = findStartingNodes(mapData);
+
+            // Make all starting nodes selectable
+            startingNodeIds.forEach(nodeId => {
                 const node = nodes.get(nodeId);
                 if (node) {
                     node.selectable = true;
@@ -900,26 +1291,25 @@ document.addEventListener('DOMContentLoaded', function () {
             const modalContent = document.createElement('div');
             modalContent.className = 'modal-content';
 
-            // Add modal HTML structure
+            // Add modal HTML structure with no reward text for non-boss nodes
             modalContent.innerHTML = `
-                <div class="challenge-title">Challenge Day!</div>
-                <div class="challenge-bonus">
-                    <div class="bonus-header">Challenge Bonus:</div>
-                    <div class="bonus-description">Complete all habits before noon (12:00pm)!</div>
-                    <div class="bonus-reward">Reward: New Fish Outfit</div>
-                </div>
-                <div class="time-remaining">
-                    <div class="time-label">Time Remaining:</div>
-                    <div class="time-counter" id="time-counter">03:42:18</div>
-                </div>
-                <div class="habits-container" id="habits-container">
-                    <!-- Habits will be inserted here dynamically -->
-                </div>
-                <div class="button-row">
-                    <button class="button cancel-button" id="cancel-challenge">Cancel</button>
-                    <button class="button accept-button" id="accept-challenge">Accept</button>
-                </div>
-            `;
+            <div class="challenge-title">Challenge Day!</div>
+            <div class="challenge-bonus">
+                <div class="bonus-header">Challenge:</div>
+                <div class="bonus-description">Complete all habits for this node!</div>
+            </div>
+            <div class="time-remaining">
+                <div class="time-label">Time Remaining:</div>
+                <div class="time-counter" id="time-counter">03:42:18</div>
+            </div>
+            <div class="habits-container" id="habits-container">
+                <!-- Habits will be inserted here dynamically -->
+            </div>
+            <div class="button-row">
+                <button class="button cancel-button" id="cancel-challenge">Cancel</button>
+                <button class="button accept-button" id="accept-challenge">Accept</button>
+            </div>
+        `;
 
             // Add content to container
             modalContainer.appendChild(modalContent);
@@ -958,26 +1348,26 @@ document.addEventListener('DOMContentLoaded', function () {
             const modalContent = document.createElement('div');
             modalContent.className = 'modal-content';
 
-            // Add modal HTML structure
+            // Add modal HTML structure with no reward text for non-boss nodes
             modalContent.innerHTML = `
-                <div class="challenge-title">Complete Your Habits</div>
-                <div class="challenge-bonus">
-                    <div class="bonus-header">Today's Challenge:</div>
-                    <div class="bonus-description" id="habit-description">Complete all habits to continue your journey!</div>
-                    <div class="bonus-reward" id="habit-reward">Reward: Progress on your map</div>
-                </div>
-                <div class="time-remaining">
-                    <div class="time-label">Time Remaining Today:</div>
-                    <div class="time-counter" id="habit-time-counter">03:42:18</div>
-                </div>
-                <div class="habits-container" id="habit-checkboxes-container">
-                    <!-- Habits with checkboxes will be inserted here dynamically -->
-                </div>
-                <div class="button-row">
-                    <button class="button cancel-button" id="close-habit-modal">Close</button>
-                    <button class="button accept-button" id="complete-habits">Complete All</button>
-                </div>
-            `;
+            <div class="challenge-title">Complete Your Habits</div>
+            <div class="challenge-bonus">
+                <div class="bonus-header">Today's Challenge:</div>
+                <div class="bonus-description" id="habit-description">Complete all habits to continue your journey!</div>
+                <div class="bonus-reward" id="habit-reward"></div>
+            </div>
+            <div class="time-remaining">
+                <div class="time-label">Time Remaining Today:</div>
+                <div class="time-counter" id="habit-time-counter">03:42:18</div>
+            </div>
+            <div class="habits-container" id="habit-checkboxes-container">
+                <!-- Habits with checkboxes will be inserted here dynamically -->
+            </div>
+            <div class="button-row">
+                <button class="button cancel-button" id="close-habit-modal">Close</button>
+                <button class="button accept-button" id="complete-habits">Complete!</button>
+            </div>
+        `;
 
             // Add content to container
             modalContainer.appendChild(modalContent);
@@ -1009,17 +1399,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Update title based on node type
         const titleElement = document.querySelector('#habit-completion-modal .challenge-title');
-        titleElement.textContent = `${node.nodeType.charAt(0).toUpperCase() + node.nodeType.slice(1)}: ${node.displayLabel}`;
+        if (titleElement) {
+            titleElement.textContent = `${node.nodeType.charAt(0).toUpperCase() + node.nodeType.slice(1)}: ${node.displayLabel}`;
 
-        // Set the background color of the title to match the node type color
-        const nodeTypeStyle = nodeTypes[node.nodeType];
-        if (nodeTypeStyle && nodeTypeStyle.color && nodeTypeStyle.color.filled) {
-            titleElement.style.backgroundColor = nodeTypeStyle.color.filled;
+            // Set the background color of the title to match the node type color
+            const nodeTypeStyle = nodeTypes[node.nodeType];
+            if (nodeTypeStyle && nodeTypeStyle.color && nodeTypeStyle.color.filled) {
+                titleElement.style.backgroundColor = nodeTypeStyle.color.filled;
 
-            // Set text color to white or black based on background brightness
-            const rgb = hexToRgb(nodeTypeStyle.color.filled);
-            const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
-            titleElement.style.color = brightness > 128 ? '#333' : '#fff';
+                // Set text color to white or black based on background brightness
+                const rgb = hexToRgb(nodeTypeStyle.color.filled);
+                const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+                titleElement.style.color = brightness > 128 ? '#333' : '#fff';
+            }
         }
 
         // Helper function to convert hex color to RGB
@@ -1038,99 +1430,113 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Update description based on node
         const descriptionElement = document.getElementById('habit-description');
-        descriptionElement.textContent = node.description;
-
-        // Set reward based on node type
-        const rewardElement = document.getElementById('habit-reward');
-        let reward = "Progress on your map";
-        switch (node.nodeType) {
-            case 'challenge':
-                reward = "Double XP Bonus";
-                break;
-            case 'event':
-                reward = "Special Decoration";
-                break;
-            case 'rest':
-                reward = "Energy Refill";
-                break;
-            case 'boss':
-                reward = "Rare Fish Outfit";
-                break;
-            default:
-                reward = "New Fish Outfit";
+        if (descriptionElement) {
+            descriptionElement.textContent = node.description;
         }
-        rewardElement.textContent = `Reward: ${reward}`;
+
+        // Set reward text only for boss nodes
+        const rewardElement = document.getElementById('habit-reward');
+        if (rewardElement) {
+            if (node.nodeType === 'boss') {
+                rewardElement.textContent = 'Reward: Unlock a new avatar!';
+                rewardElement.style.display = 'block';
+            } else {
+                // Hide reward text for non-boss nodes
+                rewardElement.style.display = 'none';
+            }
+        }
 
         // Start a live countdown timer
         startCountdownTimer('habit-time-counter');
 
         // Add habits with checkboxes based on node data
         const habitsContainer = document.getElementById('habit-checkboxes-container');
-        habitsContainer.innerHTML = ''; // Clear previous habits
+        if (habitsContainer) {
+            habitsContainer.innerHTML = ''; // Clear previous habits
 
-        // Add habits from the node with checkboxes
-        if (node.habits && node.habits.length > 0) {
-            node.habits.forEach((habit, index) => {
-                const habitElement = document.createElement('div');
-                habitElement.className = 'habit-item';
+            // Add habits from the node with checkboxes
+            if (node.habits && node.habits.length > 0) {
+                node.habits.forEach((habit, index) => {
+                    const habitElement = document.createElement('div');
+                    habitElement.className = 'habit-item';
 
-                // Get saved checkbox state if available
-                const isChecked = habitCheckboxStates[node.id] &&
-                    habitCheckboxStates[node.id][index] === true;
+                    // Get saved checkbox state if available
+                    const isChecked = habitCheckboxStates[node.id] &&
+                        habitCheckboxStates[node.id][index] === true;
 
-                habitElement.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <div class="habit-name">${habit.name}</div>
-                            <div class="habit-details">${habit.details}</div>
-                        </div>
-                        <div class="habit-checkbox-container">
-                            <input type="checkbox" id="habit-${index}" class="habit-checkbox" 
-                                  ${isChecked ? 'checked' : ''} style="width: 25px; height: 25px;">
-                        </div>
+                    habitElement.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <div style="text-align: left; flex-grow: 1; padding-right: 10px;">
+                        <div class="habit-name" style="text-align: left;">${habit.name}</div>
+                        <div class="habit-details" style="text-align: left;">${habit.details}</div>
                     </div>
+                    <div class="habit-checkbox-container" style="flex-shrink: 0;">
+                        <input type="checkbox" id="habit-${index}" class="habit-checkbox" 
+                              ${isChecked ? 'checked' : ''} style="width: 25px; height: 25px;">
+                    </div>
+                </div>
                 `;
-                habitsContainer.appendChild(habitElement);
-            });
-        }
+                    habitsContainer.appendChild(habitElement);
+                });
+            }
 
-        // Add event listeners to checkboxes
-        const checkboxes = document.querySelectorAll('.habit-checkbox');
-        checkboxes.forEach((checkbox, index) => {
-            checkbox.addEventListener('change', function () {
-                // Save the checkbox state
-                handleHabitCheckboxChange(node.id, index, checkbox.checked);
+            // Add event listeners to checkboxes
+            const checkboxes = document.querySelectorAll('.habit-checkbox');
+            checkboxes.forEach((checkbox, index) => {
+                checkbox.addEventListener('change', function () {
+                    // Save the checkbox state
+                    handleHabitCheckboxChange(node.id, index, checkbox.checked);
 
-                // Check if all habits are completed
-                const allChecked = Array.from(checkboxes).every(box => box.checked);
-                const completeButton = document.getElementById('complete-habits');
+                    // Get the parent habit-item container
+                    const habitContainer = checkbox.closest('.habit-item');
+                    if (habitContainer) {
+                        // Change background color based on checked state
+                        if (checkbox.checked) {
+                            // Green background when checked
+                            habitContainer.style.backgroundColor = '#4CAF50';
+                            habitContainer.style.transition = 'background-color 0.3s ease';
+                        } else {
+                            // Return to default background when unchecked
+                            habitContainer.style.backgroundColor = '#3a8f9d'; // Original color
+                            habitContainer.style.transition = 'background-color 0.3s ease';
+                        }
+                    }
 
-                if (completeButton) {
-                    completeButton.disabled = !allChecked;
-                    if (allChecked) {
-                        completeButton.style.backgroundColor = '#4CAF50'; // Green when all habits are checked
+                    // Check if all habits are completed
+                    const allChecked = Array.from(checkboxes).every(box => box.checked);
+                    const completeButton = document.getElementById('complete-habits');
+
+                    if (completeButton) {
+                        completeButton.disabled = !allChecked;
+                        if (allChecked) {
+                            completeButton.style.backgroundColor = '#4CAF50'; // Green when all habits are checked
+                            completeButton.style.cursor = 'pointer';
+                            completeButton.style.opacity = '1';
+                        } else {
+                            completeButton.style.backgroundColor = '#cccccc'; // Grey when disabled
+                            completeButton.style.cursor = 'not-allowed';
+                            completeButton.style.opacity = '0.6';
+                        }
+                    }
+                });
+
+                // Apply the correct initial color based on checkbox state when modal opens
+                const habitContainer = checkbox.closest('.habit-item');
+                if (habitContainer) {
+                    if (checkbox.checked) {
+                        habitContainer.style.backgroundColor = '#4CAF50'; // Green when checked
                     } else {
-                        completeButton.style.backgroundColor = '#276F7C'; // Default color
+                        habitContainer.style.backgroundColor = '#3a8f9d'; // Original color
                     }
                 }
             });
-        });
-
-        // Initially check if all checkboxes are already checked
-        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
-        const completeButton = document.getElementById('complete-habits');
-        if (completeButton) {
-            completeButton.disabled = !allChecked;
-            if (allChecked) {
-                completeButton.style.backgroundColor = '#4CAF50'; // Green when all habits are checked
-            } else {
-                completeButton.style.backgroundColor = '#276F7C'; // Default color
-            }
         }
 
         // Show modal
         const modalContainer = document.getElementById('habit-completion-modal');
-        modalContainer.style.display = 'flex';
+        if (modalContainer) {
+            modalContainer.style.display = 'flex';
+        }
     }
 
     // Hide the habit completion modal
@@ -1171,6 +1577,17 @@ document.addEventListener('DOMContentLoaded', function () {
             if (habitCheckboxStates[currentSelectedNode]) {
                 delete habitCheckboxStates[currentSelectedNode];
                 saveHabitCheckboxStates();
+            }
+
+            // Check if this was a boss node and unlock an avatar if so
+            if (node.nodeType === 'boss') {
+                const unlockedAvatar = unlockRandomAvatar();
+                if (unlockedAvatar) {
+                    // Show avatar unlocked modal after a short delay
+                    setTimeout(() => {
+                        showAvatarUnlockedModal(unlockedAvatar);
+                    }, 1000);
+                }
             }
 
             // Update the streak count
@@ -1219,17 +1636,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Update title based on node type
         const titleElement = document.querySelector('.challenge-title');
-        titleElement.textContent = `${node.nodeType.charAt(0).toUpperCase() + node.nodeType.slice(1)}: ${node.displayLabel}`;
+        if (titleElement) {
+            titleElement.textContent = `${node.nodeType.charAt(0).toUpperCase() + node.nodeType.slice(1)}: ${node.displayLabel}`;
 
-        // Set the background color of the title to match the node type color
-        const nodeTypeStyle = nodeTypes[node.nodeType];
-        if (nodeTypeStyle && nodeTypeStyle.color && nodeTypeStyle.color.filled) {
-            titleElement.style.backgroundColor = nodeTypeStyle.color.filled;
+            // Set the background color of the title to match the node type color
+            const nodeTypeStyle = nodeTypes[node.nodeType];
+            if (nodeTypeStyle && nodeTypeStyle.color && nodeTypeStyle.color.filled) {
+                titleElement.style.backgroundColor = nodeTypeStyle.color.filled;
 
-            // Set text color to white or black based on background brightness
-            const rgb = hexToRgb(nodeTypeStyle.color.filled);
-            const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
-            titleElement.style.color = brightness > 128 ? '#333' : '#fff';
+                // Set text color to white or black based on background brightness
+                const rgb = hexToRgb(nodeTypeStyle.color.filled);
+                const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+                titleElement.style.color = brightness > 128 ? '#333' : '#fff';
+            }
         }
 
         // Helper function to convert hex color to RGB
@@ -1248,44 +1667,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Update description based on node
         const descriptionElement = document.querySelector('.bonus-description');
-        descriptionElement.textContent = node.description;
-
-        // Set reward based on node type
-        const rewardElement = document.querySelector('.bonus-reward');
-        let reward = "New Fish Outfit";
-        switch (node.nodeType) {
-            case 'challenge':
-                reward = "Double XP Bonus";
-                break;
-            case 'event':
-                reward = "Special Decoration";
-                break;
-            case 'rest':
-                reward = "Energy Refill";
-                break;
-            case 'boss':
-                reward = "Rare Fish Outfit";
-                break;
-            default:
-                reward = "New Fish Outfit";
+        if (descriptionElement) {
+            descriptionElement.textContent = node.description;
         }
-        rewardElement.textContent = `Reward: ${reward}`;
+
+        // Remove any existing reward element
+        const oldRewardElement = document.querySelector('.bonus-reward');
+        if (oldRewardElement) {
+            oldRewardElement.remove();
+        }
+
+        // Add reward text only for boss nodes
+        if (node.nodeType === 'boss') {
+            const bonusDiv = document.querySelector('.challenge-bonus');
+            if (bonusDiv) {
+                const rewardElement = document.createElement('div');
+                rewardElement.className = 'bonus-reward';
+                rewardElement.textContent = 'Reward: Unlock a new avatar!';
+                bonusDiv.appendChild(rewardElement);
+            }
+        }
 
         // Add habits based on node data
         const habitsContainer = document.getElementById('habits-container');
-        habitsContainer.innerHTML = ''; // Clear previous habits
+        if (habitsContainer) {
+            habitsContainer.innerHTML = ''; // Clear previous habits
 
-        // Add habits from the node
-        if (node.habits && node.habits.length > 0) {
-            node.habits.forEach(habit => {
-                const habitElement = document.createElement('div');
-                habitElement.className = 'habit-item';
-                habitElement.innerHTML = `
-                    <div class="habit-name">${habit.name}</div>
-                    <div class="habit-details">${habit.details}</div>
+            // Add habits from the node
+            if (node.habits && node.habits.length > 0) {
+                node.habits.forEach(habit => {
+                    const habitElement = document.createElement('div');
+                    habitElement.className = 'habit-item';
+                    habitElement.innerHTML = `
+                <div class="habit-name">${habit.name}</div>
+                <div class="habit-details">${habit.details}</div>
                 `;
-                habitsContainer.appendChild(habitElement);
-            });
+                    habitsContainer.appendChild(habitElement);
+                });
+            }
         }
 
         // Start a live countdown timer
@@ -1293,7 +1712,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Show modal
         const modalContainer = document.getElementById('node-challenge-modal');
-        modalContainer.style.display = 'flex';
+        if (modalContainer) {
+            modalContainer.style.display = 'flex';
+        }
     }
 
     // Hide the node challenge modal
@@ -1301,6 +1722,132 @@ document.addEventListener('DOMContentLoaded', function () {
         const modalContainer = document.getElementById('node-challenge-modal');
         if (modalContainer) {
             modalContainer.style.display = 'none';
+        }
+    }
+
+    function showCompletedNodeModal(node) {
+        createHabitCompletionModal(); // Reuse the same modal structure
+
+        // Update title based on node type
+        const titleElement = document.querySelector('#habit-completion-modal .challenge-title');
+        if (titleElement) {
+            titleElement.textContent = `${node.nodeType.charAt(0).toUpperCase() + node.nodeType.slice(1)}: ${node.displayLabel} (Completed)`;
+
+            // Set the background color of the title to match the node type color
+            const nodeTypeStyle = nodeTypes[node.nodeType];
+            if (nodeTypeStyle && nodeTypeStyle.color && nodeTypeStyle.color.filled) {
+                titleElement.style.backgroundColor = nodeTypeStyle.color.filled;
+
+                // Set text color to white or black based on background brightness
+                const rgb = hexToRgb(nodeTypeStyle.color.filled);
+                const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+                titleElement.style.color = brightness > 128 ? '#333' : '#fff';
+            }
+        }
+
+        // Helper function to convert hex color to RGB
+        function hexToRgb(hex) {
+            // Remove the # if present
+            hex = hex.replace(/^#/, '');
+
+            // Parse the hex values
+            const bigint = parseInt(hex, 16);
+            const r = (bigint >> 16) & 255;
+            const g = (bigint >> 8) & 255;
+            const b = bigint & 255;
+
+            return { r, g, b };
+        }
+
+        // Update description based on node
+        const descriptionElement = document.getElementById('habit-description');
+        if (descriptionElement) {
+            descriptionElement.textContent = node.description;
+        }
+
+        // Change the header text to indicate this is a completed node
+        const bonusHeader = document.querySelector('#habit-completion-modal .bonus-header');
+        if (bonusHeader) {
+            bonusHeader.textContent = "Completed on:";
+        }
+
+        // Try to get the completion date if available
+        const lastDate = getLastCompletionDate();
+        if (descriptionElement) {
+            if (lastDate) {
+                descriptionElement.textContent = `You completed these habits on ${lastDate.toLocaleDateString()}.`;
+            } else {
+                descriptionElement.textContent = "You've already completed these habits.";
+            }
+        }
+
+        // Set reward text only for boss nodes
+        const rewardElement = document.getElementById('habit-reward');
+        if (rewardElement) {
+            if (node.nodeType === 'boss') {
+                rewardElement.textContent = 'Reward: New avatar unlocked!';
+                rewardElement.style.display = 'block';
+            } else {
+                // Hide reward text for non-boss nodes
+                rewardElement.style.display = 'none';
+            }
+        }
+
+        // Hide the countdown timer section as it's not relevant for completed nodes
+        const timeRemainingSection = document.querySelector('#habit-completion-modal .time-remaining');
+        if (timeRemainingSection) {
+            timeRemainingSection.style.display = 'none';
+        }
+
+        // Add habits without checkboxes (or with disabled checked checkboxes)
+        const habitsContainer = document.getElementById('habit-checkboxes-container');
+        if (habitsContainer) {
+            habitsContainer.innerHTML = ''; // Clear previous habits
+
+            // Add habits from the node as completed
+            if (node.habits && node.habits.length > 0) {
+                node.habits.forEach((habit, index) => {
+                    const habitElement = document.createElement('div');
+                    habitElement.className = 'habit-item';
+                    habitElement.style.backgroundColor = '#4CAF50'; // Green background to show completion
+
+                    habitElement.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div style="text-align: left; flex-grow: 1; padding-right: 10px;">
+                            <div class="habit-name" style="text-align: left;">${habit.name}</div>
+                            <div class="habit-details" style="text-align: left;">${habit.details}</div>
+                        </div>
+                        <div class="habit-checkbox-container" style="flex-shrink: 0;">
+                            <input type="checkbox" checked disabled style="width: 25px; height: 25px; opacity: 0.7;">
+                        </div>
+                    </div>
+                    `;
+                    habitsContainer.appendChild(habitElement);
+                });
+            }
+        }
+
+        // Update the button row - remove the Complete button
+        const buttonRow = document.querySelector('#habit-completion-modal .button-row');
+        if (buttonRow) {
+            // Replace the buttons with just a close button
+            buttonRow.innerHTML = `
+                <button class="button cancel-button" id="close-completed-modal" style="width: 100%;">Close</button>
+            `;
+
+            // Add event listener to the new close button
+            const closeButton = document.getElementById('close-completed-modal');
+            if (closeButton) {
+                closeButton.addEventListener('click', function () {
+                    hideHabitCompletionModal();
+                });
+            }
+        }
+
+        // Show modal
+        const modalContainer = document.getElementById('habit-completion-modal');
+        if (modalContainer) {
+            modalContainer.style.display = 'flex';
         }
     }
 
@@ -1443,6 +1990,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // If this is the current node and it's in progress, show habit completion modal
         if (nodeId === currentSelectedNode && node.state === 'in-progress') {
             showHabitCompletionModal(node);
+        }
+        // If the node is completed, show a view-only version of the habit modal
+        else if (node.state === 'completed') {
+            showCompletedNodeModal(node);
         }
         // If no current node yet or we're allowed to select new nodes (current one is completed)
         else if (node.selectable) {
@@ -1606,6 +2157,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
 
+            // Add reward info only for boss nodes
+            if (node.nodeType === 'boss') {
+                tooltipContent += '<br><br><strong>Reward:</strong> Unlock a new avatar!';
+            }
+
             // Indicate if the node is selectable
             if (node.selectable) {
                 tooltipContent += '<br><br><strong>✓ Available to select</strong>';
@@ -1756,8 +2312,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const newMapButton = document.querySelector('.new-map-button');
     if (newMapButton) {
         newMapButton.addEventListener('click', function () {
-            if (confirm("Are you sure you want to reset your progress and start a new map?")) {
-                window.clearFishboneData();
+            // If we already have a map, confirm before resetting
+            if (localStorage.getItem(STORAGE_KEYS.MAP_DATA)) {
+                if (confirm("Are you sure you want to reset your progress and start a new map?")) {
+                    generateNewMap();
+                }
+            } else {
+                // If no map exists yet, just generate one without confirmation
+                generateNewMap();
             }
         });
     }
