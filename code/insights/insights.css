@@ -36,7 +36,7 @@ body {
     flex-direction: column;
     padding: 12px 16px;
     border-radius: 10px;
-    background-color: #1a1c1f;
+    background-color: #257b8a;
     border: 3px solid white;
     color: white;
     font-size: 16px;
@@ -51,7 +51,7 @@ body {
     flex-direction: column;
     padding: 12px 16px;
     border-radius: 10px;
-    background-color: #1a1c1f;
+    background-color: rgba(37, 123, 138, 0.3);
     border: 3px solid white;
     color: white;
     font-size: 16px;
@@ -66,7 +66,7 @@ body {
     flex-direction: column;
     padding: 12px 16px;
     border-radius: 10px;
-    background-color: #1a1c1f;
+    background-color: #257b8a;
     border: 3px solid white;
     color: white;
     font-size: 16px;
