@@ -25,11 +25,20 @@
         <header>
             <a href="edit-profile.html">
                 <img src="../img/profile/skeleton-green.png" alt="Your Profile" style="height: 100px; width: 100px; border-radius: 0; background-color: transparent;">
-            </a>            
+            </a>        
             <h2 style="margin-bottom: -5px;">Ann Basil</h2>
             <p style="font-size: 13px; color: #ccc">@ann_basil</p>
         </header>
-
+        <script>
+            const savedImageSrc = localStorage.getItem('selectedProfileImage');
+            // If a saved image exists, update the profile image
+            if (savedImageSrc) {
+                const profileImage = document.querySelector('header img');
+                console.log(profileImage);
+                profileImage.src = savedImageSrc;
+                
+            }
+        </script>   
         <main>
             <h2>Current Habits</h2>
             <div class="column" id="column-1">
@@ -93,14 +102,6 @@
 
         <script>
             // Get the saved image src from localStorage
-            const savedImageSrc = localStorage.getItem('selectedProfileImage');
-            
-            // If a saved image exists, update the profile image
-            if (savedImageSrc) {
-                const profileImage = document.querySelector('#header img');
-                profileImage.src = savedImageSrc;
-            }
-
             window.addEventListener("DOMContentLoaded", () => {
                 const headerContainer = document.getElementById("main-habits");
                 headerContainer.innerHTML = "";

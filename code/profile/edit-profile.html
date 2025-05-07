@@ -130,6 +130,9 @@
                             const transformedSrc = img.src.replace('-profile-', '-').replace('/img/', '/img/profile/');
                             localStorage.setItem('selectedProfile', img.src);
                             localStorage.setItem('selectedProfileImage', transformedSrc);
+
+                            console.log('Selected Profile:', img.src);
+                            console.log('Transformed Profile Image:', transformedSrc);
                             
                             // Update highlighting - remove highlight from all containers
                             document.querySelectorAll('.avatar-container').forEach(div => {
