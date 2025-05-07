@@ -23,16 +23,18 @@
 
 <body>
     <div id="mobile">
+      
         <header>
             <h1>Create New Habit</h1>     
         </header>
 
         <main>
+          
             <div id="Add-Habit">
-
+              
                 <!-- Habit Name -->
                 <label for="habitname">Habit Name </label>
-                <input class= "not-freq" type="text" id="habitname" name="Habit" placeholder="Enter the habit you want to create."><br>
+                <input class= "not-freq" type="text" id="habitname" name="Habit" placeholder="Enter the habit you want to create.">
                 <br>
     
                 <!-- Frequency Buttons -->
@@ -67,10 +69,11 @@
                 <!-- Description -->
                 <label for="notes">Description/Additional Notes </label>
                 <input class= "not-freq" type="text" id="notes" name="Description/Additional Notes" placeholder="Add any description/additional notes.">
-                <br><br>
+                <br>
 
                 <button class="button" id="Done">Done!</button>
             </div>
+            <button id="back-btn" style="font-family: 'Figtree', sans-serif; cursor: pointer; margin-top: 3%; border: none; border-radius: 10px; height: 30px; width: 70px;";>Cancel</button>
 
         </main>
 
@@ -129,6 +132,10 @@
               localStorage.setItem("cameBack", "true");
               location.assign("habits.html");
           });
+
+          document.getElementById("back-btn").addEventListener("click", function () {
+                window.location.href = "habits.html";
+            });
 
          
         </script>
