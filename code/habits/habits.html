@@ -39,6 +39,7 @@
               <div class="popup-content">
                 <span id="close">&times;</span>
                 <h3>What types of habits are you in the mood for? </h3>
+                <h3>We'll fish around for a habit!</h3><br>
                 <input type="text" id="userInput" placeholder="Type here..." /><br><br>
                 <button class="button" id="popup-submit">Submit!</button>
               </div>
@@ -110,7 +111,7 @@
           function habitSaver() {
             const headerContainer = document.getElementsByClassName("curr-habits")[0];
             headerContainer.innerHTML = "";
-            
+
             const habitList = JSON.parse(localStorage.getItem("habitData")) || []; 
                 // console.log(habitList); 
 
