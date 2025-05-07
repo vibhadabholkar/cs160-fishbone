@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Oski the Bear</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" type="text/css" href="friends.css" />
+    <link rel="stylesheet" href="../main.css">
+</head>
+
+<body>
+    <div id="mobile">
+        <button id="back-btn">×</button>
+        <div id="header">
+            <img src="../img/skeleton-profile-yellow.png" alt="Oski's Profile" style="height: 100px; width: 100px;">
+            <h2 style="margin-bottom: -5px;">Oski</h2>
+            <p style="font-size: 13px; color: #ccc">@oski_the_bear</p>
+        </div>
+        <img id="friends-image" src="../img/profile/friends-3.png" alt="Friends" style="height: 20px;" onclick="replaceImageAndAddFriend()">
+
+        <script>
+            function replaceImageAndAddFriend() {
+                // Replace the image
+                const image = document.getElementById('friends-image');
+                image.src = '../img/profile/friends-2.png';
+        
+                // Add the profile avatar to the "All Friends" section in friends.html
+                // Save the friend's data to localStorage
+                const newFriend = {
+                    name: 'Oski Bear',
+                    avatar: '../img/skeleton-profile-yellow.png',
+                    profileLink: 'oski-bear.html'
+                };
+        
+                // Save the new friend to localStorage
+                let friendsList = JSON.parse(localStorage.getItem('allFriends')) || [];
+                friendsList.push(newFriend);
+                localStorage.setItem('allFriends', JSON.stringify(friendsList));
+        
+                // Optionally, alert the user that the friend has been added
+                alert(`${newFriend.name} has been added to your friends list!`);
+            }
+        </script>
+        
+        <div class="column" id="column-1">
+            <div class="container" id="friend-habits">
+                <div style="text-align: left;">
+                    <h2>Current Habits</h2>
+                </div>
+                <div class="friend-habits">
+                    <div style="text-align: left;">
+                        <h2 style="margin-bottom: -5px; font-size: 15px">Rallying</h2>
+                        <p style="font-size: 10px; color: #ccc">Daily • 10 minutes • Morning</p>
+                    </div>
+                    <div style="text-align: right; margin-left: auto;">
+                        <img src="../img/profile/bookmark.png" alt="bookmark" class="bookmark" style="width: 20px; height: 20px; border-radius: 0; background-color: transparent;">
+                    </div>
+                </div>
+                <div class="friend-habits">
+                    <div style="text-align: left;">
+                        <h2 style="margin-bottom: -5px; font-size: 15px">Dancing</h2>
+                        <p style="font-size: 10px; color: #ccc">3 times per week • 2 miles</p>
+                    </div>
+                    <div style="text-align: right; margin-left: auto;">
+                        <img src="../img/profile/bookmark.png" alt="bookmark" class="bookmark" style="width: 20px; height: 20px; border-radius: 0; background-color: transparent;">
+                    </div>
+                </div>
+                <div class="friend-habits">
+                    <div style="text-align: left;">
+                        <h2 style="margin-bottom: -5px; font-size: 15px">Beating Stanford</h2>
+                        <p style="font-size: 10px; color: #ccc">Daily • 20 minutes • Evening</p>
+                    </div>
+                    <div style="text-align: right;margin-left: auto;">
+                        <img src="../img/profile/bookmark.png" alt="bookmark" class="bookmark" style="width: 20px; height: 20px; border-radius: 0; background-color: transparent;">
+                    </div>
+                </div>
+            </div>
+            <div class="container" id="friend-habits">
+                <div style="text-align: left;">
+                    <h2>Badges</h2>
+                </div>
+                <div>
+                    <img src="../img/badge/readingBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/campingBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/meditationBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/foodBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                </div>
+
+            </div>
+        </div>
+        <script src="../elements/navbar.js"></script>
+        <script>
+            // Select all bookmark images
+            const bookmarks = document.querySelectorAll('.bookmark');
+        
+            // Add a click event listener to each bookmark
+            bookmarks.forEach(bookmark => {
+                bookmark.addEventListener('click', () => {
+                    // Toggle the 'darkened' class on click
+                    bookmark.classList.toggle('darkened');
+                });
+            });
+
+            document.getElementById("back-btn").addEventListener("click", function () {
+                window.location.href = "friends.html";
+            });
+        </script>
+        <custom-navbar></custom-navbar>
+    </div>
+</body>
+</html>
