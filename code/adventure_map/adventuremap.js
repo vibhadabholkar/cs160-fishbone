@@ -10,6 +10,584 @@ const STORAGE_KEYS = {
     UNLOCKED_AVATARS: 'fishbone_unlocked_avatars'
 };
 
+const DEFAULT_MAP_DATA = {
+    "nodes": [
+        {
+            "id": 1,
+            "label": "Starting Point A",
+            "nodeType": "standard",
+            "state": "pending",
+            "x": -150,
+            "y": 50,
+            "description": "Your journey begins with a calm start. Embrace your daily meditation and reading ritual.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Starting Point B",
+            "nodeType": "standard",
+            "state": "pending",
+            "x": 0,
+            "y": 50,
+            "description": "Every great adventure starts with a single step. Start with mindfulness and a good book.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Starting Point C",
+            "nodeType": "standard",
+            "state": "pending",
+            "x": 150,
+            "y": 50,
+            "description": "Set forth with energy and curiosity. A fresh path lies ahead.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Path of Steady Progress",
+            "nodeType": "standard",
+            "state": "pending",
+            "x": -200,
+            "y": 150,
+            "description": "A clear path opens; keep your focus as you maintain your routine.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                },
+                {
+                    "name": "Running",
+                    "details": "3 miles"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "Beat the Clock",
+            "nodeType": "challenge",
+            "state": "pending",
+            "x": -50,
+            "y": 130,
+            "description": "Race against time to complete your habits. Conquer your challenges before 18:00!",
+            "timeLimit": "18:00",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                },
+                {
+                    "name": "Running",
+                    "details": "3 miles"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "label": "One-and-Done",
+            "nodeType": "rest",
+            "state": "pending",
+            "x": 50,
+            "y": 170,
+            "description": "Today, select one habit to nail with full effort while letting the others rest for a moment.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                },
+                {
+                    "name": "Running",
+                    "details": "3 miles"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "label": "Steady Momentum",
+            "nodeType": "standard",
+            "state": "pending",
+            "x": 200,
+            "y": 150,
+            "description": "Keep moving forward steadily while nurturing your routine and building momentum.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                },
+                {
+                    "name": "Running",
+                    "details": "3 miles"
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "label": "Calm Woodland",
+            "nodeType": "standard",
+            "state": "pending",
+            "x": -250,
+            "y": 260,
+            "description": "The forest whispers calm encouragement. Stay mindfully present in the serenity.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "label": "Theme Day: Mind & Body",
+            "nodeType": "event",
+            "state": "pending",
+            "x": -100,
+            "y": 240,
+            "description": "Focus on connecting mind and body today with a special theme that unites your practices.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "label": "Double Down",
+            "nodeType": "challenge",
+            "state": "pending",
+            "x": -20,
+            "y": 280,
+            "description": "Push a bit harder: double your effort on one selected habit to power through the challenge.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "label": "Narrative Prompt",
+            "nodeType": "event",
+            "state": "pending",
+            "x": 80,
+            "y": 255,
+            "description": "Imagine a surge of energy as a storm passes; channel its intensity into your daily ritual.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "label": "Quiet Stream",
+            "nodeType": "standard",
+            "state": "pending",
+            "x": 150,
+            "y": 265,
+            "description": "Flow like a quiet stream, letting your routine refresh your inner spirit.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "label": "Micro-Habit Spotlight",
+            "nodeType": "rest",
+            "state": "pending",
+            "x": 250,
+            "y": 250,
+            "description": "Mini actions can have big impacts. Today, try micro versions of your habits to spark progress.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "1 minute"
+                },
+                {
+                    "name": "Reading",
+                    "details": "5 minutes"
+                }
+            ]
+        },
+        {
+            "id": 14,
+            "label": "Swap & Amp",
+            "nodeType": "challenge",
+            "state": "pending",
+            "x": -200,
+            "y": 360,
+            "description": "Mix things up: swap targets of two habits and amplify your efforts for a fresh challenge.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                },
+                {
+                    "name": "Running",
+                    "details": "3 miles"
+                }
+            ]
+        },
+        {
+            "id": 15,
+            "label": "Habit Remix",
+            "nodeType": "event",
+            "state": "pending",
+            "x": -50,
+            "y": 340,
+            "description": "Blend your habits into one smooth routine; let each practice enhance the other.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                },
+                {
+                    "name": "Running",
+                    "details": "3 miles"
+                }
+            ]
+        },
+        {
+            "id": 16,
+            "label": "Reflect & Reset",
+            "nodeType": "rest",
+            "state": "pending",
+            "x": 50,
+            "y": 370,
+            "description": "Take a moment to reflect on your progress and set one tweak for a better routine next time.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                },
+                {
+                    "name": "Running",
+                    "details": "3 miles"
+                }
+            ]
+        },
+        {
+            "id": 17,
+            "label": "Steady Climb",
+            "nodeType": "standard",
+            "state": "pending",
+            "x": 200,
+            "y": 355,
+            "description": "Your commitment shines as you steadily climb towards new achievements in your routine.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                },
+                {
+                    "name": "Running",
+                    "details": "3 miles"
+                }
+            ]
+        },
+        {
+            "id": 18,
+            "label": "Sequential Flow",
+            "nodeType": "challenge",
+            "state": "pending",
+            "x": -100,
+            "y": 460,
+            "description": "Focus intensely and complete your habits back-to-back in one continuous flow.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                }
+            ]
+        },
+        {
+            "id": 19,
+            "label": "50% Across the Board",
+            "nodeType": "rest",
+            "state": "pending",
+            "x": 100,
+            "y": 440,
+            "description": "Today, perform each habit at half effort. Embrace a lighter pace and allow yourself to recover.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "5 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "15 minutes"
+                }
+            ]
+        },
+        {
+            "id": 20,
+            "label": "Bonus Micro-Habit",
+            "nodeType": "event",
+            "state": "pending",
+            "x": 0,
+            "y": 560,
+            "description": "A bonus challenge appears! Add an extra micro-habit to spice up your routine today.",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                }
+            ]
+        },
+        {
+            "id": 21,
+            "label": "Full Completion",
+            "nodeType": "boss",
+            "state": "pending",
+            "x": 0,
+            "y": 660,
+            "description": "Face the ultimate trial: complete all your habits at full strength to claim victory over your challenges!",
+            "timeLimit": "none",
+            "habits": [
+                {
+                    "name": "Meditate",
+                    "details": "10 minutes"
+                },
+                {
+                    "name": "Reading",
+                    "details": "30 minutes"
+                },
+                {
+                    "name": "Running",
+                    "details": "3 miles"
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "from": 1,
+            "to": 4,
+            "state": "pending"
+        },
+        {
+            "from": 2,
+            "to": 5,
+            "state": "pending"
+        },
+        {
+            "from": 2,
+            "to": 6,
+            "state": "pending"
+        },
+        {
+            "from": 3,
+            "to": 7,
+            "state": "pending"
+        },
+        {
+            "from": 4,
+            "to": 8,
+            "state": "pending"
+        },
+        {
+            "from": 5,
+            "to": 9,
+            "state": "pending"
+        },
+        {
+            "from": 5,
+            "to": 10,
+            "state": "pending"
+        },
+        {
+            "from": 5,
+            "to": 11,
+            "state": "pending"
+        },
+        {
+            "from": 6,
+            "to": 12,
+            "state": "pending"
+        },
+        {
+            "from": 7,
+            "to": 13,
+            "state": "pending"
+        },
+        {
+            "from": 8,
+            "to": 14,
+            "state": "pending"
+        },
+        {
+            "from": 9,
+            "to": 15,
+            "state": "pending"
+        },
+        {
+            "from": 10,
+            "to": 15,
+            "state": "pending"
+        },
+        {
+            "from": 11,
+            "to": 16,
+            "state": "pending"
+        },
+        {
+            "from": 12,
+            "to": 16,
+            "state": "pending"
+        },
+        {
+            "from": 13,
+            "to": 17,
+            "state": "pending"
+        },
+        {
+            "from": 14,
+            "to": 18,
+            "state": "pending"
+        },
+        {
+            "from": 15,
+            "to": 18,
+            "state": "pending"
+        },
+        {
+            "from": 16,
+            "to": 19,
+            "state": "pending"
+        },
+        {
+            "from": 17,
+            "to": 19,
+            "state": "pending"
+        },
+        {
+            "from": 18,
+            "to": 20,
+            "state": "pending"
+        },
+        {
+            "from": 19,
+            "to": 20,
+            "state": "pending"
+        },
+        {
+            "from": 20,
+            "to": 21,
+            "state": "pending"
+        }
+    ]
+};
+
 // Available avatars data array - used for unlocking rewards
 const AVATAR_DATA = [
     {
@@ -170,6 +748,142 @@ function showAvatarUnlockedModal(avatar) {
     document.getElementById('avatar-unlocked-modal').style.display = 'flex';
 }
 
+// Function to show map selection modal
+function showMapSelectionModal() {
+    // Create modal container if it doesn't exist
+    if (!document.getElementById('map-selection-modal')) {
+        const modalContainer = document.createElement('div');
+        modalContainer.id = 'map-selection-modal';
+        modalContainer.className = 'modal-container';
+        modalContainer.style.display = 'none';
+
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content';
+
+        // Add modal HTML structure
+        modalContent.innerHTML = `
+            <div class="challenge-title" style="background-color: #276F7C;">Choose Your Map</div>
+            <div class="challenge-bonus">
+                <div class="bonus-header">Map Selection:</div>
+                <div class="bonus-description">Choose which type of adventure map you'd like to use.</div>
+            </div>
+            <div class="habits-container">
+                <div class="habit-item" id="default-map-option" style="cursor: pointer; transition: background-color 0.3s ease;">
+                    <div class="habit-name">Default Adventure Map</div>
+                    <div class="habit-details">Use the pre-designed map with a balanced path for your habits.</div>
+                </div>
+                <div class="habit-item" id="generated-map-option" style="cursor: pointer; transition: background-color 0.3s ease;">
+                    <div class="habit-name">Custom Generated Map</div>
+                    <div class="habit-details">Create a unique map tailored to your specific habits using AI.</div>
+                </div>
+            </div>
+            <div class="button-row">
+                <button class="button cancel-button" id="cancel-map-selection">Cancel</button>
+            </div>
+        `;
+
+        // Add content to container
+        modalContainer.appendChild(modalContent);
+
+        // Add modal to page
+        document.body.appendChild(modalContainer);
+
+        // Add event listeners to options
+        document.getElementById('default-map-option').addEventListener('click', function () {
+            useDefaultMap();
+            hideMapSelectionModal();
+        });
+
+        document.getElementById('generated-map-option').addEventListener('click', function () {
+            generateNewMap();
+            hideMapSelectionModal();
+        });
+
+        // Add hover effects to options
+        document.getElementById('default-map-option').addEventListener('mouseenter', function () {
+            this.style.backgroundColor = '#4aa7b5';
+        });
+
+        document.getElementById('default-map-option').addEventListener('mouseleave', function () {
+            this.style.backgroundColor = '#3a8f9d';
+        });
+
+        document.getElementById('generated-map-option').addEventListener('mouseenter', function () {
+            this.style.backgroundColor = '#4aa7b5';
+        });
+
+        document.getElementById('generated-map-option').addEventListener('mouseleave', function () {
+            this.style.backgroundColor = '#3a8f9d';
+        });
+
+        // Add event listener to cancel button
+        document.getElementById('cancel-map-selection').addEventListener('click', function () {
+            hideMapSelectionModal();
+        });
+
+        // Close modal when clicking outside of content
+        modalContainer.addEventListener('click', function (event) {
+            if (event.target === modalContainer) {
+                hideMapSelectionModal();
+            }
+        });
+    }
+
+    // Show the modal
+    document.getElementById('map-selection-modal').style.display = 'flex';
+}
+
+// Function to hide map selection modal
+function hideMapSelectionModal() {
+    const modalContainer = document.getElementById('map-selection-modal');
+    if (modalContainer) {
+        modalContainer.style.display = 'none';
+    }
+}
+
+// Function to use the default map
+function useDefaultMap() {
+    // Show loading animation in map area
+    const mapContainer = document.querySelector('.map-container');
+    if (mapContainer) {
+        // Create loading element
+        const loadingDiv = document.createElement('div');
+        loadingDiv.id = 'map-loading-message';
+        loadingDiv.style.backgroundColor = '#276F7C';
+        loadingDiv.style.borderRadius = '10px';
+        loadingDiv.style.padding = '30px 20px';
+        loadingDiv.style.textAlign = 'center';
+        loadingDiv.style.color = '#d1dced';
+        loadingDiv.style.fontSize = '20px';
+        loadingDiv.style.fontWeight = 'bold';
+        loadingDiv.style.marginTop = '20px';
+        loadingDiv.textContent = "Setting up default adventure map...";
+
+        // Replace the map with loading message
+        mapContainer.innerHTML = '';
+        mapContainer.appendChild(loadingDiv);
+
+        // Save the default map data to localStorage
+        saveMapData(DEFAULT_MAP_DATA);
+
+        // Clear other saved state since we're using a new map
+        localStorage.removeItem(STORAGE_KEYS.CURRENT_NODE);
+        localStorage.removeItem(STORAGE_KEYS.NODE_STATES);
+        localStorage.removeItem(STORAGE_KEYS.EDGE_STATES);
+        localStorage.removeItem(STORAGE_KEYS.HABIT_CHECKBOXES);
+        localStorage.removeItem(STORAGE_KEYS.STREAK_COUNT);
+
+        // Add a small delay to show the loading message
+        setTimeout(() => {
+            console.log("Default map set up. Reloading page...");
+            // Reload the page to use the new map data
+            sessionStorage.setItem('newlyGeneratedMap', 'true');
+            window.location.reload();
+        }, 800);
+    }
+}
+
 // Add a function to generate a new map based on habits
 async function generateNewMap() {
     const habitData = localStorage.getItem("habitData");
@@ -242,6 +956,7 @@ async function generateNewMap() {
                 localStorage.removeItem(STORAGE_KEYS.NODE_STATES);
                 localStorage.removeItem(STORAGE_KEYS.EDGE_STATES);
                 localStorage.removeItem(STORAGE_KEYS.HABIT_CHECKBOXES);
+                localStorage.removeItem(STORAGE_KEYS.STREAK_COUNT);
 
                 console.log("Map data generated successfully. Reloading page...");
                 // Reload the page to use the new map data
@@ -298,328 +1013,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Map configuration option - increase the default size of the nodes for a larger clickable area
     const CLICK_AREA_SIZE = 50; // Clickable area size (larger than visual size)
 
-    // The new Slay the Spire style map data
-    const mapData = {
-        "nodes": [
-            {
-                "id": 1,
-                "label": "Path Beginning",
-                "nodeType": "standard",
-                "state": "pending",
-                "x": -200,
-                "y": 500,
-                "description": "Begin your week of habit building.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 2,
-                "label": "New Journey",
-                "nodeType": "standard",
-                "state": "pending",
-                "x": 185,
-                "y": 500,
-                "description": "The start of a new week of healthy habits.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 3,
-                "label": "Mind Focus",
-                "nodeType": "standard",
-                "state": "pending",
-                "x": -290,
-                "y": 410,
-                "description": "Concentrate on clearing your mind through meditation.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 4,
-                "label": "Running Day",
-                "nodeType": "challenge",
-                "state": "pending",
-                "x": -115,
-                "y": 425,
-                "description": "Time for your weekly run! Push yourself a little today.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Running", "details": "3 miles • Afternoon" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 5,
-                "label": "Reading Focus",
-                "nodeType": "standard",
-                "state": "pending",
-                "x": 65,
-                "y": 405,
-                "description": "A day to focus on deepening your reading habit.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "45 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 6,
-                "label": "Mindful Movement",
-                "nodeType": "challenge",
-                "state": "pending",
-                "x": 240,
-                "y": 420,
-                "description": "Combine mindfulness with physical activity today.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Running", "details": "3 miles • Afternoon" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 7,
-                "label": "Growth Day",
-                "nodeType": "event",
-                "state": "pending",
-                "x": -350,
-                "y": 320,
-                "description": "Today your habits will help you grow in unexpected ways.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 8,
-                "label": "Rest Period",
-                "nodeType": "rest",
-                "state": "pending",
-                "x": -235,
-                "y": 340,
-                "description": "A day to take it easier while maintaining your habits.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "20 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 9,
-                "label": "Consistency Check",
-                "nodeType": "standard",
-                "state": "pending",
-                "x": -70,
-                "y": 325,
-                "description": "Focus on performing your habits at the same time each day.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 10,
-                "label": "Running Day",
-                "nodeType": "challenge",
-                "state": "pending",
-                "x": 120,
-                "y": 315,
-                "description": "Your second run of the week. Find your rhythm.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Running", "details": "3 miles • Afternoon" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 11,
-                "label": "Reflection Point",
-                "nodeType": "event",
-                "state": "pending",
-                "x": 300,
-                "y": 340,
-                "description": "Take time to reflect on how your habits are affecting you.",
-                "habits": [
-                    { "name": "Meditation", "details": "15 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 12,
-                "label": "Milestone Day",
-                "nodeType": "event",
-                "state": "pending",
-                "x": -290,
-                "y": 240,
-                "description": "Celebrate your consistency this week!",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 13,
-                "label": "Challenge Yourself",
-                "nodeType": "challenge",
-                "state": "pending",
-                "x": -145,
-                "y": 245,
-                "description": "Push a little harder with your habits today.",
-                "habits": [
-                    { "name": "Meditation", "details": "15 minutes • Morning" },
-                    { "name": "Reading", "details": "45 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 14,
-                "label": "Running Day",
-                "nodeType": "challenge",
-                "state": "pending",
-                "x": 105,
-                "y": 225,
-                "description": "Final run of the week. Make it count!",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Running", "details": "3 miles • Afternoon" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 15,
-                "label": "Recovery Focus",
-                "nodeType": "rest",
-                "state": "pending",
-                "x": 240,
-                "y": 240,
-                "description": "A day to focus on recovery and rejuvenation.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 16,
-                "label": "Mindfulness Peak",
-                "nodeType": "event",
-                "state": "pending",
-                "x": -220,
-                "y": 140,
-                "description": "Your meditation practice is deepening nicely.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 17,
-                "label": "Knowledge Builder",
-                "nodeType": "standard",
-                "state": "pending",
-                "x": -15,
-                "y": 130,
-                "description": "Your reading habit is building a foundation of knowledge.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 18,
-                "label": "Physical Progress",
-                "nodeType": "event",
-                "state": "pending",
-                "x": 180,
-                "y": 150,
-                "description": "Notice the improvements in your physical wellbeing from running.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 19,
-                "label": "Integration Day",
-                "nodeType": "challenge",
-                "state": "pending",
-                "x": -130,
-                "y": 50,
-                "description": "Feel how your habits work together to improve your life.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 20,
-                "label": "Final Preparation",
-                "nodeType": "rest",
-                "state": "pending",
-                "x": 100,
-                "y": 60,
-                "description": "Prepare yourself for the final challenge of the week.",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            },
-            {
-                "id": 21,
-                "label": "Weekly Summit",
-                "nodeType": "boss",
-                "state": "pending",
-                "x": 0,
-                "y": -50,
-                "description": "Complete your entire week of habits. Celebrate your consistency and growth!",
-                "habits": [
-                    { "name": "Meditation", "details": "10 minutes • Morning" },
-                    { "name": "Running", "details": "3 miles • Afternoon" },
-                    { "name": "Reading", "details": "30 minutes • Evening" }
-                ]
-            }
-        ],
-        "edges": [
-            { "from": 1, "to": 3, "state": "pending" },
-            { "from": 1, "to": 4, "state": "pending" },
-            { "from": 2, "to": 5, "state": "pending" },
-            { "from": 2, "to": 6, "state": "pending" },
-
-            { "from": 3, "to": 7, "state": "pending" },
-            { "from": 3, "to": 8, "state": "pending" },
-            { "from": 4, "to": 8, "state": "pending" },
-            { "from": 4, "to": 9, "state": "pending" },
-            { "from": 5, "to": 9, "state": "pending" },
-            { "from": 5, "to": 10, "state": "pending" },
-            { "from": 5, "to": 11, "state": "pending" },
-            { "from": 6, "to": 10, "state": "pending" },
-            { "from": 6, "to": 11, "state": "pending" },
-
-            { "from": 7, "to": 12, "state": "pending" },
-            { "from": 8, "to": 12, "state": "pending" },
-            { "from": 8, "to": 13, "state": "pending" },
-            { "from": 9, "to": 13, "state": "pending" },
-            { "from": 10, "to": 14, "state": "pending" },
-            { "from": 11, "to": 14, "state": "pending" },
-            { "from": 11, "to": 15, "state": "pending" },
-
-            { "from": 12, "to": 16, "state": "pending" },
-            { "from": 13, "to": 16, "state": "pending" },
-            { "from": 13, "to": 17, "state": "pending" },
-            { "from": 14, "to": 17, "state": "pending" },
-            { "from": 14, "to": 18, "state": "pending" },
-            { "from": 15, "to": 18, "state": "pending" },
-
-            { "from": 16, "to": 19, "state": "pending" },
-            { "from": 17, "to": 19, "state": "pending" },
-            { "from": 17, "to": 20, "state": "pending" },
-            { "from": 18, "to": 20, "state": "pending" },
-
-            { "from": 19, "to": 21, "state": "pending" },
-            { "from": 20, "to": 21, "state": "pending" }
-        ]
-    };
+    // default map data
+    const mapData = DEFAULT_MAP_DATA;
 
     // Function to load map data from localStorage
     function loadMapData() {
@@ -1452,9 +1847,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const deadline = new Date();
             deadline.setHours(hh, mm, 0, 0);
             startCountdownTimer('habit-time-counter', deadline);
-          } else {
+        } else {
             startCountdownTimer('habit-time-counter');
-          }
+        }
 
 
         // Add habits with checkboxes based on node data
@@ -1721,10 +2116,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const deadline = new Date();
             deadline.setHours(hh, mm, 0, 0);
             startCountdownTimer('time-counter', deadline);
-          } else {
+        } else {
             // fallback to end‐of‐day
             startCountdownTimer('time-counter');
-          }
+        }
 
         // Show modal
         const modalContainer = document.getElementById('node-challenge-modal');
@@ -2324,11 +2719,11 @@ document.addEventListener('DOMContentLoaded', function () {
             // If we already have a map, confirm before resetting
             if (localStorage.getItem(STORAGE_KEYS.MAP_DATA)) {
                 if (confirm("Are you sure you want to reset your progress and start a new map? This will reset your streak to 0 if you have not completed the boss node.")) {
-                    generateNewMap();
+                    showMapSelectionModal();
                 }
             } else {
-                // If no map exists yet, just generate one without confirmation
-                generateNewMap();
+                // If no map exists yet, just show the selection modal without confirmation
+                showMapSelectionModal();
             }
         });
     }
