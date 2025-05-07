@@ -41,39 +41,160 @@
         <div style="text-align: left;">
             <h2>Select an Avatar:</h2>
         </div>
-        <div class="container" id="avatar-options" style="background-color: #454848; margin-left: -20px; margin-right: -20px; overflow-x: auto; white-space: nowrap;">
+        <div class="avatar-container" id="avatar-options" style="background-color: #454848; margin-left: -20px; margin-right: -20px; overflow-x: auto; white-space: nowrap;">
             <div style="display: inline-flex;">
+                <img src="../img/skeleton-profile-green.png" alt="badge" style="width: 100px; height: 100px; margin: 7px; border-radius: 0; background-color: transparent;">
                 <img src="../img/shark-profile-red.png" alt="badge" style="width: 100px; height: 100px; margin: 7px; border-radius: 0; background-color: transparent;">
                 <img src="../img/fish-profile-purple.png" alt="badge" style="width: 100px; height: 100px; margin: 7px; border-radius: 0; background-color: transparent;">
                 <img src="../img/fish-profile-green.png" alt="badge" style="width: 100px; height: 100px; margin: 7px; border-radius: 0; background-color: transparent;">
                 <img src="../img/shark-profile-black.png" alt="badge" style="width: 100px; height: 100px; margin: 7px; border-radius: 0; background-color: transparent;">
                 <img src="../img/skeleton-profile-yellow.png" alt="badge" style="width: 100px; height: 100px; margin: 7px; border-radius: 0; background-color: transparent;">
                 <img src="../img/fish-profile-suit.png" alt="badge" style="width: 100px; height: 100px; margin: 7px; border-radius: 0; background-color: transparent;">
-                <img src="../img/skeleton-profile-green.png" alt="badge" style="width: 100px; height: 100px; margin: 7px; border-radius: 0; background-color: transparent;">
             </div>
         </div>
         <script>
-            // Select the large profile image
-            const profileImage = document.getElementById('profile-image');
-        
-            // Select all images in the avatar options container
-            const avatarImages = document.querySelectorAll('#avatar-options img');
-        
-            // Add a click event listener to each avatar image
-            avatarImages.forEach(image => {
-                image.addEventListener('click', () => {
-                    // Update the large profile image's src and alt attributes
-                    profileImage.src = image.src;
-                    profileImage.alt = image.alt;
-        
-                    // Transform the filename from "x-profile-y.png" to "x-y.png"
-                    const originalSrc = image.src;
-                    const transformedSrc = originalSrc.replace('-profile-', '-').replace('/img/', '/img/profile/');
-        
-                    // Save the transformed image's src to localStorage
-                    localStorage.setItem('selectedProfile', originalSrc);
-                    localStorage.setItem('selectedProfileImage', transformedSrc);
+            document.addEventListener('DOMContentLoaded', function() {
+                // Select the large profile image
+                const profileImage = document.getElementById('profile-image');
+                
+                // Get unlocked avatars (the IDs of avatars that have been unlocked)
+                const unlockedAvatarIds = JSON.parse(localStorage.getItem('fishbone_unlocked_avatars')) || [];
+                
+                // Always make sure the default green skeleton is unlocked
+                if (!unlockedAvatarIds.includes('skeleton-green')) {
+                    unlockedAvatarIds.push('skeleton-green');
+                }
+                
+                // Get currently selected avatar
+                const selectedAvatar = localStorage.getItem('selectedProfile');
+                
+                // Select avatar container and images
+                const avatarContainer = document.querySelector('#avatar-options > div');
+                const avatarImages = document.querySelectorAll('#avatar-options img');
+                
+                // Process each avatar image
+                avatarImages.forEach(img => {
+                    // Extract avatar ID from src - for example, get "shark-red" from "shark-profile-red.png"
+                    const src = img.src;
+                    const filename = src.split('/').pop();
+                    const parts = filename.split('-profile-');
+                    const avatarId = parts[0] + '-' + parts[1].replace('.png', '');
+                    
+                    // Create container div for lock icon overlay and selection highlighting
+                    const container = document.createElement('div');
+                    container.className = 'avatar-container';
+                    container.style.position = 'relative';
+                    container.style.width = '100px';
+                    container.style.height = '100px';
+                    container.style.margin = '7px';
+                    container.style.borderRadius = '3px';
+                    
+                    // Check if the avatar is unlocked
+                    const isUnlocked = unlockedAvatarIds.includes(avatarId);
+                    
+                    // Replace img with container + img
+                    img.parentNode.insertBefore(container, img);
+                    container.appendChild(img);
+                    img.style.margin = '0';
+                    
+                    // If avatar is locked, gray it out and add lock icon
+                    if (!isUnlocked) {
+                        img.style.filter = 'grayscale(100%)';
+                        img.style.opacity = '0.6';
+                        
+                        const lock = document.createElement('div');
+                        lock.textContent = '🔒';
+                        lock.style.position = 'absolute';
+                        lock.style.top = '50%';
+                        lock.style.left = '50%';
+                        lock.style.transform = 'translate(-50%, -50%)';
+                        lock.style.fontSize = '30px';
+                        lock.style.color = 'white';
+                        lock.style.textShadow = '0 0 3px black';
+                        container.appendChild(lock);
+                    }
+                    
+                    // Highlight the currently selected avatar
+                    if (selectedAvatar && selectedAvatar.includes(filename)) {
+                        container.style.boxShadow = '0 0 0 3px #276F7C';
+                    }
+                    
+                    // Only allow clicking on unlocked avatars
+                    if (isUnlocked) {
+                        img.addEventListener('click', function() {
+                            // Update profile image
+                            profileImage.src = img.src;
+                            profileImage.alt = img.alt;
+                            
+                            // Save selection to localStorage
+                            const transformedSrc = img.src.replace('-profile-', '-').replace('/img/', '/img/profile/');
+                            localStorage.setItem('selectedProfile', img.src);
+                            localStorage.setItem('selectedProfileImage', transformedSrc);
+                            
+                            // Update highlighting - remove highlight from all containers
+                            document.querySelectorAll('.avatar-container').forEach(div => {
+                                div.style.boxShadow = 'none';
+                            });
+                            
+                            // Add highlight to selected avatar
+                            container.style.boxShadow = '0 0 0 3px #276F7C';
+                        });
+                    } else {
+                        // Prevent clicks on locked avatars
+                        img.style.pointerEvents = 'none';
+                    }
                 });
+                
+                // Improve drag-to-scroll for avatar selection
+                let isDragging = false;
+                let startX;
+                let scrollLeft;
+                
+                avatarContainer.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    startX = e.pageX - avatarContainer.offsetLeft;
+                    scrollLeft = avatarContainer.scrollLeft;
+                    avatarContainer.style.cursor = 'grabbing';
+                });
+                
+                avatarContainer.addEventListener('mouseleave', () => {
+                    isDragging = false;
+                    avatarContainer.style.cursor = 'grab';
+                });
+                
+                avatarContainer.addEventListener('mouseup', () => {
+                    isDragging = false;
+                    avatarContainer.style.cursor = 'grab';
+                });
+                
+                avatarContainer.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    e.preventDefault();
+                    const x = e.pageX - avatarContainer.offsetLeft;
+                    const walk = (x - startX) * 2; // Scrolling speed multiplier
+                    avatarContainer.scrollLeft = scrollLeft - walk;
+                });
+                
+                // Add touch support for mobile devices
+                avatarContainer.addEventListener('touchstart', (e) => {
+                    isDragging = true;
+                    startX = e.touches[0].pageX - avatarContainer.offsetLeft;
+                    scrollLeft = avatarContainer.scrollLeft;
+                });
+                
+                avatarContainer.addEventListener('touchend', () => {
+                    isDragging = false;
+                });
+                
+                avatarContainer.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    const x = e.touches[0].pageX - avatarContainer.offsetLeft;
+                    const walk = (x - startX) * 2;
+                    avatarContainer.scrollLeft = scrollLeft - walk;
+                });
+                
+                // Add grabbing cursor style to indicate scrollable area
+                avatarContainer.style.cursor = 'grab';
             });
         </script>
         <script src="../elements/navbar.js"></script>
