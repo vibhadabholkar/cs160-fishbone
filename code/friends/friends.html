@@ -37,7 +37,7 @@
 
         <hr>
 
-        <div id="friend-box">
+        <div id="friend-box" style="margin-bottom: -420px">
             <div class="column" id="column-1">
                 <div class="container" id="top-friends">
                     <h2>Your top friends</h2>
@@ -74,7 +74,78 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="search-container" style="width: 300px; text-align: center; position: relative; display: inline-block; margin-bottom: 20px">
+            <input type="text" id="friend-search" placeholder="Search friends..." style="width: 100%; padding: 10px 40px 10px 20px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+            <span class="search-icon" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 18px;">
+                🔍
+            </span>
+            <ul id="search-dropdown" style="display: none; position: absolute; top: calc(100% + 5px); left: 10%; width: 80%; background-color: white; border: 1px solid #ccc; border-radius: 5px; list-style: none; padding: 0; margin: 0; z-index: 1000; text-align: left;">
+                <!-- Matching names will be dynamically added here -->
+            </ul>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const searchInput = document.getElementById('friend-search');
+                const searchDropdown = document.getElementById('search-dropdown');
+            
+                // List of names to search
+                const friendNames = [
+                    'Bruno Mars',
+                    'Miley Cyrus',
+                    'Lady Gaga',
+                    'Charli XCX',
+                    'Troye Sivan',
+                    'Jessi J',
+                    'Ariana Grande',
+                    'Taylor Swift',
+                    'Ed Sheeran',
+                    'Katy Perry'
+                ];
+            
+                // Show dropdown and filter names as the user types
+                searchInput.addEventListener('input', () => {
+                    const query = searchInput.value.toLowerCase();
+                    searchDropdown.innerHTML = ''; // Clear previous results
+            
+                    if (query.trim() !== '') {
+                        const matches = friendNames.filter(name => name.toLowerCase().includes(query));
+            
+                        if (matches.length > 0) {
+                            searchDropdown.style.display = 'block'; // Show dropdown
+            
+                            matches.forEach(name => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = name;
+                                listItem.style.padding = '10px';
+                                listItem.style.cursor = 'pointer';
+            
+                                // Add click functionality to select a name
+                                listItem.addEventListener('click', () => {
+                                    searchInput.value = name; // Set the input value to the selected name
+                                    searchDropdown.style.display = 'none'; // Hide the dropdown
+                                });
+            
+                                searchDropdown.appendChild(listItem);
+                            });
+                        } else {
+                            searchDropdown.style.display = 'none'; // Hide dropdown if no matches
+                        }
+                    } else {
+                        searchDropdown.style.display = 'none'; // Hide dropdown if input is empty
+                    }
+                });
+            
+                // Hide dropdown when clicking outside the search bar
+                document.addEventListener('click', (event) => {
+                    if (!searchInput.contains(event.target) && !searchDropdown.contains(event.target)) {
+                        searchDropdown.style.display = 'none';
+                    }
+                });
+            });
+        </script>
+        <div id="friend-box">
             <div class="column" id="column-2">
                 <h2 style="text-align: center;">All friends</h2>
                 <div class="container" id="all-friends">
@@ -120,12 +191,6 @@
                         </a>
                         <p>Troye Sivan</p>
                     </div>
-                </div>
-                <div class="search-container" style="width: 320px; text-align: center; margin-top: 30px; position: relative; display: inline-block;">
-                    <input type="text" id="friend-search" placeholder="Search friends..." style="width: 80%; padding: 10px 40px 10px 20px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px;">
-                    <span class="search-icon" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer;">
-                        🔍
-                    </span>
                 </div>
                 
             </div>
