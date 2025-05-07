@@ -19,6 +19,7 @@
 
 <body>
     <div id="mobile">
+        <button id="back-btn">×</button>
         <div id="header">
             <img src="../img/fish-profile-suit.png" alt="Troye Sivan's Profile" style="height: 100px; width: 100px;">
             <h2 style="margin-bottom: -5px;">Troy Sivan</h2>
@@ -88,6 +89,10 @@
                     // Toggle the 'darkened' class on click
                     bookmark.classList.toggle('darkened');
                 });
+            });
+
+            document.getElementById("back-btn").addEventListener("click", function () {
+                window.location.href = "friends.html"; // replace with your target URL
             });
         </script>
         <custom-navbar></custom-navbar>

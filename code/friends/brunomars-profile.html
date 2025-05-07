@@ -19,8 +19,10 @@
 
 <body>
     <div id="mobile">
+        <button id="back-btn">×</button>
         <div id="header">
-            <img src="../img/skeleton-profile-green.png" alt="Bruno Mars's Profile" style="height: 100px; width: 100px;">
+            <img src="../img/skeleton-profile-green.png" alt="Bruno Mars's Profile"
+                style="height: 100px; width: 100px;">
             <h2 style="margin-bottom: -5px;">Bruno Mars</h2>
             <p style="font-size: 13px; color: #ccc">@talkingtothemoon</p>
         </div>
@@ -36,7 +38,8 @@
                         <p style="font-size: 10px; color: #ccc">Daily • 10 minutes • Morning</p>
                     </div>
                     <div style="text-align: right; padding-left: 90px;">
-                        <img src="../img/profile/bookmark.png" alt="bookmark" class="bookmark" style="width: 20px; height: 20px; border-radius: 0; background-color: transparent;">
+                        <img src="../img/profile/bookmark.png" alt="bookmark" class="bookmark"
+                            style="width: 20px; height: 20px; border-radius: 0; background-color: transparent;">
                     </div>
                 </div>
                 <div class="friend-habits">
@@ -45,7 +48,8 @@
                         <p style="font-size: 10px; color: #ccc">Weekly • 30 minutes • Afternoon</p>
                     </div>
                     <div style="text-align: right; padding-left: 70px;">
-                        <img src="../img/profile/bookmark.png" alt="bookmark" class="bookmark" style="width: 20px; height: 20px; border-radius: 0; background-color: transparent;">
+                        <img src="../img/profile/bookmark.png" alt="bookmark" class="bookmark"
+                            style="width: 20px; height: 20px; border-radius: 0; background-color: transparent;">
                     </div>
                 </div>
                 <div class="friend-habits">
@@ -54,7 +58,8 @@
                         <p style="font-size: 10px; color: #ccc">Daily • 10 minutes • Morning</p>
                     </div>
                     <div style="text-align: right; padding-left: 90px;">
-                        <img src="../img/profile/bookmark.png" alt="bookmark" class="bookmark" style="width: 20px; height: 20px; border-radius: 0; background-color: transparent;">
+                        <img src="../img/profile/bookmark.png" alt="bookmark" class="bookmark"
+                            style="width: 20px; height: 20px; border-radius: 0; background-color: transparent;">
                     </div>
                 </div>
             </div>
@@ -63,10 +68,13 @@
                     <h2>Badges</h2>
                 </div>
                 <div>
-                    <img src="../img/badge/runningBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/runningBadge.png" alt="badge"
+                        style="width: 45px; height: 45px; margin: 7px;">
                     <img src="../img/badge/flowerBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
-                    <img src="../img/badge/readingBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
-                    <img src="../img/badge/meditationBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/readingBadge.png" alt="badge"
+                        style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/meditationBadge.png" alt="badge"
+                        style="width: 45px; height: 45px; margin: 7px;">
                 </div>
             </div>
         </div>
@@ -74,7 +82,7 @@
         <script>
             // Select all bookmark images
             const bookmarks = document.querySelectorAll('.bookmark');
-        
+
             // Add a click event listener to each bookmark
             bookmarks.forEach(bookmark => {
                 bookmark.addEventListener('click', () => {
@@ -82,8 +90,13 @@
                     bookmark.classList.toggle('darkened');
                 });
             });
+
+            document.getElementById("back-btn").addEventListener("click", function () {
+                window.location.href = "friends.html"; // replace with your target URL
+            });
         </script>
         <custom-navbar></custom-navbar>
     </div>
 </body>
+
 </html>
