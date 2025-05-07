@@ -1295,7 +1295,7 @@ document.addEventListener('DOMContentLoaded', function () {
             modalContent.innerHTML = `
             <div class="challenge-title">Challenge Day!</div>
             <div class="challenge-bonus">
-                <div class="bonus-header">Challenge:</div>
+                <div class="bonus-header">Goal:</div>
                 <div class="bonus-description">Complete all habits for this node!</div>
             </div>
             <div class="time-remaining">
@@ -1352,7 +1352,7 @@ document.addEventListener('DOMContentLoaded', function () {
             modalContent.innerHTML = `
             <div class="challenge-title">Complete Your Habits</div>
             <div class="challenge-bonus">
-                <div class="bonus-header">Today's Challenge:</div>
+                <div class="bonus-header">Today's Goal:</div>
                 <div class="bonus-description" id="habit-description">Complete all habits to continue your journey!</div>
                 <div class="bonus-reward" id="habit-reward"></div>
             </div>
@@ -1446,8 +1446,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Start a live countdown timer
-        startCountdownTimer('habit-time-counter');
+        // If this node has its own deadline, use that; otherwise end-of-day
+        if (node.timeLimit && node.timeLimit !== 'none') {
+            const [hh, mm] = node.timeLimit.split(':').map(Number);
+            const deadline = new Date();
+            deadline.setHours(hh, mm, 0, 0);
+            startCountdownTimer('habit-time-counter', deadline);
+          } else {
+            startCountdownTimer('habit-time-counter');
+          }
+
 
         // Add habits with checkboxes based on node data
         const habitsContainer = document.getElementById('habit-checkboxes-container');
@@ -1707,8 +1715,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Start a live countdown timer
-        startCountdownTimer('time-counter');
+        // Determine which timer to start
+        if (node.timeLimit && node.timeLimit !== 'none') {
+            const [hh, mm] = node.timeLimit.split(':').map(Number);
+            const deadline = new Date();
+            deadline.setHours(hh, mm, 0, 0);
+            startCountdownTimer('time-counter', deadline);
+          } else {
+            // fallback to end‐of‐day
+            startCountdownTimer('time-counter');
+          }
 
         // Show modal
         const modalContainer = document.getElementById('node-challenge-modal');
@@ -1926,44 +1942,37 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Update countdown timer
-    function startCountdownTimer(elementId) {
-        // Clear any existing timer
-        if (countdownTimer) {
-            clearInterval(countdownTimer);
+    function startCountdownTimer(elementId, deadline) {
+        // Clear previous timer
+        if (countdownTimer) clearInterval(countdownTimer);
+
+        // Update display once and then every second
+        function update() {
+            const now = new Date();
+            // If a specific deadline was passed, use it; else default to end of day
+            const end = deadline
+                ? deadline
+                : (() => {
+                    const eod = new Date();
+                    eod.setHours(23, 59, 59, 999);
+                    return eod;
+                })();
+
+            let diff = end - now;
+            if (diff <= 0) {
+                document.getElementById(elementId).textContent = '00:00:00';
+                clearInterval(countdownTimer);
+                return;
+            }
+
+            const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
+            const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+            const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+            document.getElementById(elementId).textContent = `${h}:${m}:${s}`;
         }
 
-        // Function to update the countdown display
-        const updateTimeDisplay = () => {
-            const timeCounter = document.getElementById(elementId);
-            if (!timeCounter) {
-                clearInterval(countdownTimer);
-                return;
-            }
-
-            const now = new Date();
-            const endOfDay = new Date();
-            endOfDay.setHours(23, 59, 59, 999);
-            const timeRemaining = endOfDay - now;
-
-            // If it's past midnight, stop the timer
-            if (timeRemaining <= 0) {
-                timeCounter.textContent = '00:00:00';
-                clearInterval(countdownTimer);
-                return;
-            }
-
-            const hours = Math.floor(timeRemaining / 3600000).toString().padStart(2, '0');
-            const minutes = Math.floor((timeRemaining % 3600000) / 60000).toString().padStart(2, '0');
-            const seconds = Math.floor((timeRemaining % 60000) / 1000).toString().padStart(2, '0');
-
-            timeCounter.textContent = `${hours}:${minutes}:${seconds}`;
-        };
-
-        // Update immediately then set interval
-        updateTimeDisplay();
-        countdownTimer = setInterval(updateTimeDisplay, 1000);
-
-        return countdownTimer;
+        update();
+        countdownTimer = setInterval(update, 1000);
     }
 
     // Function to stop countdown timer
@@ -2314,7 +2323,7 @@ document.addEventListener('DOMContentLoaded', function () {
         newMapButton.addEventListener('click', function () {
             // If we already have a map, confirm before resetting
             if (localStorage.getItem(STORAGE_KEYS.MAP_DATA)) {
-                if (confirm("Are you sure you want to reset your progress and start a new map?")) {
+                if (confirm("Are you sure you want to reset your progress and start a new map? This will reset your streak to 0 if you have not completed the boss node.")) {
                     generateNewMap();
                 }
             } else {
