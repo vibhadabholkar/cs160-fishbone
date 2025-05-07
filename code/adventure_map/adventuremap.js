@@ -2014,6 +2014,23 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
+        const checkboxes = document.querySelectorAll('.habit-checkbox');
+        const allChecked = Array.from(checkboxes).every(box => box.checked);
+        const completeButton = document.getElementById('complete-habits');
+
+        if (completeButton) {
+            completeButton.disabled = !allChecked;
+            if (allChecked) {
+                completeButton.style.backgroundColor = '#4CAF50'; // Green when all habits are checked
+                completeButton.style.cursor = 'pointer';
+                completeButton.style.opacity = '1';
+            } else {
+                completeButton.style.backgroundColor = '#cccccc'; // Grey when disabled
+                completeButton.style.cursor = 'not-allowed';
+                completeButton.style.opacity = '0.6';
+            }
+        }
+
         // Show modal
         const modalContainer = document.getElementById('habit-completion-modal');
         if (modalContainer) {
