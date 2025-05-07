@@ -18,7 +18,7 @@
 </head>
 
 <style>
-    #mobile {
+    /* #mobile {
         background-color: #1a1c1f;
         width: 400px;
         height: 100%;
@@ -26,11 +26,63 @@
         position: relative;
         padding-bottom: 60px;
         box-sizing: border-box;
-    }
+    } */
 
+    /* html, body {
+        height: 100%;
+        overflow-y: auto;
+    } */
+
+    /* Prevent any horizontal scroll */
     html, body {
         height: 100%;
         overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /* Make the mobile “phone” container fluid and centered */
+    #mobile {
+        background-color: #1a1c1f;
+        width: 100%;
+        max-width: 400px;
+        min-height: 100vh;
+        margin: 0 auto;
+        box-sizing: border-box;
+        padding: 20px 0 60px; /* top/bottom padding, leave room for navbar */
+        position: relative;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Responsive profile image */
+    #profile-image {
+        /* override inline 500px size */
+        width: 80% !important;
+        max-width: 250px !important;
+        height: auto !important;
+        display: block;
+        margin: 20px auto 10px !important;
+        border-radius: 0;
+        background-color: transparent;
+    }
+
+    /* Avatar picker: remove negative margins, use padding */
+    #avatar-options {
+        /* override inline margins */
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 0 10px;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: #454848;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    #avatar-options > div {
+        display: inline-flex;
     }
 </style>
 
