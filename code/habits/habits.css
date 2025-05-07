@@ -30,12 +30,16 @@ body {
 
   input {
     font-family: 'Figtree', sans-serif;
+    width: 100%;
   }
 
   label {
     font-family: 'Figtree', sans-serif;
   }
 
+  #mobile {
+    padding: 20px;
+  }
 
   
   #Add-Habit {
@@ -190,6 +194,20 @@ body {
   background-color: white;
 }
 
+#popup-submit {
+  padding: 10px 10px;
+  height: auto; 
+  width: auto;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  color: #257b8a;
+  background-color: white;
+}
+
 .popup {
   display: none; 
   position: fixed;
@@ -198,7 +216,6 @@ body {
   justify-content: center; align-items: center;
   z-index: 1000;
 }
-
 
 
 .popup-content {
