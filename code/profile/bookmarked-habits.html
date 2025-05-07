@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Katy Perry</title>
+    <title>Bookmarked Habits</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,69 +29,120 @@
                 <div style="text-align: left;">
                     <h2>Bookmarked Habits</h2>
                 </div>
-                <div class="friend-habits" style="background-color: #D1E8EC;">
+                <div class="friend-habits" style="background-color: #BFD9DE;">
                     <div style="text-align: left;">
                         <h2 style="margin-bottom: -5px; font-size: 15px">Meditation</h2>
                         <p style="font-size: 10px; color: #2B2E2F">Daily • 10 minutes • Morning</p>
                     </div>
-                    <div style="text-align: right; padding-left: 98px;">
+                    <div style="text-align: right; margin-left: auto;">
                         <input type="radio" name="habit-selection" style="width: 20px; height: 20px;">
                     </div>
                 </div>
-                <div class="friend-habits" style="background-color: #D1E8EC;">
+
+                <div class="friend-habits" style="background-color: #BFD9DE;">
                     <div style="text-align: left;">
                         <h2 style="margin-bottom: -5px; font-size: 15px">Running</h2>
                         <p style="font-size: 10px; color: #2B2E2F">3 times per week • 2 miles</p>
                     </div>
-                    <div style="text-align: right; padding-left: 108px;">
+                    <div style="text-align: right; margin-left: auto;">
                         <input type="radio" name="habit-selection" style="width: 20px; height: 20px;">
                     </div>
                 </div>
-                <div class="friend-habits" style="background-color: #D1E8EC;">
+
+                <div class="friend-habits" style="background-color: #BFD9DE;">
                     <div style="text-align: left;">
-                        <h2 style="margin-bottom: -5px; font-size: 15px">Running</h2>
-                        <p style="font-size: 10px; color: #2B2E2F">3 times per week • 2 miles</p>
+                        <h2 style="margin-bottom: -5px; font-size: 15px">Reading</h2>
+                        <p style="font-size: 10px; color: #2B2E2F">Daily • 20 minutes • Evening</p>
                     </div>
-                    <div style="text-align: right; padding-left: 108px;">
+                    <div style="text-align: right; margin-left: auto;">
                         <input type="radio" name="habit-selection" style="width: 20px; height: 20px;">
                     </div>
                 </div>
-                <div class="friend-habits" style="background-color: #D1E8EC;">
+
+                <div class="friend-habits" style="background-color: #BFD9DE;">
                     <div style="text-align: left;">
-                        <h2 style="margin-bottom: -5px; font-size: 15px">Running</h2>
-                        <p style="font-size: 10px; color: #2B2E2F">3 times per week • 2 miles</p>
+                        <h2 style="margin-bottom: -5px; font-size: 15px">Cooking</h2>
+                        <p style="font-size: 10px; color: #2B2E2F">3 times per week • 20 minutes • Evening</p>
                     </div>
-                    <div style="text-align: right; padding-left: 108px;">
+                    <div style="text-align: right; margin-left: auto;">
                         <input type="radio" name="habit-selection" style="width: 20px; height: 20px;">
                     </div>
                 </div>
             </div>
             <br>
-            <div class="container" id="bookmarked-habits">
-                <style>
-                    .rounded-button {
-                        background-color: #257b8a; /* Default background color */
-                        color: white; /* Default text color */
-                        padding: 10px 20px;
-                        font-size: 14px;
-                        border: none;
-                        border-radius: 25px;
-                        cursor: pointer;
-                        text-align: center;
-                        transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
-                    }
-                
-                    .rounded-button:hover {
-                        background-color: #1a5e63; /* Hover background color */
-                        color: #f0f0f0; /* Hover text color */
-                    }
-                </style>
-                <div class="container" id="bookmarked-habits">
-                    <button class="rounded-button" onclick="location.href='../habits/edithabits.html';">Add Habit</button>
-                </div>            
-            </div>
+           
+            <div class="container">
+                <button class="rounded-button" id="add-btn">Add Habit</button>
+            </div>            
+
 
         </div>
+
+        <script>
+            document.getElementById('add-btn').addEventListener('click', async function() {
+                const habitBtn = document.querySelector('input[name="habit-selection"]:checked');
+
+                if (habitBtn) {
+                    const habitDiv = habitBtn.closest('.friend-habits');
+                    const detailsDiv = habitDiv.children[0];
+                    const habitNameText = detailsDiv.querySelector('h2').textContent;
+                    var otherDetailsText = detailsDiv.querySelector('p').textContent;
+
+                    habitBtn.disabled = true;
+                    habitBtn.innerHTML = `Adding... <span class="loading-spinner"></span>`;
+
+
+                    var responseData = 0;
+                    var habit = {};
+
+                    const response = await fetch(
+                    'https://noggin.rea.gent/kind-cobra-3234',
+                        {
+                            method: 'POST',
+                            headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: 'Bearer rg_v1_j8nyhxdsygxyohlyhu4bitjkf056k7c4huwl_ngk',
+                            },
+                            body: JSON.stringify({
+                            // fill variables here.
+                            "habittraits": otherDetailsText,
+                            }),
+                        }
+                    ).then(response => response.json())
+                    .then(responseData => {
+                        if (responseData["Time of Day"]) {
+                            habit = 
+                                {"Habit": habitNameText, 
+                                "Frequency": responseData["Frequency"], 
+                                "Preferred Time of Day": responseData["Time of Day"], 
+                                "Target": responseData["Target Goal"]};
+                        } else {
+                            habit = 
+                                {"Habit": habitNameText, 
+                                "Frequency": responseData["Frequency"], 
+                                "Target": responseData["Target Goal"]};
+                        }
+                        
+                    });
+                    
+                    let habitList = JSON.parse(localStorage.getItem("habitData")) || [];
+
+                    habitList.push(habit);
+                    localStorage.setItem("habitData", JSON.stringify(habitList));
+                    
+                    habitDiv.remove();
+                    location.href = '../habits/habits.html';
+                    habitBtn.innerHTML = `Add Habit`
+                    habitBtn.disabled = true;
+                }
+            
+
+                
+                });
+
+
+        </script>
+
         <script src="../elements/navbar.js"></script>
         <custom-navbar></custom-navbar>
     </div>
