@@ -1361,48 +1361,72 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.setItem(STORAGE_KEYS.LAST_COMPLETION_DATE, completionDate.toISOString());
     }
 
+    // function updateStreak() {
+    //     let streakCount = getStreakCount();
+    //     const lastCompletionDate = getLastCompletionDate();
+    //     const today = new Date();
+
+    //     // Reset dates to just the date part (no time) for comparison
+    //     const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+    //     // If this is the first completion or the streak was broken, start at 1
+    //     if (!lastCompletionDate) {
+    //         streakCount = 1;
+    //     } else {
+    //         const lastDate = new Date(
+    //             lastCompletionDate.getFullYear(),
+    //             lastCompletionDate.getMonth(),
+    //             lastCompletionDate.getDate()
+    //         );
+
+    //         // Calculate the difference in days
+    //         const timeDiff = todayDate.getTime() - lastDate.getTime();
+    //         const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+
+    //         if (daysDiff === 0) {
+    //             // Already completed something today, streak doesn't change
+    //         } else if (daysDiff === 1) {
+    //             // Completed yesterday, streak increases
+    //             streakCount++;
+    //         } else {
+    //             // Streak broken
+    //             streakCount = 1;
+    //         }
+    //     }
+
+    //     // Save updated streak data
+    //     saveStreakData(streakCount, today);
+
+    //     // Update the UI
+    //     updateStreakDisplay(streakCount);
+
+    //     return streakCount;
+    // }
+
+    // function updateStreakDisplay(streakCount) {
+    //     const streakElement = document.querySelector('.streak-info');
+    //     if (streakElement) {
+    //         streakElement.textContent = `Current Streak: ${streakCount} ${streakCount === 1 ? 'day' : 'days'}`;
+    //     }
+    // }
+
+
     function updateStreak() {
         let streakCount = getStreakCount();
-        const lastCompletionDate = getLastCompletionDate();
         const today = new Date();
-
-        // Reset dates to just the date part (no time) for comparison
-        const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-        // If this is the first completion or the streak was broken, start at 1
-        if (!lastCompletionDate) {
-            streakCount = 1;
-        } else {
-            const lastDate = new Date(
-                lastCompletionDate.getFullYear(),
-                lastCompletionDate.getMonth(),
-                lastCompletionDate.getDate()
-            );
-
-            // Calculate the difference in days
-            const timeDiff = todayDate.getTime() - lastDate.getTime();
-            const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
-
-            if (daysDiff === 0) {
-                // Already completed something today, streak doesn't change
-            } else if (daysDiff === 1) {
-                // Completed yesterday, streak increases
-                streakCount++;
-            } else {
-                // Streak broken
-                streakCount = 1;
-            }
-        }
-
+        
+        // Simply increment the streak counter by 1 for each completed node
+        streakCount++;
+        
         // Save updated streak data
         saveStreakData(streakCount, today);
-
+        
         // Update the UI
         updateStreakDisplay(streakCount);
-
+        
         return streakCount;
     }
-
+    
     function updateStreakDisplay(streakCount) {
         const streakElement = document.querySelector('.streak-info');
         if (streakElement) {
