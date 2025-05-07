@@ -35,7 +35,7 @@
                         <h2 style="margin-bottom: -5px; font-size: 15px">Journaling</h2>
                         <p style="font-size: 10px; color: #ccc">Daily • 15 minutes • Evening</p>
                     </div>
-                    <div style="text-align: right; padding-left: 100px;">
+                    <div style="text-align: right; padding-left: 90px;">
                         <img src="../img/profile/bookmark.png" alt="bookmark" class="bookmark" style="width: 20px; height: 20px; border-radius: 0;">
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                         <h2 style="margin-bottom: -5px; font-size: 15px">Stretching</h2>
                         <p style="font-size: 10px; color: #ccc">Daily • 30 minutes • Morning</p>
                     </div>
-                    <div style="text-align: right; padding-left: 100px;">
+                    <div style="text-align: right; padding-left: 85px;">
                         <img src="../img/profile/bookmark.png" alt="bookmark" class="bookmark" style="width: 20px; height: 20px; border-radius: 0;">
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                         <h2 style="margin-bottom: -5px; font-size: 15px">Knitting</h2>
                         <p style="font-size: 10px; color: #ccc">3 times a week • 1 hour • Evening</p>
                     </div>
-                    <div style="text-align: right; padding-left: 90px;">
+                    <div style="text-align: right; padding-left: 65px;">
                         <img src="../img/profile/bookmark.png" alt="bookmark" class="bookmark" style="width: 20px; height: 20px; border-radius: 0;">
                     </div>
                 </div>
@@ -70,6 +70,18 @@
             </div>
         </div>
         <script src="../elements/navbar.js"></script>
+        <script>
+            // Select all bookmark images
+            const bookmarks = document.querySelectorAll('.bookmark');
+        
+            // Add a click event listener to each bookmark
+            bookmarks.forEach(bookmark => {
+                bookmark.addEventListener('click', () => {
+                    // Toggle the 'darkened' class on click
+                    bookmark.classList.toggle('darkened');
+                });
+            });
+        </script>
         <custom-navbar></custom-navbar>
     </div>
 </body>
