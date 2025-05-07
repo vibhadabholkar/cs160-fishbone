@@ -104,6 +104,10 @@ hr {
   display: contents;      
 }
 
+#star {
+  margin-left: auto;
+}
+
 #top-friends {
   grid-row: 1;
   display: flex;
