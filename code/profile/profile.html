@@ -121,7 +121,11 @@
 
                     let html1 = "";
                     html1 += ` <h2 style="margin-bottom: -5px; font-size: 15px"> ${habit["Habit"]} </h2>`;
-                    html1 += `<p style="font-size: 10px; color: #2B2E2F"> ${habit["Frequency"]} • ${habit["Target"]} • ${habit["Preferred Time of Day"]}</p>`;
+                    if (habit["Time of Day"]) {
+                        html1 += `<p style="font-size: 10px; color: #2B2E2F"> ${habit["Frequency"]} • ${habit["Target"]} • ${habit["Preferred Time of Day"]}</p>`;
+                    } else {
+                        html1 += `<p style="font-size: 10px; color: #2B2E2F"> ${habit["Frequency"]} • ${habit["Target"]}</p>`;
+                    }
                     innerHabitDiv1.innerHTML = html1;
 
                     let html2 = "";

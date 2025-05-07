@@ -13,7 +13,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="stylesheet" type="text/css" href="../friends/friends.css" />
+    <link rel="stylesheet" type="text/css" href="profile.css" />
     <link rel="stylesheet" href="../main.css">
 </head>
 
@@ -29,7 +29,7 @@
                 <div style="text-align: left;">
                     <h2>Bookmarked Habits</h2>
                 </div>
-                <div class="friend-habits" style="background-color: #BFD9DE;">
+                <div class="habits" style="background-color: #BFD9DE;">
                     <div style="text-align: left;">
                         <h2 style="margin-bottom: -5px; font-size: 15px">Meditation</h2>
                         <p style="font-size: 10px; color: #2B2E2F">Daily • 10 minutes • Morning</p>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                <div class="friend-habits" style="background-color: #BFD9DE;">
+                <div class="habits" style="background-color: #BFD9DE;">
                     <div style="text-align: left;">
                         <h2 style="margin-bottom: -5px; font-size: 15px">Running</h2>
                         <p style="font-size: 10px; color: #2B2E2F">3 times per week • 2 miles</p>
@@ -49,7 +49,7 @@
                     </div>
                 </div>
 
-                <div class="friend-habits" style="background-color: #BFD9DE;">
+                <div class="habits" style="background-color: #BFD9DE;">
                     <div style="text-align: left;">
                         <h2 style="margin-bottom: -5px; font-size: 15px">Reading</h2>
                         <p style="font-size: 10px; color: #2B2E2F">Daily • 20 minutes • Evening</p>
@@ -59,7 +59,7 @@
                     </div>
                 </div>
 
-                <div class="friend-habits" style="background-color: #BFD9DE;">
+                <div class="habits" style="background-color: #BFD9DE;">
                     <div style="text-align: left;">
                         <h2 style="margin-bottom: -5px; font-size: 15px">Cooking</h2>
                         <p style="font-size: 10px; color: #2B2E2F">3 times per week • 20 minutes • Evening</p>
@@ -83,7 +83,7 @@
                 const habitBtn = document.querySelector('input[name="habit-selection"]:checked');
 
                 if (habitBtn) {
-                    const habitDiv = habitBtn.closest('.friend-habits');
+                    const habitDiv = habitBtn.closest('.habits');
                     const detailsDiv = habitDiv.children[0];
                     const habitNameText = detailsDiv.querySelector('h2').textContent;
                     var otherDetailsText = detailsDiv.querySelector('p').textContent;
@@ -91,9 +91,9 @@
                     habitBtn.disabled = true;
                     habitBtn.innerHTML = `Adding... <span class="loading-spinner"></span>`;
 
-
                     var responseData = 0;
                     var habit = {};
+
 
                     const response = await fetch(
                     'https://noggin.rea.gent/kind-cobra-3234',
@@ -130,10 +130,11 @@
                     habitList.push(habit);
                     localStorage.setItem("habitData", JSON.stringify(habitList));
                     
-                    habitDiv.remove();
-                    location.href = '../habits/habits.html';
+                    // habitDiv.remove();
+                    
                     habitBtn.innerHTML = `Add Habit`
                     habitBtn.disabled = true;
+                    location.href = '../habits/habits.html';
                 }
             
 
