@@ -1184,7 +1184,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Create message element
             const messageDiv = document.createElement('div');
             messageDiv.id = 'map-placeholder-message';
-            messageDiv.style.backgroundColor = '#276F7C';
+            messageDiv.style.backgroundColor = '#257b8a';
             messageDiv.style.borderRadius = '10px';
             messageDiv.style.padding = '30px 20px';
             messageDiv.style.textAlign = 'center';
