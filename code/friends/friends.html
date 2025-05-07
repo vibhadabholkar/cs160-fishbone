@@ -24,6 +24,17 @@
             <h2>Ann Basil</h2>
         </div>
 
+        <script>
+            // Get the saved image src from localStorage
+            const savedImageSrc = localStorage.getItem('selectedProfile');
+        
+            // If a saved image exists, update the profile image
+            if (savedImageSrc) {
+                const profileImage = document.querySelector('#header img');
+                profileImage.src = savedImageSrc;
+            }
+        </script>
+
         <hr>
 
         <div id="friend-box">
