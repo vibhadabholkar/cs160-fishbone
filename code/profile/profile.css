@@ -2,16 +2,10 @@ body {
     font-family: "Figtree", sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    justify-content: center; /* Center vertically */
-    align-items: center; /* Center horizontally */
-    text-align: center; /* Center text inside elements */
     background-color: #d1dced;
     color: #d1dced;
     height: 100%;
-    overflow-y: auto;
-    padding-bottom: 20px;
+    overflow-y: auto; /* <-- allow vertical scrolling */
   }
   
   html {
@@ -27,12 +21,11 @@ body {
     width: 400px;
     min-height: 100vh;
     align-items: center;
+    padding-bottom: 100px;
     position: relative; /* Ensure #navbar is positioned relative to this */
-    margin: 0 auto;
-    padding-bottom: 100px; 
   }
   
-  #header {
+  header {
     text-align: center; /* Ensures the heading is centered */
     margin-bottom: 10px; /* Adds space between the title and the tasks */
   }
@@ -45,6 +38,10 @@ body {
     border-radius: 50%;
   }
   
+  main {
+    padding-bottom: 100px;
+  }
+  
   hr {
     color: #d1dced;
     width: 40%;
@@ -53,9 +50,7 @@ body {
   .container {
     margin: 1%;
   }
-  
- 
-  
+
   .habits {
     display: flex;
     flex-direction: row;
@@ -77,8 +72,8 @@ body {
     width: 10%;
   }
   
-  
-  
+
+
   #navbar {
     position: fixed;
     bottom: 0;
@@ -114,23 +109,22 @@ body {
   }
   
   .rounded-button {
-    display: inline-block;
-    padding: 10px 20px; /* Adjust padding for size */
-    font-size: 14px; /* Adjust font size */
-    color: black; /* Text color */
-    background-color: #96D4DF; /* Button background color */
-    border: none; /* Remove border */
-    border-radius: 25px; /* Make the button rounded */
-    cursor: pointer; /* Change cursor to pointer on hover */
-    text-align: center; /* Center the text */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
-    transition: background-color 0.3s ease; /* Smooth hover effect */
-  }
-  
-  .rounded-button:hover {
-    background-color: #257b8a; /* Darker shade on hover */
-    color: white; /* Text color */
-  }
+    font-family: "Figtree", sans-serif;
+    background-color: #257b8a; /* Default background color */
+    color: white; /* Default text color */
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+.rounded-button:hover {
+    background-color: #BFD9DE; /* Hover background color */
+    color: #2B2E2F; /* Hover text color */
+}
   
   .bookmark {
     transition: filter 0.3s ease; /* Smooth transition for hover and click effects */
@@ -143,4 +137,26 @@ body {
   
   .bookmark.darkened {
     filter: brightness(0.7); /* Keep the image darkened when clicked */
+  }
+
+  main {
+    padding-bottom: 100px;
+  }
+
+  /* ChatGPT */
+.loading-spinner {
+    border: 2px solid #f3f3f3; /* Light grey */
+    border-top: 2px solid #333; /* Darker spinner line */
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    animation: spin 0.6s linear infinite;
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }

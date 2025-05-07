@@ -1146,7 +1146,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Create message element
             const messageDiv = document.createElement('div');
             messageDiv.id = 'map-placeholder-message';
-            messageDiv.style.backgroundColor = '#276F7C';
+            messageDiv.style.backgroundColor = '#257b8a';
             messageDiv.style.borderRadius = '10px';
             messageDiv.style.padding = '30px 20px';
             messageDiv.style.textAlign = 'center';
@@ -2530,7 +2530,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let tooltipDiv = document.createElement('div');
     tooltipDiv.id = 'node-tooltip';
     tooltipDiv.style.position = 'absolute';
-    tooltipDiv.style.backgroundColor = 'rgba(39, 111, 124, 0.9)';
+    tooltipDiv.style.backgroundColor = 'rgba(37, 123, 138, 0.9)';
     tooltipDiv.style.color = 'white';
     tooltipDiv.style.padding = '10px';
     tooltipDiv.style.borderRadius = '5px';

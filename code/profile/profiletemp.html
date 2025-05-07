@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Ann Basil</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- <link rel="stylesheet" type="text/css" href="../friends/friends.css" /> -->
+    <link rel="stylesheet" type="text/css" href="../friends/friends.css" />
+    <link rel="stylesheet" href="../main.css">
+</head>
+
+<body>
+    <div id="mobile">
+        <div id="header">
+            <a href="edit-profile.html">
+                <img src="../img/profile/skeleton-green.png" alt="Your Profile" style="height: 100px; width: 100px; border-radius: 0; background-color: transparent;">
+            </a>            
+            <h2 style="margin-bottom: -5px;">Ann Basil</h2>
+            <p style="font-size: 13px; color: #ccc">@ann_basil</p>
+        </div>
+
+        <script>
+            // Get the saved image src from localStorage
+            const savedImageSrc = localStorage.getItem('selectedProfileImage');
+        
+            // If a saved image exists, update the profile image
+            if (savedImageSrc) {
+                const profileImage = document.querySelector('#header img');
+                profileImage.src = savedImageSrc;
+            }
+        </script>
+
+        <div class="column" id="column-1">
+            <div class="container" id="friend-habits">
+                <div style="text-align: left;">
+                    <h2>Current Habits</h2>
+                </div>
+                <div class="friend-habits" style="background-color: #BFD9DE;">
+                    <div style="text-align: left;">
+                        <h2 style="margin-bottom: -5px; font-size: 15px">Meditation</h2>
+                        <p style="font-size: 10px; color: #2B2E2F">Daily • 10 minutes • Morning</p>
+                    </div>
+                    <div style="text-align: right; padding-left: 80px;">
+                        <img src="../img/profile/hp1.png" alt="progress" style="width: 40px; height: 40px; border-radius: 0; background-color: transparent;">
+                    </div>
+                </div>
+                <div class="friend-habits" style="background-color: #BFD9DE;">
+                    <div style="text-align: left;">
+                        <h2 style="margin-bottom: -5px; font-size: 15px">Running</h2>
+                        <p style="font-size: 10px; color: #2B2E2F">3 times per week • 2 miles</p>
+                    </div>
+                    <div style="text-align: right; padding-left: 90px;">
+                        <img src="../img/profile/hp2.png" alt="progress" style="width: 40px; height: 40px; border-radius: 0; background-color: transparent;">
+                    </div>
+                </div>
+                <div class="friend-habits" style="background-color: #BFD9DE;">
+                    <div style="text-align: left;">
+                        <h2 style="margin-bottom: -5px; font-size: 15px">Reading</h2>
+                        <p style="font-size: 10px; color: #2B2E2F">Daily • 20 minutes • Evening</p>
+                    </div>
+                    <div style="text-align: right; padding-left: 80px;">
+                        <img src="../img/profile/hp3.png" alt="progress" style="width: 40px; height: 40px; border-radius: 0; background-color: transparent;">
+                    </div>
+                </div>
+            </div>
+            <div class="container" id="friend-habits1">
+                <div style="text-align: left;">
+                    <h2>Badges</h2>
+                </div>
+                <div>
+                    <img src="../img/badge/runningBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/waterBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/flowerBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/teethBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/readingBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/campingBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/meditationBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                    <img src="../img/badge/foodBadge.png" alt="badge" style="width: 45px; height: 45px; margin: 7px;">
+                </div>
+            </div>
+            <br>
+            <div class="container" id="bookmarked-habits">
+                <style>
+                    .rounded-button {
+                        background-color: #257b8a; /* Default background color */
+                        color: black; /* Default text color */
+                        padding: 10px 20px;
+                        font-size: 14px;
+                        border: none;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        text-align: center;
+                        transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+                    }
+                
+                    .rounded-button:hover {
+                        background-color: #1a5e63; /* Hover background color */
+                        color: white; /* Hover text color */
+                    }
+                </style>
+                <button class="rounded-button" onclick="location.href='bookmarked-habits.html';">Bookmarked Habits</button>
+            </div>
+        </div>
+
+        <!-- <script>
+            window.addEventListener("DOMContentLoaded", () => {
+                const headerContainer = document.getElementsByClassName("friend-habits")[0];
+                headerContainer.innerHTML = "";
+
+                const habitList = JSON.parse(localStorage.getItem("habitData")) || []; 
+
+                if (habitList.length > 0) {
+                habitList.forEach(habit => {
+                    const habitDiv = document.createElement('div');  
+                    habitDiv.classList.add("friend-habits");
+                    habitDiv.style.backgroundColor("#BFD9DE");
+                    
+                    const innerHabitDiv1 = document.createElement('div'); 
+                    innerHabitDiv1.style.textAlign("left");
+
+                    const innerHabitDiv2 = document.createElement('div'); 
+                    innerHabitDiv2.style.textAlign("right");
+                    innerHabitDiv2.style.paddingLeft("80px");
+
+                    let html1 = "";
+                    html1 += ` <h2 style="margin-bottom: -5px; font-size: 15px"> ${habit["Habit"]} </h2>`;
+                    html1 += `<p style="font-size: 10px; color: #2B2E2F"> ${habit["Frequency"]} • ${habit["Target"]} • ${habit["Preferred Time of Day"]}</p>`;
+
+                    innerHabitDiv1.innerHTML = html1;
+
+                    let html2 = "";
+                    html2 += ` <img src="../img/profile/hp3.png" alt="progress" style="width: 40px; height: 40px; border-radius: 0; background-color: transparent;">`;
+                   
+                    habitDiv.append(innerHabitDiv1);
+                    habitDiv.append(innerHabitDiv2);
+
+                    headerContainer.appendChild(habitDiv); 
+                    headerContainer.appendChild(document.createElement('br'));
+                    
+                });
+                }
+
+            }); -->
+
+        <!-- </script> -->
+
+        <script src="../elements/navbar.js"></script>
+        <custom-navbar></custom-navbar>
+    </div>
+</body>
+</html>
