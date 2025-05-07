@@ -130,6 +130,7 @@ custom-navbar {
   overflow: auto;
 }
 
+/* From ChatGPT */
 /* For Webkit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   width: 8px; /* Width of the scrollbar */

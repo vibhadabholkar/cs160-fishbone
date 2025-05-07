@@ -20,9 +20,20 @@
 <body>
     <div id="mobile">
         <div id="header">
-            <img src="../img/Fishbone Skeleton 1.png" alt="your profile" style="height: 50px; width: 50px;">
+            <img src="../img/skeleton-profile-green.png" alt="your profile" style="height: 50px; width: 50px;">
             <h2>Ann Basil</h2>
         </div>
+
+        <script>
+            // Get the saved image src from localStorage
+            const savedImageSrc = localStorage.getItem('selectedProfile');
+        
+            // If a saved image exists, update the profile image
+            if (savedImageSrc) {
+                const profileImage = document.querySelector('#header img');
+                profileImage.src = savedImageSrc;
+            }
+        </script>
 
         <hr>
 
@@ -32,7 +43,7 @@
                     <h2>Your top friends</h2>
                     <div class="friend-card">
                         <p>1</p>
-                        <img src="../img/Fishbone Default Green.png" alt="profile pic">
+                        <img src="../img/fish-profile-green.png" alt="profile pic">
                         <p>Vibha</p>
                         <img src="../img/star-badge.png" alt="star symbol" id="star">
                         <p>34</p>
@@ -40,7 +51,7 @@
 
                     <div class="friend-card">
                         <p>2</p>
-                        <img src="../img/Fishbone Shark Red.png" alt="profile pic">
+                        <img src="../img/shark-profile-red.png" alt="profile pic">
                         <p>Angela</p>
                         <img src="../img/star-badge.png" alt="star symbol" id="star">
                         <p>75</p>
@@ -48,7 +59,7 @@
 
                     <div class="friend-card">
                         <p>3</p>
-                        <img src="../img/Fishbone Default Purple.png" alt="profile pic">
+                        <img src="../img/fish-profile-purple.png" alt="profile pic">
                         <p>Daniel</p>
                         <img src="../img/star-badge.png" alt="star symbol" id="star">
                         <p>42</p>
@@ -61,43 +72,43 @@
                 <div class="container" id="all-friends">
                     <div class="friend-info">
                         <a href="katyperry-profile.html">
-                            <img src="../img/Fishbone Skeleton 2.png" alt="katy perry">
+                            <img src="../img/skeleton-profile-yellow.png" alt="katy perry">
                         </a>
                         <p>Katy Perry</p>
                     </div>
                     <div class="friend-info">
                         <a href="jessi-j-profile.html">
-                            <img src="../img/Fishbone Default Green.png" alt="jessi j">
+                            <img src="../img/fish-profile-green.png" alt="jessi j">
                         </a>
                         <p>Jessi J</p>
                     </div>
                     <div class="friend-info">
                         <a href="brunomars-profile.html">
-                            <img src="../img/Fishbone Skeleton 1.png" alt="bruno mars">
+                            <img src="../img/skeleton-profile-green.png" alt="bruno mars">
                         </a>
                         <p>Bruno Mars</p>
                     </div>
                     <div class="friend-info">
                         <a href="mileycyrus-profile.html">
-                            <img src="../img/Fishbone Shark Red.png" alt="miley cyrus">
+                            <img src="../img/shark-profile-red.png" alt="miley cyrus">
                         </a>
                         <p>Miley Cyrus</p>
                     </div>
                     <div class="friend-info">
                         <a href="ladygaga-profile.html">
-                            <img src="../img/Fishbone Shark Black.png" alt="lady gaga">
+                            <img src="../img/shark-profile-black.png" alt="lady gaga">
                         </a>
                         <p>Lady Gaga</p>
                     </div>
                     <div class="friend-info">
                         <a href="charli-xcx-profile.html">
-                            <img src="../img/Fishbone Default Purple.png" alt="charli xcx">
+                            <img src="../img/fish-profile-purple.png" alt="charli xcx">
                         </a>
                         <p>Charli XCX</p>
                     </div>
                     <div class="friend-info">
                         <a href="troyesivan-profile.html">
-                            <img src="../img/Fishbone Suit Fish.png" alt="troye sivan">
+                            <img src="../img/fish-profile-suit.png" alt="troye sivan">
                         </a>
                         <p>Troye Sivan</p>
                     </div>

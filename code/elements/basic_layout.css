@@ -12,6 +12,10 @@ body {
     background-color: #f0f0f0; 
   }
 
+header {
+    font-family: "Figtree", sans-serif;
+}
+
 .avatar {
     position: absolute;
     max-width: 100%;
