@@ -864,15 +864,34 @@ function useDefaultMap() {
         mapContainer.innerHTML = '';
         mapContainer.appendChild(loadingDiv);
 
+        // Check if boss is completed before resetting streak
+        const bossDone = isBossNodeCompleted();
+
+        // Save the current streak if boss is completed
+        let currentStreak = 0;
+        let lastCompletionDate = null;
+        if (bossDone) {
+            currentStreak = getStreakCount();
+            lastCompletionDate = getLastCompletionDate();
+        }
+
         // Save the default map data to localStorage
-        saveMapData(DEFAULT_MAP_DATA);
+        saveMapData(mapData);
 
         // Clear other saved state since we're using a new map
         localStorage.removeItem(STORAGE_KEYS.CURRENT_NODE);
         localStorage.removeItem(STORAGE_KEYS.NODE_STATES);
         localStorage.removeItem(STORAGE_KEYS.EDGE_STATES);
         localStorage.removeItem(STORAGE_KEYS.HABIT_CHECKBOXES);
-        localStorage.removeItem(STORAGE_KEYS.STREAK_COUNT);
+
+        // Only reset streak if boss was not completed
+        if (!bossDone) {
+            localStorage.removeItem(STORAGE_KEYS.STREAK_COUNT);
+            localStorage.removeItem(STORAGE_KEYS.LAST_COMPLETION_DATE);
+        } else {
+            // Restore streak data
+            saveStreakData(currentStreak, lastCompletionDate);
+        }
 
         // Add a small delay to show the loading message
         setTimeout(() => {
@@ -912,6 +931,17 @@ async function generateNewMap() {
         // Replace the map with loading message
         mapContainer.innerHTML = '';
         mapContainer.appendChild(loadingDiv);
+
+        // Check if boss is completed before resetting streak
+        const bossDone = isBossNodeCompleted();
+
+        // Save the current streak if boss is completed
+        let currentStreak = 0;
+        let lastCompletionDate = null;
+        if (bossDone) {
+            currentStreak = getStreakCount();
+            lastCompletionDate = getLastCompletionDate();
+        }
 
         // Start the ellipsis animation
         let dotsCount = 0;
@@ -956,7 +986,15 @@ async function generateNewMap() {
                 localStorage.removeItem(STORAGE_KEYS.NODE_STATES);
                 localStorage.removeItem(STORAGE_KEYS.EDGE_STATES);
                 localStorage.removeItem(STORAGE_KEYS.HABIT_CHECKBOXES);
-                localStorage.removeItem(STORAGE_KEYS.STREAK_COUNT);
+
+                // Only reset streak if boss was not completed
+                if (!bossDone) {
+                    localStorage.removeItem(STORAGE_KEYS.STREAK_COUNT);
+                    localStorage.removeItem(STORAGE_KEYS.LAST_COMPLETION_DATE);
+                } else {
+                    // Restore streak data
+                    saveStreakData(currentStreak, lastCompletionDate);
+                }
 
                 console.log("Map data generated successfully. Reloading page...");
                 // Reload the page to use the new map data
@@ -1302,6 +1340,34 @@ document.addEventListener('DOMContentLoaded', function () {
     function loadNodeStates() {
         const savedStates = localStorage.getItem(STORAGE_KEYS.NODE_STATES);
         return savedStates ? JSON.parse(savedStates) : null;
+    }
+
+    function isBossNodeCompleted() {
+        // Get the saved node states
+        const savedNodeStates = loadNodeStates();
+        if (!savedNodeStates) return false;
+
+        // Find boss nodes in the current map data
+        const bossNodes = [];
+
+        // Check if we have loaded map data
+        const savedMapData = loadMapData();
+        if (savedMapData) {
+            // Find boss nodes from the saved map data
+            savedMapData.nodes.forEach(node => {
+                if (node.nodeType === 'boss') {
+                    bossNodes.push(node.id);
+                }
+            });
+        } else {
+            // Use the default map data which has node 21 as the boss
+            bossNodes.push(21);
+        }
+
+        // Check if any boss node is completed
+        return bossNodes.some(nodeId =>
+            savedNodeStates[nodeId] && savedNodeStates[nodeId].state === 'completed'
+        );
     }
 
     // Function to save edge states to localStorage
