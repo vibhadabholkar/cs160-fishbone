@@ -101,32 +101,50 @@
                     'Ariana Grande',
                     'Taylor Swift',
                     'Ed Sheeran',
-                    'Katy Perry'
+                    'Katy Perry',
+                    'Oski'
                 ];
-            
+
+                // Map each name to its corresponding profile page
+                const friendPages = {
+                    'Bruno Mars': 'brunomars-profile.html',
+                    'Miley Cyrus': 'mileycyrus-profile.html',
+                    'Lady Gaga': 'ladygaga-profile.html',
+                    'Charli XCX': 'charli-xcx-profile.html',
+                    'Troye Sivan': 'troyesivan-profile.html',
+                    'Jessi J': 'jessi-j-profile.html',
+                    'Ariana Grande': 'arianagrande-profile.html',
+                    'Taylor Swift': 'taylorswift-profile.html',
+                    'Ed Sheeran': 'edsheeran-profile.html',
+                    'Katy Perry': 'katyperry-profile.html',
+                    'Oski': 'oski-bear.html'
+                };
+
                 // Show dropdown and filter names as the user types
                 searchInput.addEventListener('input', () => {
                     const query = searchInput.value.toLowerCase();
                     searchDropdown.innerHTML = ''; // Clear previous results
-            
+
                     if (query.trim() !== '') {
                         const matches = friendNames.filter(name => name.toLowerCase().includes(query));
-            
+
                         if (matches.length > 0) {
                             searchDropdown.style.display = 'block'; // Show dropdown
-            
+
                             matches.forEach(name => {
                                 const listItem = document.createElement('li');
                                 listItem.textContent = name;
                                 listItem.style.padding = '10px';
                                 listItem.style.cursor = 'pointer';
-            
-                                // Add click functionality to select a name
+
+                                // Add click functionality to redirect to the corresponding page
                                 listItem.addEventListener('click', () => {
-                                    searchInput.value = name; // Set the input value to the selected name
-                                    searchDropdown.style.display = 'none'; // Hide the dropdown
+                                    const page = friendPages[name]; // Get the corresponding page URL
+                                    if (page) {
+                                        window.location.href = page; // Redirect to the page
+                                    }
                                 });
-            
+
                                 searchDropdown.appendChild(listItem);
                             });
                         } else {
@@ -191,6 +209,42 @@
                         </a>
                         <p>Troye Sivan</p>
                     </div>
+                    
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const allFriendsContainer = document.getElementById('all-friends');
+                    
+                            // Load friends from localStorage
+                            const friendsList = JSON.parse(localStorage.getItem('allFriends')) || [];
+                    
+                            // Dynamically add each friend to the "All Friends" section
+                            friendsList.forEach(friend => {
+                                const friendCard = document.createElement('div');
+                                friendCard.classList.add('friend-info');
+                    
+                                // Add the avatar image
+                                const avatar = document.createElement('img');
+                                avatar.src = friend.avatar;
+                                avatar.alt = friend.name;
+                                friendCard.appendChild(avatar);
+                    
+                                // Add the friend's name
+                                const friendName = document.createElement('p');
+                                friendName.textContent = friend.name;
+                                friendCard.appendChild(friendName);
+                    
+                                // Add a link to the friend's profile
+                                const profileLink = document.createElement('a');
+                                profileLink.href = friend.profileLink;
+                                profileLink.style.display = 'block';
+                                profileLink.style.marginTop = '5px';
+                                friendCard.appendChild(profileLink);
+                    
+                                // Append the friend card to the container
+                                allFriendsContainer.appendChild(friendCard);
+                            });
+                        });
+                    </script>
                 </div>
                 
             </div>
