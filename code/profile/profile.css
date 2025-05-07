@@ -1,0 +1,146 @@
+body {
+    font-family: "Figtree", sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    text-align: center; /* Center text inside elements */
+    background-color: #d1dced;
+    color: #d1dced;
+    height: 100%;
+    overflow-y: auto;
+    padding-bottom: 20px;
+  }
+  
+  html {
+    height: 100%;
+  }
+  
+  h2 {
+    font-size: 18px;
+  }
+  
+  #mobile {
+    background-color: #1a1c1f;
+    width: 400px;
+    min-height: 100vh;
+    align-items: center;
+    position: relative; /* Ensure #navbar is positioned relative to this */
+    margin: 0 auto;
+    padding-bottom: 100px; 
+  }
+  
+  #header {
+    text-align: center; /* Ensures the heading is centered */
+    margin-bottom: 10px; /* Adds space between the title and the tasks */
+  }
+  
+  #header img {
+    margin-top: 3%;
+    background-color: #257b8a;
+    height: 5%;
+    width: 5%;
+    border-radius: 50%;
+  }
+  
+  hr {
+    color: #d1dced;
+    width: 40%;
+  }
+  
+  .container {
+    margin: 1%;
+  }
+  
+ 
+  
+  .habits {
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+    background-color: #276F7C;
+    color: #1a1c1f;
+    padding: 1% 4%;
+    border-radius: 10px;
+    width: 75%;
+    align-items: center;
+    justify-content: left;
+  }
+  
+  .container img {
+    border-radius: 50%;
+    background-color: #257b8a;
+    object-fit: contain;
+    height: 10%;
+    width: 10%;
+  }
+  
+  
+  
+  #navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 400px;
+    margin: 0 auto;           /* center it horizontally */
+    padding: 20px 0;
+    background-color: #1a1c1f;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #1a1c1f;
+    box-sizing: border-box;
+  }
+  
+  .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: 'Figtree', sans-serif;
+      font-size: 12px;
+      color: #ccc;
+  }
+  
+  .nav-icon {
+      width: 70px;
+      height: 70px;
+  }
+  
+  .nav-item p {
+      margin: 0;
+  }
+  
+  .rounded-button {
+    display: inline-block;
+    padding: 10px 20px; /* Adjust padding for size */
+    font-size: 14px; /* Adjust font size */
+    color: black; /* Text color */
+    background-color: #96D4DF; /* Button background color */
+    border: none; /* Remove border */
+    border-radius: 25px; /* Make the button rounded */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    text-align: center; /* Center the text */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+  }
+  
+  .rounded-button:hover {
+    background-color: #257b8a; /* Darker shade on hover */
+    color: white; /* Text color */
+  }
+  
+  .bookmark {
+    transition: filter 0.3s ease; /* Smooth transition for hover and click effects */
+    cursor: pointer; /* Pointer cursor for interactivity */
+  }
+  
+  .bookmark:hover {
+    filter: brightness(0.7); /* Darken on hover */
+  }
+  
+  .bookmark.darkened {
+    filter: brightness(0.7); /* Keep the image darkened when clicked */
+  }

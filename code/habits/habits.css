@@ -129,7 +129,7 @@ body {
     background-color: #52595c;
   }
 
-  .Edit-Habit {
+  #Edit-Habit {
     display: flex;
     flex-direction: column;
     padding: 12px 16px;
