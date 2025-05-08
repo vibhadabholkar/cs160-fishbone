@@ -214,33 +214,33 @@
                     <script>
                         document.addEventListener('DOMContentLoaded', () => {
                             const allFriendsContainer = document.getElementById('all-friends');
-                    
+
                             // Load friends from localStorage
                             const friendsList = JSON.parse(localStorage.getItem('allFriends')) || [];
-                    
+
                             // Dynamically add each friend to the "All Friends" section
                             friendsList.forEach(friend => {
                                 const friendCard = document.createElement('div');
                                 friendCard.classList.add('friend-info');
-                    
-                                // Add the avatar image
+
+                                // Create a link element and wrap the avatar image
+                                const profileLink = document.createElement('a');
+                                profileLink.href = friend.profileLink; // Set the profile link
+
+                                // Add the avatar image inside the link
                                 const avatar = document.createElement('img');
                                 avatar.src = friend.avatar;
                                 avatar.alt = friend.name;
-                                friendCard.appendChild(avatar);
-                    
+                                profileLink.appendChild(avatar);
+
+                                // Add the link (with the image) to the friend card
+                                friendCard.appendChild(profileLink);
+
                                 // Add the friend's name
                                 const friendName = document.createElement('p');
                                 friendName.textContent = friend.name;
                                 friendCard.appendChild(friendName);
-                    
-                                // Add a link to the friend's profile
-                                const profileLink = document.createElement('a');
-                                profileLink.href = friend.profileLink;
-                                profileLink.style.display = 'block';
-                                profileLink.style.marginTop = '5px';
-                                friendCard.appendChild(profileLink);
-                    
+
                                 // Append the friend card to the container
                                 allFriendsContainer.appendChild(friendCard);
                             });
