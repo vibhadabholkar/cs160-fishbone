@@ -28,12 +28,27 @@
         <img id="friends-image" src="../img/profile/friends-3.png" alt="Friends" style="height: 20px;" onclick="replaceImageAndAddFriend()">
 
         <script>
+            // Check if the friend has already been added
+            document.addEventListener('DOMContentLoaded', () => {
+                const isFriendAdded = localStorage.getItem('oskiFriendAdded');
+                if (isFriendAdded === 'true') {
+                    const image = document.getElementById('friends-image');
+                    image.src = '../img/profile/friends-2.png'; // Set the permanent image
+                    image.onclick = null; // Disable further clicks
+                }
+            });
+        
             function replaceImageAndAddFriend() {
+                // Check if the friend has already been added
+                const isFriendAdded = localStorage.getItem('oskiFriendAdded');
+                if (isFriendAdded === 'true') {
+                    return; // Do nothing if already added
+                }
+        
                 // Replace the image
                 const image = document.getElementById('friends-image');
                 image.src = '../img/profile/friends-2.png';
         
-                // Add the profile avatar to the "All Friends" section in friends.html
                 // Save the friend's data to localStorage
                 const newFriend = {
                     name: 'Oski',
@@ -41,13 +56,17 @@
                     profileLink: 'oski-bear.html'
                 };
         
-                // Save the new friend to localStorage
                 let friendsList = JSON.parse(localStorage.getItem('allFriends')) || [];
                 friendsList.push(newFriend);
                 localStorage.setItem('allFriends', JSON.stringify(friendsList));
         
-                // Optionally, alert the user that the friend has been added
-                alert(`${newFriend.name} has been added to your friends list!`);
+                // Mark the friend as added in localStorage
+                localStorage.setItem('oskiFriendAdded', 'true');
+        
+                // Disable further clicks
+                image.onclick = null;
+        
+                alert('Oski has been added to your friends list!');
             }
         </script>
         

@@ -22,18 +22,32 @@
         <button id="back-btn">×</button>
         <div id="header">
             <img src="../img/skeleton-profile-yellow.png" alt="Taylor Swift's Profile" style="height: 100px; width: 100px;">
-            <h2 style="margin-bottom: -5px;">Taylor</h2>
+            <h2 style="margin-bottom: -5px;">Taylor Swift</h2>
             <p style="font-size: 13px; color: #ccc">@tay_tay_swift</p>
         </div>
         <img id="friends-image" src="../img/profile/friends-3.png" alt="Friends" style="height: 20px;" onclick="replaceImageAndAddFriend()">
-
         <script>
+            // Check if the friend has already been added
+            document.addEventListener('DOMContentLoaded', () => {
+                const isFriendAdded = localStorage.getItem('taylorSwiftFriendAdded');
+                if (isFriendAdded === 'true') {
+                    const image = document.getElementById('friends-image');
+                    image.src = '../img/profile/friends-2.png'; // Set the permanent image
+                    image.onclick = null; // Disable further clicks
+                }
+            });
+        
             function replaceImageAndAddFriend() {
+                // Check if the friend has already been added
+                const isFriendAdded = localStorage.getItem('taylorSwiftFriendAdded');
+                if (isFriendAdded === 'true') {
+                    return; // Do nothing if already added
+                }
+        
                 // Replace the image
                 const image = document.getElementById('friends-image');
                 image.src = '../img/profile/friends-2.png';
         
-                // Add the profile avatar to the "All Friends" section in friends.html
                 // Save the friend's data to localStorage
                 const newFriend = {
                     name: 'Taylor Swift',
@@ -41,13 +55,17 @@
                     profileLink: 'taylorswift-profile.html'
                 };
         
-                // Save the new friend to localStorage
                 let friendsList = JSON.parse(localStorage.getItem('allFriends')) || [];
                 friendsList.push(newFriend);
                 localStorage.setItem('allFriends', JSON.stringify(friendsList));
         
-                // Optionally, alert the user that the friend has been added
-                alert(`${newFriend.name} has been added to your friends list!`);
+                // Mark the friend as added in localStorage
+                localStorage.setItem('taylorSwiftFriendAdded', 'true');
+        
+                // Disable further clicks
+                image.onclick = null;
+        
+                alert('Taylor Swift has been added to your friends list!');
             }
         </script>
         
